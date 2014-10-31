@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>assets</key>
+			<array>
+				<dict>
+					<key>kind</key>
+					<string>software-package</string>
+					<key>url</key>
+					<string>http://www.njiang1987.com/wp-content/uploads/2014/02/pomodoro.ipa</string>
+				</dict>
+			</array>
+			<key>metadata</key>
+			<dict>
+				<key>bundle-identifier</key>
+				<string>com.jn.iphone</string>
+				<key>bundle-version</key>
+				<string>9.2.300.104</string>
+				<key>kind</key>
+				<string>software</string>
+				<key>title</key>
+				<string>Pomodoro</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
