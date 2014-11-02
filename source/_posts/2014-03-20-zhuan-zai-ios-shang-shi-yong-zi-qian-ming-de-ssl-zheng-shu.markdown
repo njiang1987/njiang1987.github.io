@@ -2,8 +2,8 @@
 layout: post
 title: '[转]在iOS上使用自签名的SSL证书'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

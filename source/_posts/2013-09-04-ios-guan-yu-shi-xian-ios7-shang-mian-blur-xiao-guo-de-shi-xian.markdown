@@ -2,8 +2,8 @@
 layout: post
 title: '[原创][iOS]关于实现iOS7上面Blur效果的实现'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

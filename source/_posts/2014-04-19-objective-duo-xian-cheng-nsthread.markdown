@@ -3,7 +3,8 @@ layout: post
 title: "Objective-多线程NSThread"
 date: 2014-02-19 20:30:38 +0800
 comments: true
-categories: iOS NSThread
+categories: 技术
+tags: iOS
 ---
 iOS 支持多个层次的多线程编程，层次越高的抽象程度越高，使用起来也越方便，也是苹果最推荐使用的方法。下面根据抽象层次从低到高依次列出iOS所支持的多线程编程范式：
 

@@ -2,8 +2,8 @@
 layout: post
 title: IIS7 download cer file
 categories:
-- 未分类
-tags: []
+- 技术
+tags: [Other]
 published: true
 comments: true
 ---

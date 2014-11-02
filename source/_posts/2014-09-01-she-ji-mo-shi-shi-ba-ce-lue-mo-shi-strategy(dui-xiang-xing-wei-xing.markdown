@@ -3,7 +3,8 @@ layout: post
 title: "设计模式 ( 十八 ) 策略模式Strategy（对象行为型)"
 date: 2014-09-01 10:17:27 +0800
 comments: true
-categories: 设计模式
+categories: 技术
+tags: iOS
 ---
 设计模式 ( 十八 ) 策略模式Strategy（对象行为型）
 

@@ -3,7 +3,8 @@ layout: post
 title: "[iOS]KVC/KVO原理详解及编程指南"
 date: 2014-10-28 17:48:12 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 
 ##前言：

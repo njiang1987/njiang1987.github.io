@@ -2,8 +2,8 @@
 layout: post
 title: '[转]Longest Path in a Directed Acyclic Graph'
 categories:
-- Algorithm
-tags: []
+- 技术
+tags: [CodeJam]
 published: true
 comments: true
 ---

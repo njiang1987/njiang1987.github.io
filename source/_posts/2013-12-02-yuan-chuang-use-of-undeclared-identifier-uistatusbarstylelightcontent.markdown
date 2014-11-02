@@ -2,8 +2,8 @@
 layout: post
 title: '[原创]Use of undeclared identifier ''UIStatusBarStyleLightContent'''
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

@@ -3,7 +3,8 @@ layout: post
 title: "C++ Primer 读书笔记"
 date: 2014-09-30 16:29:22 +0800
 comments: true
-categories: C++
+categories: 技术
+tags: C++
 ---
 ###1. Array
 

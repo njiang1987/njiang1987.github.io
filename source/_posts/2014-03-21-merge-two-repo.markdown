@@ -2,8 +2,8 @@
 layout: post
 title: Merge two repo
 categories:
-- 未分类
-tags: []
+- 技术
+tags: [Git]
 published: true
 comments: true
 ---

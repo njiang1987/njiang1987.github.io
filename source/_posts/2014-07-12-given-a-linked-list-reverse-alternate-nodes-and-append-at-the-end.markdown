@@ -3,7 +3,8 @@ layout: post
 title: "Given a linked list, reverse alternate nodes and append at the end"
 date: 2014-07-12 21:11:31 +0800
 comments: true
-categories: GeeksForGeeks LinkList
+categories: 技术
+tags: Other
 ---
 Given a linked list, reverse alternate nodes and append them to end of list. Extra allowed space is O(1) 
 Examples

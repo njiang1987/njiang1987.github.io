@@ -3,7 +3,8 @@ layout: post
 title: "[iOS]UIPopoverPresentationController on iOS 8"
 date: 2014-10-14 14:01:02 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 In Tumblr for iOS, we have a view controller that gets presented differently on iPhone and on iPad:
 

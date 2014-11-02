@@ -3,7 +3,8 @@ layout: post
 title: "Add customize commander into Facebook Chisel"
 date: 2014-05-11 10:13:51 +0800
 comments: true
-categories: chisel lldb python
+categories: 技术
+tags: lldb
 ---  
 
 ## 1. How the chisel init

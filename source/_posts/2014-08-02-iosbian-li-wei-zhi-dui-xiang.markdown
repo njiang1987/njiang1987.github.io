@@ -3,7 +3,8 @@ layout: post
 title: "iOS遍历未知对象"
 date: 2014-08-02 13:29:53 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 ```objc
 #import <objc/runtime.h>

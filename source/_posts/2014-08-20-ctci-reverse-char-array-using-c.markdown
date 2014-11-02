@@ -3,7 +3,8 @@ layout: post
 title: "[CTCI]-Homework Part 1"
 date: 2014-08-20 20:21:26 +0800
 comments: true
-categories: CTCI
+categories: 技术
+tags: iOS
 ---
 
 ##1.1 Implement an algorithm to determine if a string has all unique characters. What if you cannot use additional data structures?
@@ -202,7 +203,7 @@ public class StringComparer {
 ## 1.4 Write a method to replace all spaces in a string with'%20'. You may assume that the string has sufficient space at the end of the string to hold the additional characters, and that you are given the "true" length of the string. (Note: if imple- menting in Java, please use a character array so that you can perform this opera- tion in place.)
 
 ```java
-	public static void replaceBlankTest(char[] str, int length)
+	public static void replaceBlankTest(char[] str, int length)
 	{
 		if(length == 0)
 			return;
@@ -236,4 +237,5 @@ public class StringComparer {
 			
 			index--;
 		}
-	}```
+	}
+```

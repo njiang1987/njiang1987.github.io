@@ -2,8 +2,8 @@
 layout: post
 title: '[StackOverflow]edgesForExtendedLayout'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

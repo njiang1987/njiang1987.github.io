@@ -2,8 +2,8 @@
 layout: post
 title: '[CodeJam]2009Problem A. Alien Language1'
 categories:
-- CodeJam
-tags: []
+- 技术
+tags: [CodeJam]
 published: true
 comments: true
 ---

@@ -2,8 +2,8 @@
 layout: post
 title: '[转载]objective-C多线程NSThread'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [NSThread]
 published: true
 comments: true
 ---

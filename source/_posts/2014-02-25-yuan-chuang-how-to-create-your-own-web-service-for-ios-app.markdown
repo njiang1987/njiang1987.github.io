@@ -2,8 +2,8 @@
 layout: post
 title: '[原创] How to create your own web service for iOS App'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---
@@ -20,13 +20,13 @@ Download and install:</p>
 
 <p>Axis2: <a href="http://axis.apache.org/axis2/java/core/download.cgi">http://axis.apache.org/axis2/java/core/download.cgi</a>, after get download zip file, extract it. It will be like below.</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.03.27-PM.png"><img class="aligncenter size-medium wp-image-267" alt="Screen Shot 2014-02-25 at 8.03.27 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.03.27-PM-300x297.png" width="300" height="297" /></a></p>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.03.27-PM.png"><img class="aligncenter size-medium wp-image-267" alt="Screen Shot 2014-02-25 at 8.03.27 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.03.27-PM-300x297.png" width="300" height="297" /></a></p>
 
 <p>For more information about Axis2, please click <a href="http://zh.wikipedia.org/wiki/Apache_Axis2">here</a>.
 <h2>2.3 Configuration</h2>
 In eclipse, eclipse-&gt;Preference-&gt;Web Service-&gt;Axis2 Preference, set the "Axis2 runtime location" to the above axis2 extract folder.</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.05.05-PM.png"><img class="aligncenter size-medium wp-image-268" alt="Screen Shot 2014-02-25 at 8.05.05 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.05.05-PM-300x255.png" width="300" height="255" /></a> Then click "OK" button.
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.05.05-PM.png"><img class="aligncenter size-medium wp-image-268" alt="Screen Shot 2014-02-25 at 8.05.05 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.05.05-PM-300x255.png" width="300" height="255" /></a> Then click "OK" button.
 <h2>2.4 Develop Web Service:</h2>
 <pre lang="java">package com.nj.webservice;</pre></p>
 
@@ -58,19 +58,19 @@ public class CalculateService {<br />
     }  <br />
 }
 (3). On the project "WebServiceTest", "new" -&gt; "other", find "Web Service"
-<a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.20.35-PM.png"><img class="aligncenter size-medium wp-image-272" alt="Screen Shot 2014-02-25 at 8.20.35 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.20.35-PM-300x284.png" width="300" height="284" /></a> (4). click "next", click "Browse" in "Service implementation" and find "CalculateService".</p>
+<a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.20.35-PM.png"><img class="aligncenter size-medium wp-image-272" alt="Screen Shot 2014-02-25 at 8.20.35 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.20.35-PM-300x284.png" width="300" height="284" /></a> (4). click "next", click "Browse" in "Service implementation" and find "CalculateService".</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.23.11-PM.png"><img class="aligncenter size-medium wp-image-273" alt="Screen Shot 2014-02-25 at 8.23.11 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.23.11-PM-300x249.png" width="300" height="249" /></a> (5). In the Web Service dialog, set "Web Service type" to be "start service". "Client type" to be "no client" (we will use iOS app to access this web service later).</p>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.23.11-PM.png"><img class="aligncenter size-medium wp-image-273" alt="Screen Shot 2014-02-25 at 8.23.11 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.23.11-PM-300x249.png" width="300" height="249" /></a> (5). In the Web Service dialog, set "Web Service type" to be "start service". "Client type" to be "no client" (we will use iOS app to access this web service later).</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.25.44-PM.png"><img class="aligncenter size-medium wp-image-275" alt="Screen Shot 2014-02-25 at 8.25.44 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.25.44-PM-234x300.png" width="234" height="300" /></a></p>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.25.44-PM.png"><img class="aligncenter size-medium wp-image-275" alt="Screen Shot 2014-02-25 at 8.25.44 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.25.44-PM-234x300.png" width="234" height="300" /></a></p>
 
 <p>&nbsp;</p>
 
 <p>(6). Click "configuration" -&gt; "Service Deployment Configuration", here we will set the server to deploy the web service, I have download tomcat 7.0.4 previously.</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.27.53-PM.png"><img class="aligncenter size-medium wp-image-277" alt="Screen Shot 2014-02-25 at 8.27.53 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.27.53-PM-300x271.png" width="300" height="271" /></a> (7). click "OK", return Web Service dialog. And click "next"</p>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.27.53-PM.png"><img class="aligncenter size-medium wp-image-277" alt="Screen Shot 2014-02-25 at 8.27.53 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.27.53-PM-300x271.png" width="300" height="271" /></a> (7). click "OK", return Web Service dialog. And click "next"</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.29.51-PM.png"><img class="aligncenter size-medium wp-image-278" alt="Screen Shot 2014-02-25 at 8.29.51 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.29.51-PM-235x300.png" width="235" height="300" /></a></p>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.29.51-PM.png"><img class="aligncenter size-medium wp-image-278" alt="Screen Shot 2014-02-25 at 8.29.51 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.29.51-PM-235x300.png" width="235" height="300" /></a></p>
 
 <p>&nbsp;</p>
 
@@ -80,33 +80,33 @@ public class CalculateService {<br />
 
 <p>You will see the following web page.</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.32.30-PM.png"><img class="aligncenter size-medium wp-image-279" alt="Screen Shot 2014-02-25 at 8.32.30 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.32.30-PM-300x171.png" width="300" height="171" /></a></p>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.32.30-PM.png"><img class="aligncenter size-medium wp-image-279" alt="Screen Shot 2014-02-25 at 8.32.30 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.32.30-PM-300x171.png" width="300" height="171" /></a></p>
 
 <p>&nbsp;</p>
 
 <p>Now you have setup your own web service using Axis2.
 <h1>3. Set up your own iOS App.</h1>
 <h2>3.1 Create an single view application.</h2>
-<h2><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.34.55-PM.png"><img class="aligncenter size-medium wp-image-283" alt="Screen Shot 2014-02-25 at 8.34.55 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.34.55-PM-300x205.png" width="300" height="205" /></a> 3.2 Download ASIHTTPRequest and add it into our own Application.</h2>
+<h2><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.34.55-PM.png"><img class="aligncenter size-medium wp-image-283" alt="Screen Shot 2014-02-25 at 8.34.55 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.34.55-PM-300x205.png" width="300" height="205" /></a> 3.2 Download ASIHTTPRequest and add it into our own Application.</h2>
 (1). Download ASIHTTPRequest.</p>
 
 <p><a href="http://github.com/pokeb/asi-http-request/tarball/master">http://github.com/pokeb/asi-http-request/tarball/master</a></p>
 
 <p>(2). Add all the files under "ASIHTTPRequest\Classes" into our project.<br />
 We should also add "ASIHTTPRequestExternal\Reachability" into our project.
-<a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.39.37-PM.png"><img class="aligncenter size-medium wp-image-284" alt="Screen Shot 2014-02-25 at 8.39.37 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.39.37-PM-132x300.png" width="132" height="300" /></a></p>
+<a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.39.37-PM.png"><img class="aligncenter size-medium wp-image-284" alt="Screen Shot 2014-02-25 at 8.39.37 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.39.37-PM-132x300.png" width="132" height="300" /></a></p>
 
 <p>(3). Set project configuration.</p>
 
 <p>Click Project-&gt;target-&gt;buildphases-&gt;Link Binary with Libraries,<br />
 Click "+" to libz.dylib and libxml2.dylib
-<a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.30-PM.png"><img class="aligncenter size-medium wp-image-285" alt="Screen Shot 2014-02-25 at 8.43.30 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.30-PM-300x121.png" width="300" height="121" /></a></p>
+<a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.30-PM.png"><img class="aligncenter size-medium wp-image-285" alt="Screen Shot 2014-02-25 at 8.43.30 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.30-PM-300x121.png" width="300" height="121" /></a></p>
 
 <p>&nbsp;</p>
 
 <p>Click "Building Setting", find "Other Linker Flags" and add "-lxml2"</p>
 
-<p><a href="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.40-PM.png"><img class="aligncenter size-medium wp-image-286" alt="Screen Shot 2014-02-25 at 8.43.40 PM" src="http://www.njiang1987.com/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.40-PM-300x39.png" width="300" height="39" /></a>
+<p><a href="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.40-PM.png"><img class="aligncenter size-medium wp-image-286" alt="Screen Shot 2014-02-25 at 8.43.40 PM" src="http://www.njiang.cn/wp-content/uploads/2014/02/Screen-Shot-2014-02-25-at-8.43.40-PM-300x39.png" width="300" height="39" /></a>
 <h2>3.3 Learn SOAP request</h2>
 POST /iwscooperationws/todocenter.asmx HTTP/1.1<br />
 Host: 192.168.1.11<br />

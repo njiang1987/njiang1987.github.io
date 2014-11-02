@@ -3,7 +3,8 @@ layout: post
 title: "NSOperation和dispatch_async的区别"
 date: 2014-03-02 17:20:33 +0800
 comments: true
-categories: iOS NSOperation dispatch_async
+categories: 技术
+tags: iOS
 ---
 <code>NSOperation*</code> classes are the higher level api. They hide GCD's lower level api from you so that you can concentrate on getting the task done.
 

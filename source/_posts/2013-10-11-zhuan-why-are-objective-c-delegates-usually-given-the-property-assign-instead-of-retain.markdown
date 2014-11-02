@@ -3,8 +3,8 @@ layout: post
 title: '[转]Why are Objective-C delegates usually given the property assign instead
   of retain?'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

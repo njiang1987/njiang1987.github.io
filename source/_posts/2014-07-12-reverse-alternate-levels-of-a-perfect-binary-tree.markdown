@@ -3,7 +3,8 @@ layout: post
 title: "Reverse alternate levels of a perfect binary tree"
 date: 2014-07-12 16:10:38 +0800
 comments: true
-categories: GeeksForGeeks-Tree
+categories: 技术
+tags: Other
 ---
 
 Given a Perfect Binary Tree, reverse the alternate level nodes of the binary tree.

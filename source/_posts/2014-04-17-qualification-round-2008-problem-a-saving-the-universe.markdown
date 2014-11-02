@@ -3,7 +3,8 @@ layout: post
 title: "Qualification Round 2008 Problem A. Saving The Universe"
 date: 2013-10-17 23:57:39 +0800
 comments: true
-categories: CodeJam, C++
+categories: 技术
+tags: iOS
 ---
 Problem
 

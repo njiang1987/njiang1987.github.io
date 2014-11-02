@@ -3,7 +3,8 @@ layout: post
 title: "[iOS]IOS面试问题总结"
 date: 2014-10-22 17:47:48 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 通过网络搜寻和自己总结经历找了一些IOS面试经常被问道的问题：
 

@@ -2,8 +2,8 @@
 layout: post
 title: '[XCode] 关于怎么用Instrument查看object retain情况'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [XCode]
 published: true
 comments: true
 ---

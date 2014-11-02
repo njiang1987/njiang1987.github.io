@@ -2,8 +2,10 @@
 layout: post
 title: "关于CALAYER和UIVIEW ANIMATION同步问题"
 date: 2014-01-13 18:08:00 +0800
+categories:
+- 技术
+tags: [iOS]
 comments: true
-categories: iOS CALayer UIViewAnimation 
 ---
 今天在做项目的时候, 同时用到了CABasicAnimation和UIView的animation， 发现会有问题，calayer的animation和uiview的animation不同步，比如CALayer设置position的animation
 

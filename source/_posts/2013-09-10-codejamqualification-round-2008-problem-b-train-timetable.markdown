@@ -2,8 +2,8 @@
 layout: post
 title: '[CodeJam]Qualification Round 2008 Problem B. Train Timetable'
 categories:
-- CodeJam
-tags: []
+- 技术
+tags: [CodeJam]
 published: true
 comments: true
 ---

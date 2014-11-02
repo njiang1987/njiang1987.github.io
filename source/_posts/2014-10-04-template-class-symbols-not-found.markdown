@@ -3,7 +3,8 @@ layout: post
 title: "Template Class - Symbols not found"
 date: 2014-10-04 10:03:51 +0800
 comments: true
-categories: C++
+categories: 技术
+tags: C++
 ---
 Detailed Explanation available from <http://www.parashift.com/c++-faq-lite/templates.html>
 

@@ -2,8 +2,8 @@
 layout: post
 title: '[转]Ruby Gem命令详解'
 categories:
-- Linux
-tags: []
+- 技术
+tags: [Ruby]
 published: true
 comments: true
 ---

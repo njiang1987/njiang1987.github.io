@@ -2,8 +2,8 @@
 layout: post
 title: '[心情]我的梦想啊！有这么一辆房车可以各地旅游了！'
 categories:
-- 心情
-tags: []
+- 生活
+tags: [梦想]
 published: true
 comments: true
 ---

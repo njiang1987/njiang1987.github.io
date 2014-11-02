@@ -2,7 +2,7 @@
 layout: post
 title: '[转载]iOS多线程编程指南（四）线程同步'
 categories:
-- iOS
+- 技术
 tags:
 - 多线程
 published: true

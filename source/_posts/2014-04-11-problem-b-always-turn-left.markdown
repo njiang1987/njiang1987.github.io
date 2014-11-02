@@ -2,8 +2,10 @@
 layout: post
 title: "Problem B. Always Turn Left"
 date: 2013-08-31 10:40:14 +0800
+categories:
+- 技术
+tags: [CodeJam]
 comments: true
-categories: CodeJam
 ---
 Problem
 

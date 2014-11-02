@@ -3,7 +3,8 @@ layout: post
 title: "[iOS]深入浅出ObjC之消息"
 date: 2014-10-22 21:57:41 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 在入门级别的ObjC 教程中，我们常对从C++或Java 或其他面向对象语言转过来的程序员说，ObjC 中的方法调用（ObjC中的术语为消息）跟其他语言中的方法调用差不多，只是形式有些不同而已。
 譬如Ｃ++ 中的：

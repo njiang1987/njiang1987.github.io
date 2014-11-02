@@ -2,8 +2,8 @@
 layout: post
 title: git创建、删除库，分支管理
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

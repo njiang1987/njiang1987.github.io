@@ -3,7 +3,8 @@ layout: post
 title: "NSString应用retain还是copy"
 date: 2014-04-17 19:41:07 +0800
 comments: true
-categories: iOS NSString
+categories: 技术
+tags: [iOS]
 ---
 1. 对NSString应用retain，效率无疑是最好的
 

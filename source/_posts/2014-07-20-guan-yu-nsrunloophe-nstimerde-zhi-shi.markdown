@@ -3,7 +3,8 @@ layout: post
 title: "关于NSRunLoop和NSTimer的知识"
 date: 2014-07-20 15:26:16 +0800
 comments: true
-categories: iOS NSRunLoop NSTimer
+categories: 技术
+tags: iOS
 ---
 1.什么是`NSRunLoop`
 

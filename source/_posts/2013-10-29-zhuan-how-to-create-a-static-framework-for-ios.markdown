@@ -2,8 +2,8 @@
 layout: post
 title: '[转]How to Create a Static Framework for iOS'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

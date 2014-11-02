@@ -2,8 +2,10 @@
 layout: post
 title: "2009 Problem A. Alien Language1"
 date: 2013-08-31 20:44:32 +0800
+categories:
+- 技术
+tags: [CodeJam]
 comments: true
-categories: CodeJam
 ---
 Problem
 

@@ -3,7 +3,8 @@ layout: post
 title: "[CTCI]-HashTableArray using Java"
 date: 2014-08-15 13:58:07 +0800
 comments: true
-categories: CTCI
+categories: 技术
+tags: iOS
 ---
 
 Using an array to store hash key/value.

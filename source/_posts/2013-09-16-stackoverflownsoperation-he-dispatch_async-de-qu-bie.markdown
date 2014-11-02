@@ -2,8 +2,8 @@
 layout: post
 title: '[StackOverflow]NSOperation和dispatch_async的区别'
 categories:
-- StackOverflow
-tags: []
+- 技术
+tags: [StackOverflow]
 published: true
 comments: true
 ---

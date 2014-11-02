@@ -3,7 +3,8 @@ layout: post
 title: "Core Foundation与Foundation的区别"
 date: 2014-07-22 20:03:39 +0800
 comments: true
-categories: Core-Foundation Foundation Bridge
+categories: 技术
+tags: iOS
 ---
 Core Foundation框架 (CoreFoundation.framework) 是一组C语言接口，它们为iOS应用程序提供基本数据管理和服务功能。下面列举该框架支持进行管理的数据以及可提供的服务：
 

@@ -2,9 +2,8 @@
 layout: post
 title: git ignore file, Git增加忽略文件
 categories:
-- iOS
-tags:
-- git
+- 技术
+tags: [Git]
 published: true
 comments: true
 ---

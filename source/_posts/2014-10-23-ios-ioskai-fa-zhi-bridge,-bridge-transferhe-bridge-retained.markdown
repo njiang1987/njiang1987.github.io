@@ -3,7 +3,8 @@ layout: post
 title: "[iOS]IOS开发之__bridge，__bridge_transfer和__bridge_retained"
 date: 2014-10-23 14:18:25 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 ##Core Foundation 框架
 Core Foundation框架 (CoreFoundation.framework) 是一组C语言接口，它们为iOS应用程序提供基本数据管理和服务功能。下面列举该框架支持进行管理的数据以及可提供的服务：

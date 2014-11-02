@@ -3,7 +3,8 @@ layout: post
 title: "关于怎么用Instrument查看object retain情况"
 date: 2013-09-02 13:53:06 +0800
 comments: true
-categories: iOS Instrument
+categories: 技术
+tags: [iOS]
 ---
 You can use the Allocations instrument to track the lifecycle of your objects. If you use the “Allocations” template, it is configured to record malloc and free events. You may want to configure it to also record retain, release, and autorelease events by turning on the “Record reference counts” checkbox in the Allocations instrument settings:
 

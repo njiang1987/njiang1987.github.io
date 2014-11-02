@@ -3,7 +3,8 @@ layout: post
 title: "[CTCI]-Technical Preparation(1)"
 date: 2014-08-13 22:31:33 +0800
 comments: true
-categories: CTCI
+categories: 技术
+tags: iOS
 ---
 ###1. How to Practice a Question
 1. Try to solve the problem on your own.

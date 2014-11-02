@@ -2,8 +2,8 @@
 layout: post
 title: '[转]Debug Information Format in Xcode'
 categories:
-- 未分类
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

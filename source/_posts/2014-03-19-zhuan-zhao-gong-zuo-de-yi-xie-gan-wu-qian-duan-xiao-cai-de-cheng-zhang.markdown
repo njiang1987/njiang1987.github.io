@@ -2,8 +2,8 @@
 layout: post
 title: '[转]找工作的一些感悟——前端小菜的成长'
 categories:
-- 心情
-tags: []
+- 生活
+tags: [总结]
 published: true
 comments: true
 ---

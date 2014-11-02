@@ -2,8 +2,8 @@
 layout: post
 title: '[转]短URL生成转换'
 categories:
-- 未分类
-tags: []
+- 技术
+tags: [Other]
 published: true
 comments: true
 ---

@@ -3,7 +3,8 @@ layout: post
 title: "[CTCI]-StringBuffer simple implementation in Java"
 date: 2014-08-17 08:45:50 +0800
 comments: true
-categories: CTCI
+categories: 技术
+tags: iOS
 ---
 
 Here is an implementation of String Buffer. It use an link list to store the appended string. If there is no enough space for the append string, it will create an new node for the new string.

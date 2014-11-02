@@ -3,7 +3,8 @@ layout: post
 title: "Investigate on CGContext and implement Wifi view"
 date: 2014-08-21 23:46:04 +0800
 comments: true
-categories: iOS CGContext
+categories: 技术
+tags: iOS
 ---
 Today, I did some research on CGContext. And implement an animation graph and Wifi view. Please the code below.
 

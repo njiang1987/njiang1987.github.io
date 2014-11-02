@@ -3,7 +3,8 @@ layout: post
 title: "C++智能指针详解"
 date: 2014-09-02 11:38:11 +0800
 comments: true
-categories: C++
+categories: C++categories: 技术
+tags: C++
 ---
  
 ##一、简介

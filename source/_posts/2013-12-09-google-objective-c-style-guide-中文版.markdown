@@ -2,8 +2,8 @@
 layout: post
 title: Google Objective-C Style Guide 中文版
 categories:
-- 未分类
-tags: []
+- 技术
+tags: [Other]
 published: true
 comments: true
 ---

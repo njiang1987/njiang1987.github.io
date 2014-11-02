@@ -3,7 +3,8 @@ layout: post
 title: "C++ CookBook读书笔记"
 date: 2014-10-06 11:25:17 +0800
 comments: true
-categories: 
+categories: 技术
+tags: C++
 ---
 1. C++创建静态库
 

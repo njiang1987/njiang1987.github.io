@@ -3,7 +3,8 @@ layout: post
 title: "auto_ptr的实现及CTCI"
 date: 2014-09-03 21:47:49 +0800
 comments: true
-categories: C++
+categories: 技术
+tags: C++
 ---
 
 1. 代码是参考auto_ptr的真实实现，其实大部分都一样，只是自己实现了一遍。

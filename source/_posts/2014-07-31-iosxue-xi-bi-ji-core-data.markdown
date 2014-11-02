@@ -3,7 +3,8 @@ layout: post
 title: "iOS学习笔记——Core Data"
 date: 2014-07-31 23:57:17 +0800
 comments: true
-categories: CoreData iOS
+categories: 技术
+tags: iOS
 ---
 ##7.1. 什么是Core Data
 

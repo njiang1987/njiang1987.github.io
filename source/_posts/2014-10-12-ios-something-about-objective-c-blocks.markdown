@@ -3,7 +3,8 @@ layout: post
 title: "[iOS] Something about Objective-C Blocks (Editing)"
 date: 2014-10-12 14:56:51 +0800
 comments: true
-categories: iOS
+categories: 技术
+tags: iOS
 ---
 ## 1. Block基础知识
 

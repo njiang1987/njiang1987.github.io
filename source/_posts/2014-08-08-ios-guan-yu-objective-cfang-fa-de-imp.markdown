@@ -3,7 +3,8 @@ layout: post
 title: "iOS 关于Objective-C方法的IMP"
 date: 2014-08-08 12:39:42 +0800
 comments: true
-categories: 
+categories: 技术
+tags: iOS
 ---
 ###一.什么是IMP
 IMP是”implementation”的缩写，它是objetive-C 方法(method)实现代码块的地址，可像C函数一样直接调用。通常情况下我们是通过[object method:parameter]或objc_msgSend()的方式向对象发送消息，然后Objective-C运行时(Objective-C runtime)寻找匹配此消息的IMP,然后调用它;但有些时候我们希望获取到IMP进行直接调用。

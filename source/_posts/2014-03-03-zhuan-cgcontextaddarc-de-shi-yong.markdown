@@ -2,8 +2,8 @@
 layout: post
 title: '[转]CGContextAddArc的使用'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

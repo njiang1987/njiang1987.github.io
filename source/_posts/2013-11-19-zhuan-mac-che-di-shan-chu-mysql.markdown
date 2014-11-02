@@ -2,8 +2,8 @@
 layout: post
 title: '[转]Mac 彻底删除MySQL'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [Other]
 published: true
 comments: true
 ---

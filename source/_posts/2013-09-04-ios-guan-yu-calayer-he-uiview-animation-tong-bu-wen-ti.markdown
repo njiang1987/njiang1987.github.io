@@ -2,8 +2,8 @@
 layout: post
 title: '[iOS]关于CALayer和UIView Animation同步问题'
 categories:
-- iOS
-tags: []
+- 技术
+tags: [iOS]
 published: true
 comments: true
 ---

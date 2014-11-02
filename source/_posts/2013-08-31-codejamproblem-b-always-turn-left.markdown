@@ -2,8 +2,8 @@
 layout: post
 title: '[CodeJam]Problem B. Always Turn Left'
 categories:
-- CodeJam
-tags: []
+- 技术
+tags: [CodeJam]
 published: true
 comments: true
 ---

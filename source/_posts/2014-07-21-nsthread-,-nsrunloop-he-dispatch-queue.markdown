@@ -3,7 +3,8 @@ layout: post
 title: "NSThread 、NSRunLoop 和 Dispatch Queue"
 date: 2014-07-21 21:21:23 +0800
 comments: true
-categories: NSRunLoop NSThread Dispatch
+categories: 技术
+tags: iOS
 ---
 iOS多线程编程中，`NSOperation`和`NSOperationQueue`无疑是最常用的，它们能满足绝大部分情况下的线程操作。但在完成一些特殊的任务时，我们还是要使用的NSThread和NSRunLoop。
 

@@ -3,7 +3,9 @@ layout: post
 title: "关于实现iOS7上面Blur效果的实现"
 date: 2014-01-23 18:13:00 +0800
 comments: true
-categories: iOS CALayer Blur
+categories:
+- 技术
+tags: [iOS]
 ---
 前几个月iOS7发布，说实话界面扁平化，个人不是很喜欢，但是它的一些效果还是比较炫的，比如Blur效果，看下图 <br>
 <img src="/uploads/2014-01-23/photo1_normal-169x300.png" alt="photo1_normal" width="169" height="300" class="alignnone size-medium wp-image-43" />
