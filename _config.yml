@@ -80,7 +80,7 @@ disqus_shortname:
 Plugins: ##https://github.com/hexojs/hexo/wiki/Plugins
 - hexo-generator-feed
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: jacman
+theme: jacman1
 exclude_generator:
 
 # Deployment
