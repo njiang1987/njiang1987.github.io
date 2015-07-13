@@ -68,5 +68,7 @@ theme: jacman1
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type: github
-  repository: git@github.com:njiang1987/njiang1987.github.io.git
+  type: git
+  repo: git@github.com:njiang1987/njiang1987.github.io.git
+  branch: master
+  message: add one post
