@@ -7,7 +7,7 @@ title: 天空の城
 subtitle: 愤怒的程序员，梦想着有一天也能飞！
 description:
 author: 姜楠
-language: zh-CN
+language: zh-Hans
 timezone:
 
 # URL
@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: spfk
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
