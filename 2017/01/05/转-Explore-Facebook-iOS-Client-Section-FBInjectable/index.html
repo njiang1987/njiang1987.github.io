@@ -84,20 +84,12 @@
 
 
 
-<meta name="description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。
-
-如何定位设备：iPhone5 越狱 iOS8.4 armv7
-砸壳Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。
-初步查找 strings使用str">
+<meta name="description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[转]Explore Facebook iOS Client - Section FBInjectable">
 <meta property="og:url" content="http://www.njiang.cn/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/index.html">
 <meta property="og:site_name" content="天空の城">
-<meta property="og:description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。
-
-如何定位设备：iPhone5 越狱 iOS8.4 armv7
-砸壳Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。
-初步查找 strings使用str">
+<meta property="og:description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。">
 <meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713701978671.jpg">
 <meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713711043679.jpg">
 <meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713715442206.jpg">
@@ -123,14 +115,10 @@
 <meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715363734149.jpg">
 <meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715363409527.jpg">
 <meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14717165824862.jpg">
-<meta property="og:updated_time" content="2017-01-05T07:13:43.000Z">
+<meta property="og:updated_time" content="2017-01-05T07:16:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[转]Explore Facebook iOS Client - Section FBInjectable">
-<meta name="twitter:description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。
-
-如何定位设备：iPhone5 越狱 iOS8.4 armv7
-砸壳Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。
-初步查找 strings使用str">
+<meta name="twitter:description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。">
 <meta name="twitter:image" content="http://www.njiang.cn/uploads/2017/01/05/14713701978671.jpg">
 
 
@@ -350,7 +338,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-check-o"></i>
             </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2017-01-05T15:13:43+08:00">
+            <time title="Post modified" itemprop="dateModified" datetime="2017-01-05T15:16:36+08:00">
               2017-01-05
             </time>
             
@@ -391,6 +379,7 @@
       
         <h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><p>MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。</p>
 <p><img src="/uploads/2017/01/05/14713701978671.jpg" alt="img"></p>
+<a id="more"></a>
 <h1 id="如何定位"><a href="#如何定位" class="headerlink" title="如何定位"></a>如何定位</h1><p>设备：iPhone5 越狱 iOS8.4 armv7</p>
 <h2 id="砸壳"><a href="#砸壳" class="headerlink" title="砸壳"></a>砸壳</h2><p>Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。</p>
 <h2 id="初步查找-strings"><a href="#初步查找-strings" class="headerlink" title="初步查找 strings"></a>初步查找 strings</h2><p>使用strings 搜搜关键词FBInjectable，可知可以通过字符串作为切入点。</p>
