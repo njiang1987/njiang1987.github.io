@@ -1,0 +1,829 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="写在前面：本文会在最开头将苹果官方的文档Understanding and Analyzing Application Crash Reports进行翻译,但这不仅仅是一篇翻译的文章，本文会让大家更加全面的了解ios的崩溃报告的获取、分析、用途。翻译的时候我会结合自己以往的使用经验来进行翻译。
+理解和分析应用程序崩溃报告
+重要提示：本文档包含有关开发中的一个接口或技术的初步信息。此信息将被更改，并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[转]全面的理解和分析IOS的崩溃日志">
+<meta property="og:url" content="http://www.njiang.cn/2016/12/14/转-全面的理解和分析IOS的崩溃日志/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="写在前面：本文会在最开头将苹果官方的文档Understanding and Analyzing Application Crash Reports进行翻译,但这不仅仅是一篇翻译的文章，本文会让大家更加全面的了解ios的崩溃报告的获取、分析、用途。翻译的时候我会结合自己以往的使用经验来进行翻译。
+理解和分析应用程序崩溃报告
+重要提示：本文档包含有关开发中的一个接口或技术的初步信息。此信息将被更改，并">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/1716542-41671bb546c2be61.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/2.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/3.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/4.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/5.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/6.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/7.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/8.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/9.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/10.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/11.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/12.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/13.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/14.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/15.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/16.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/17.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/18.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/19.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/20.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/21.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/22.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2016/12/14/23.png">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[转]全面的理解和分析IOS的崩溃日志">
+<meta name="twitter:description" content="写在前面：本文会在最开头将苹果官方的文档Understanding and Analyzing Application Crash Reports进行翻译,但这不仅仅是一篇翻译的文章，本文会让大家更加全面的了解ios的崩溃报告的获取、分析、用途。翻译的时候我会结合自己以往的使用经验来进行翻译。
+理解和分析应用程序崩溃报告
+重要提示：本文档包含有关开发中的一个接口或技术的初步信息。此信息将被更改，并">
+<meta name="twitter:image" content="http://www.njiang.cn/uploads/2016/12/14/1716542-41671bb546c2be61.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2016/12/14/转-全面的理解和分析IOS的崩溃日志/"/>
+
+
+
+
+
+  <title> [转]全面的理解和分析IOS的崩溃日志 | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2016/12/14/转-全面的理解和分析IOS的崩溃日志/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [转]全面的理解和分析IOS的崩溃日志
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-14T16:46:10+08:00">
+              2016-12-14
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/14/转-全面的理解和分析IOS的崩溃日志/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/14/转-全面的理解和分析IOS的崩溃日志/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>写在前面：本文会在最开头将苹果官方的文档<a href="https://developer.apple.com/library/prerelease/content/technotes/tn2151/_index.html#//apple_ref/doc/uid/DTS40008184-CH1-ANALYZING_CRASH_REPORTS" target="_blank" rel="external">Understanding and Analyzing Application Crash Reports</a>进行翻译,但这不仅仅是一篇翻译的文章，本文会让大家更加全面的了解ios的崩溃报告的获取、分析、用途。翻译的时候我会结合自己以往的使用经验来进行翻译。</p>
+<p>理解和分析应用程序崩溃报告</p>
+<p>重要提示：本文档包含有关开发中的一个接口或技术的初步信息。此信息将被更改，并根据本文档实现的软件应该用最终的操作系统软件进行测试。</p>
+<p>当应用程序崩溃时，创建了一个崩溃报告，这是非常有用的了解什么造成的崩溃。本文件包含重要的信息，如何symbolicate，理解和解释的崩溃报告。</p>
+<a id="more"></a>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>当应用程序崩溃时，将创建一个崩溃报告并存储在设备上。崩溃报告描述的情况下，应用程序终止，在大多数情况下，包括每个执行线程的一个完整的回溯，通常对于调试应用中的问题是非常有用。你应该看看这些崩溃报告，了解你的应用程序有什么崩溃，然后尝试修复它们。</p>
+<p>有回溯的崩溃报告需要被符号化了才可以分析。符号化(symbolication)成人们可读的函数名称和行号来取代内存地址。如果你通过Xcode的设备窗口来获取设备的崩溃日志，它们将在几秒钟后自动被符号化。否则，你将需要自己将崩溃日志符号化，通过自己导入崩溃文件到Xcode设备窗口。看到符号化（symbolicating）后的崩溃报告。</p>
+<p>低内存报告不同于其他的崩溃报告，没有回朔在这种类型的报告。当低内存崩溃发生时，你必须调查你的内存使用模式和对低内存警告的响应。此文档指向了您可能会发现有用的多个内存管理引用。</p>
+<h3 id="获取崩溃和低内存报告"><a href="#获取崩溃和低内存报告" class="headerlink" title="获取崩溃和低内存报告"></a>获取崩溃和低内存报告</h3><p><a href="https://developer.apple.com/library/content/qa/qa1747/_index.html" target="_blank" rel="external">调试部署iOS应用程序</a>  讨论如何直接从iOS设备获取崩溃和内存不足的报道。</p>
+<p>在<a href="https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/Introduction/Introduction.html" target="_blank" rel="external">应用程序分发指南</a>中的<a href="https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AnalyzingCrashReports/AnalyzingCrashReports.html" target="_blank" rel="external">分析崩溃报告</a> 讨论如何从TestFlight beta测试者和那些已经从App Store下载应用程序的用户中收集崩溃报告。</p>
+<h3 id="symbolicating崩溃报告"><a href="#symbolicating崩溃报告" class="headerlink" title="symbolicating崩溃报告"></a>symbolicating崩溃报告</h3><p>symbolication是解决回溯地址的源代码的方法或函数名的过程，称为符号化。没有经过符号化的崩溃报告，是不能了解具体的崩溃信息的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">注：低内存报告不需要symbolicated。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注：来自MacOS崩溃报告通常是已经符号化的，或部分符号化后的(symbolicated)。</div><div class="line">本节重点symbolicating从iOS，WatchOS，和TVOS的崩溃报告，但整体过程类似MacOS。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">图1概述了崩溃报告和symbolication过程。</div></pre></td></tr></table></figure>
+<p><img src="/uploads/2016/12/14/1716542-41671bb546c2be61.png" alt=""></p>
+<p>获取崩溃报告以及符号化过程</p>
+<p>1.当编译器将源代码翻译成机器代码时，它也会生成调试符号，它将编译后的二进制中的每一个机器指令映射到源代码的行源代码中。根据调试信息格式（debug_information_format）编译设置，这些调试符号存储在二进制或在同伴的调试符号文件（dsym）。默认情况下，调试版本的应用程序的调试符号存储在编译后的二进制中，而发布版本的应用程序的调试符号存储在相应的dsym文中件以减少二进制大小。<br>调试符号文件和应用程序二进制文件与每一个build生成的UUID捆绑在一起。一个新的UUID生成是由build一个应用产生的，它应用程序每次build(编译打包)的唯一标识。即使一个功能相同的可执行文件是从相同的源代码重构，具有相同的编译器设置，也会有不同的生成的UUID。调试符号文件的后续版本，甚至来自同一个源文件，不会与其他版本的二进制文件相混淆。</p>
+<p>2.当你的归档(archive)要分发的应用程序，Xcode会收集应用程序二进制随着.dsym文件，并且存放在home文件夹里。你可以在Xcode的组织者在“归档”部分，找到所有你归档后(archived)的应用。有关创建存档的更多信息，可以参考<a href="https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/Introduction/Introduction.html" target="_blank" rel="external">应用程序分发指南</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">重要：为了符号化(symbolicate)从测试人员，审查程序，和客户得到的崩溃报告，你必须保留每个存档您的应用程序。</div></pre></td></tr></table></figure>
+<p>3.如果你是通过App Store发布的应用程序，或使test flight进行测试，你将选择包括dsym文件到iTunes Connect。在提交对话框中，选择“您的应用程序的应用程序符号……”。为了接收来test flight收集的 以及 那些选择了分享的诊断数据的客户的崩溃报告，上传你的dsym文件是必要的 。有关崩溃报告服务的更多信息，可以参考应用程序分发指南。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">重要：从app review收到的崩溃报告将是unsymbolicated，即使你有上传dsym文件到iTunes Connect。</div><div class="line">你需要使用Xcode 来symbolicate任何从app review得到的崩溃报告。</div><div class="line">看下午中&quot;到symbolicating崩溃报告Xcode&quot;。</div></pre></td></tr></table></figure>
+<p>4.当你的应用程序崩溃时，一个unsymbolicated崩溃报告会被创建并存储在设备上。</p>
+<p>5.用户可以按照<a href="https://developer.apple.com/library/content/qa/qa1747/_index.html" target="_blank" rel="external">调试部署iOS应用程序的步骤</a>，直接从他们的设备中检索崩溃报告。如果你的应用程序通过AdHoc or Enterprise distribution发布的，这是从你的用户获取崩溃报告的唯一途径。</p>
+<p>6.从设备检索得到的未符号化的(unsymbolicated)崩溃报告需要使用Xcode来符号化(symbolicated)。Xcode使用您的应用程序的二进制在源代码中的源位置的回溯替换每个地址相关联的dsym文件。其结果是一个符号化的(symbolicated)崩溃报告。</p>
+<p>7.如果用户选择了与苹果共享诊断数据，或者如果用户通过TestFlight安装了你的应用程序，崩溃报告会被上传到应用商店。</p>
+<p>8.App Store 符号化崩溃报告  并且将类似的崩溃报告分组。类似的崩溃报告的集合被称为崩溃点。</p>
+<p>9.符号化的崩溃报告是在Xcode’s Crashes organizer提供给你的。</p>
+<h3 id="Bitcode"><a href="#Bitcode" class="headerlink" title="Bitcode"></a>Bitcode</h3><p>Bitcode是一个编译程序的中间表示。当你可以用bitcode来 archive an application，编译器产生的二进制文件包含bitcode而不是机器代码。一旦二进制已经上传到App Store，这可以被编译成机器码。App Store在将来，在没有任何行动的一部分的情况下，利用未来的改进的编译器，再次编译。</p>
+<p><img src="/uploads/2016/12/14/2.png" alt=""></p>
+<p>Bitcode compilation process</p>
+<p>因为你的二进制最后的编译出现在App Store，Mac将不包含符号化从应用程序审查或用户发给你他们从设备中取得的崩溃报告所需要的调试符号文件(.dsym)。虽然dsym文件是您归档应用程序(archive your application)的时候产生的，它是为bitcode二进制并不能用来symbolicate崩溃报告。App Store在你从Xcode或从iTunes Connect网站，可以获得编译的bitcode并且可以下载的过程中，产生dsym文件。符号化从应用程序审查或用户发给你他们从设备中取得的崩溃报告，你必须下载这些dsym文件。崩溃报告获得通过崩溃报告服务将自动symbolicated。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">重要：二进制应用程序商店会比最初二进制编译，有不同的UUID</div></pre></td></tr></table></figure>
+<h3 id="从Xcode获取dSYMs文件"><a href="#从Xcode获取dSYMs文件" class="headerlink" title="从Xcode获取dSYMs文件"></a>从Xcode获取dSYMs文件</h3><p>1.下载dsyms文件<br>在归档管理中选择相应的归档并下载dsyms文件</p>
+<p><img src="/uploads/2016/12/14/3.png" alt=""></p>
+<p><img src="/uploads/2016/12/14/4.png" alt=""></p>
+<p>2.在归档出的文件中找到dSYMs文件</p>
+<p><img src="/uploads/2016/12/14/5.png" alt=""></p>
+<p><img src="/uploads/2016/12/14/6.png" alt=""></p>
+<p><img src="/uploads/2016/12/14/7.png" alt=""></p>
+<h3 id="确定崩溃报告是否被符号化"><a href="#确定崩溃报告是否被符号化" class="headerlink" title="确定崩溃报告是否被符号化"></a>确定崩溃报告是否被符号化</h3><p><img src="/uploads/2016/12/14/8.png" alt=""></p>
+<h3 id="符号化崩溃报告"><a href="#符号化崩溃报告" class="headerlink" title="符号化崩溃报告"></a>符号化崩溃报告</h3><p>1.符号化用xcode编译安装软件的设备上的崩溃报告<br>当应用在设备上运行，遇到崩溃的时候会产生崩溃日志。如果这个应用是用xcode直接在设备上编译运行的，那么就可以将手机连接到编译的时候所用的电脑上，打开xcode，在Window的Devices中去查看日志。找到日志的时候，xcode会自己去符号化崩溃日志。</p>
+<p><img src="/uploads/2016/12/14/9.png" alt=""></p>
+<p>选取设备</p>
+<p><img src="/uploads/2016/12/14/10.png" alt=""></p>
+<p>查看设备日志</p>
+<p><img src="/uploads/2016/12/14/11.png" alt=""></p>
+<p>xcode自己去符号化崩溃文件</p>
+<p>2.符号化用安装包安装在测试设备上的应用所产生的崩溃日志<br>符号化的时候需要准备symbolicatecrash文件 .dSYM文件 以及.app文件<br>符号化前先检查一下三者的uuid是不是一致的,只有是一致的才能符号化成功。<br>查看xx.app文件的uuid的方法：<br>dwarfdump –uuid xxx.app/xxx (xxx工程名)<br>查看xx.app.dSYM文件的uuid的方法令：<br>dwarfdump –uuid xxx.app.dSYM (xxx工程名)<br>而.crash的uuid位于，crash日志中的Binary Images:中的第一行尖括号内。如：armv7 <8bdeaf1a0b233ac199728c2a0ebb4165></8bdeaf1a0b233ac199728c2a0ebb4165></p>
+<p>将三种文件拷贝到同一个目录中，在终端中使用命令<br>./symbolicatecrash ./<em>.crash ./</em>.app.dSYM &gt; xxx.crash来解析崩溃日志。</p>
+<p><img src="/uploads/2016/12/14/12.png" alt=""></p>
+<p>如果想今后解析日志的时候更方便一点，特别是解析多个崩溃日志的时候，如果一个一个去解析的话，很花费时间的。我的话，会将这些写到一个脚本中，解析的时候就只用执行脚本，就可以很方便快捷的获取到崩溃日志。</p>
+<p>3.获取并符号化线上的崩溃报告<br>一.通过打包上线时的xcode来获取线上的崩溃报告<br>线上app的崩溃日志会被app store收集并符号化分组。类似的崩溃报告的集合被称为崩溃点。(如果用户选择了与苹果共享诊断数据，这些崩溃日志才会被收集并被符号化)</p>
+<p><img src="/uploads/2016/12/14/13.png" alt=""></p>
+<p>在点击相应应用后，会显示此应用的崩溃集合。可以看到每一个集合中都会有很多个设备，如果右键进去查看的话，会看到很多文件。</p>
+<p><img src="/uploads/2016/12/14/14.png" alt=""></p>
+<p><img src="/uploads/2016/12/14/15.png" alt=""></p>
+<p>再次右键进去查看的话，会最终看到详细的崩溃日志</p>
+<p><img src="/uploads/2016/12/14/16.png" alt=""></p>
+<p>当选中了一个崩溃集合后，如果选择在项目中打开，会在项目代码中找到具体出问题的代码</p>
+<p><img src="/uploads/2016/12/14/17.png" alt=""></p>
+<p><img src="/uploads/2016/12/14/18.png" alt=""></p>
+<p><img src="/uploads/2016/12/14/19.png" alt=""></p>
+<p>二、通过友盟等第三方工具来获取崩溃日志<br>崩溃日志列表</p>
+<p><img src="/uploads/2016/12/14/20.png" alt=""></p>
+<p>其中的一个崩溃日志</p>
+<p><img src="/uploads/2016/12/14/21.png" alt=""></p>
+<p>崩溃的代码的位置，这个是最关键的，可以通过这个来找到代码中的出问题的地方</p>
+<p><img src="/uploads/2016/12/14/22.png" alt=""></p>
+<p>export dSYMPath=”$(find ~/Library/Developer/Xcode -iname ‘*.dSYM’ -print0 | xargs -0 dwarfdump -u  | grep C0349572-9622-3A00-81D0-4DDE0E00DC7A | sed -E ‘s/^{FNXX==XXFN}+//‘ | head -n 1)”;是为了找到归档时候产生的dsym文件的路径</p>
+<p>dwarfdump –arch=armv7 –lookup 0x426031 “$dSYMPath”是符号化的关键，可以找出出问题的地方。</p>
+<p><img src="/uploads/2016/12/14/23.png" alt=""></p>
+<h3 id="分析符号化后的崩溃报告"><a href="#分析符号化后的崩溃报告" class="headerlink" title="分析符号化后的崩溃报告"></a>分析符号化后的崩溃报告</h3><p>1.头部<br>每个崩溃报告都会以一个头部开始</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Listing 4  Excerpt of the header from a crash report.</div><div class="line">Incident Identifier: B6FD1E8E-B39F-430B-ADDE-FC3A45ED368C</div><div class="line">CrashReporter Key: f04e68ec62d3c66057628c9ba9839e30d55937dc</div><div class="line">Hardware Model: iPad6,8</div><div class="line">Process: TheElements [303]</div><div class="line">Path: /private/var/containers/Bundle/Application/888C1FA2-3666-4AE2-9E8E-62E2F787DEC1/TheElements.app/TheElements</div><div class="line">Identifier: com.example.apple-samplecode.TheElements</div><div class="line">Version: 1.12</div><div class="line">Code Type: ARM-64 (Native)</div><div class="line">Role: Foreground</div><div class="line">Parent Process: launchd [1]</div><div class="line">Coalition: com.example.apple-samplecode.TheElements [402]</div><div class="line"></div><div class="line">Date/Time: 2016-08-22 10:43:07.5806 -0700</div><div class="line">Launch Time: 2016-08-22 10:43:01.0293 -0700</div><div class="line">OS Version: iPhone OS 10.0 (14A5345a)</div><div class="line">Report Version: 104</div></pre></td></tr></table></figure>
+<p>以下的值是特别值得注意的:</p>
+<p>Incident Identifier: 一个唯一的标识. 不会存在共用一个标识的崩溃报告.<br>CrashReporter Key:是与设备标识相对应的唯一键值。虽然它不是真正的设备标识符，但也是一个非常有用的情报:如果你看到100个崩溃日志的CrashReporter Key值都是相同的，或者只有少数几个不同的CrashReport值，说明这不是一个普遍的问题，只发生在一个或少数几个设备上。<br>Process: 是应用名称。中括号里面的数字是闪退时应用的进程ID。<br>Version: 崩溃进程的版本号. 这个值包含在 CFBundleVersion and CFBundleVersionString中.<br>Code Type: 崩溃日志所在设备的架构. 会是ARM-64, ARM, x86-64, or x86中的一个.<br>OS Version: 崩溃发生时的系统版本</p>
+<h3 id="异常信息"><a href="#异常信息" class="headerlink" title="异常信息"></a>异常信息</h3><p>异常信息会列出异常的类型、位置。</p>
+<p>以下的内容是摘录的一个崩溃报告的异常代码段,该崩溃报告是一个进程由于一个未捕获的异常而崩溃产生的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Exception Type: EXC_CRASH (SIGABRT)</div><div class="line">Exception Codes: 0x0000000000000000, 0x0000000000000000</div><div class="line">Exception Note: EXC_CORPSE_NOTIFY</div><div class="line">Triggered by Thread: 0</div></pre></td></tr></table></figure>
+<p>以下的内容是摘录于一个因为空指针的访问而崩溃产生的崩溃报告的异常代码段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Exception Type: EXC_BAD_ACCESS (SIGSEGV)</div><div class="line">Exception Subtype: KERN_INVALID_ADDRESS at 0x0000000000000000</div><div class="line">Termination Signal: Segmentation fault: 11</div><div class="line">Termination Reason: Namespace SIGNAL, Code 0xb</div><div class="line">Terminating Process: exc handler [0]</div><div class="line">Triggered by Thread: 0</div></pre></td></tr></table></figure>
+<p>异常信息中可能出现的字段的解释如下：<br>Exception Codes: 处理器的具体信息有关的异常编码成一个或多个64位进制数。通常情况下，这个区域不会被呈现，因为将异常代码解析成人们可以看懂的描述是在其它区域进行的。<br>Exception Subtype: 供人们可读的异常代码的名字<br>Exception Message: 从异常代码中提取的额外的可供人们阅读的信息.<br>Exception Note: 不是特定于一个异常类型的额外信息.如果这个区域包含SIMULATED (这不是一个崩溃)然后进程没有崩溃，但是被watchdog杀掉了<br>Termination Reason: 当一个进程被终止的时的原因。<br>Triggered by Thread: 异常所在的线程.</p>
+<p>下面的小节将介绍一些最常见的异常类型。</p>
+<h3 id="Bad-Memory-Access-EXC-BAD-ACCESS-SIGSEGV-SIGBUS"><a href="#Bad-Memory-Access-EXC-BAD-ACCESS-SIGSEGV-SIGBUS" class="headerlink" title="Bad Memory Access [EXC_BAD_ACCESS // SIGSEGV // SIGBUS]"></a>Bad Memory Access [EXC_BAD_ACCESS // SIGSEGV // SIGBUS]</h3><p>进程试图访问无效的内存，或试图以内存的保护级别所不允许的方式去访问内存（例如，写入到只读存储器）。异常类型字段(Exception Subtype)包含一个kern_return_t描述错误，和错误的访问的内存地址。</p>
+<p>这里是调试一个Bad Memory Access的一些小技巧:</p>
+<p>1.如果objc_msgSend或者objc_release在回溯(Backtraces)的顶部附近，这个进程可能是尝试给一个释放的对象发送消息。你应该用Zombies instrument(调试僵尸对象的工具)来更好的理解这个崩溃。</p>
+<p>2.如果gpus_ReturnNotPermittedKillClient在回溯的顶部附近，这个进程是由于在后台尝试用OpenGL ES 或者 Metal来渲染，而被杀掉的。<a href="https://developer.apple.com/library/content/qa/qa1766/_index.html" target="_blank" rel="external">See QA1766: How to fix OpenGL ES application crashes when moving to the background.</a></p>
+<p>3.用地址消毒剂(<a href="https://developer.apple.com/videos/play/wwdc2015/413/" target="_blank" rel="external">Address Sanitizer</a>,这是xcode7引入的新特性 )来跑程序。<br>The address sanitizer adds additional instrumentation around memory access in your compiled code. As your application runs, Xcode will alert you if memory is accessed in a way that could lead to a crash.</p>
+<h3 id="Abnormal-Exit-异常退出-EXC-CRASH-SIGABRT"><a href="#Abnormal-Exit-异常退出-EXC-CRASH-SIGABRT" class="headerlink" title="Abnormal Exit (异常退出)[EXC_CRASH // SIGABRT]"></a>Abnormal Exit (异常退出)[EXC_CRASH // SIGABRT]</h3><p>进程异常退出。该异常类型崩溃最常见的原因是未捕获的Objective-C和C++异常和调用abort()。<br>如果他们需要太多的时间来初始化，程序将被终止，因为触发了看门狗。如果是因为启动的时候被挂起，所产生的崩溃报告异常类型(Exception Subtype)将是launch_hang。</p>
+<h3 id="Trace-Trap-追踪捕获-EXC-BREAKPOINT-SIGTRAP"><a href="#Trace-Trap-追踪捕获-EXC-BREAKPOINT-SIGTRAP" class="headerlink" title="Trace Trap (追踪捕获)[EXC_BREAKPOINT // SIGTRAP]"></a>Trace Trap (追踪捕获)[EXC_BREAKPOINT // SIGTRAP]</h3><p>类似于异常退出,这个异常是为了给附加的调试器中断的过程的机会在其执行一个特定的点。您可以从您自己的代码引发此异常使用__builtin_trap()函数。如果没有调试器连接,进程将被终止并生成崩溃报告。</p>
+<h3 id="Illegal-Instruction-非法指令-EXC-BAD-INSTRUCTION-SIGILL"><a href="#Illegal-Instruction-非法指令-EXC-BAD-INSTRUCTION-SIGILL" class="headerlink" title="Illegal Instruction(非法指令) [EXC_BAD_INSTRUCTION // SIGILL]"></a>Illegal Instruction(非法指令) [EXC_BAD_INSTRUCTION // SIGILL]</h3><p>进程试图执行非法或未定义指令。这个进程可能试图通过一个配置错误的函数指针，跳到一个无效的地址。在英特尔处理器,ud2操作码造成EXC_BAD_INSTRUCTION异常但通常用于调试的时候的追踪。在英特尔处理器上的swift代码因为这个异常类型而被终止，如果在运行时遇到意外情况。有关详细信息,请参阅追踪捕获。</p>
+<h3 id="Resource-Limit-EXC-RESOURCE"><a href="#Resource-Limit-EXC-RESOURCE" class="headerlink" title="Resource Limit [EXC_RESOURCE]"></a>Resource Limit [EXC_RESOURCE]</h3><p>这个进程超出了资源消耗的限制。这是一个从操作系统通知,进程是使用太多的资源。这虽然不是崩溃但也会生成崩溃日志。</p>
+<h2 id="其它的异常信息"><a href="#其它的异常信息" class="headerlink" title="其它的异常信息"></a>其它的异常信息</h2><p>0x8badf00d: 读做 “ate bad food”! (把数字换成字母，是不是很像 :p)该编码表示应用是因为发生watchdog超时而被iOS终止的。  通常是应用花费太多时间而无法启动、终止或响应用系统事件。</p>
+<p>0xbad22222: 该编码表示 VoIP 应用因为过于频繁重启而被终止。<br>0xdead10cc: 读做 “dead lock”!该代码表明应用因为在后台运行时占用系统资源，如通讯录数据库不释放而被终止 。<br>0xdeadfa11: 读做 “dead fall”! 该代码表示应用是被用户强制退出的。根据苹果文档, 强制退出发生在用户长按开关按钮直到出现 “滑动来关机”, 然后长按 Home按钮。强制退出将产生 包含0xdeadfa11 异常编码的崩溃日志, 因为大多数是强制退出是因为应用阻塞了界面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">待补充</div></pre></td></tr></table></figure>
+<h3 id="其它捕捉和符号化崩溃日志的方法"><a href="#其它捕捉和符号化崩溃日志的方法" class="headerlink" title="其它捕捉和符号化崩溃日志的方法"></a>其它捕捉和符号化崩溃日志的方法</h3><p>1.通过代码来捕捉崩溃信息，并发送到指定的地方<br>在项目的代码中重新指定顶层的错误处理的handler,这样可以在软件崩溃前的最后一秒调用错误处理的函数来获得崩溃的信息(这里的信息已经是被符号化的)。然后将崩溃信息发送到自己的服务器或者其它的地方，以便开发者巩固自己的代码的可靠性。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions</div><div class="line">&#123;</div><div class="line">    [[AFNetworkReachabilityManager sharedManager] startMonitoring];</div><div class="line">    appDelegate = <span class="keyword">self</span>;</div><div class="line">    <span class="keyword">self</span>.window = [[<span class="built_in">UIWindow</span> alloc] initWithFrame:[[<span class="built_in">UIScreen</span> mainScreen] bounds]];</div><div class="line">    <span class="comment">// Override point for customization after application launch.</span></div><div class="line">    <span class="keyword">self</span>.window.backgroundColor = [<span class="built_in">UIColor</span> whiteColor];</div><div class="line">    <span class="built_in">UILocalNotification</span> *notification = [launchOptions objectForKey:<span class="built_in">UIApplicationLaunchOptionsLocalNotificationKey</span>];</div><div class="line">    _notification = notification;</div><div class="line"></div><div class="line">    <span class="built_in">NSSetUncaughtExceptionHandler</span>(&amp;caughtExceptionHandler);</div><div class="line">    <span class="comment">/*Changes the top-level error handler.</span></div><div class="line">    Sets the top-level error-handling function where you can perform last-minute logging before the program terminates</div><div class="line">    */</div><div class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> caughtExceptionHandler(<span class="built_in">NSException</span> *exception)&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     *  获取异常崩溃信息</div><div class="line">     */</div><div class="line">    <span class="built_in">NSArray</span> *callStack = [exception callStackSymbols];</div><div class="line">    <span class="built_in">NSString</span> *reason = [exception reason];</div><div class="line">    <span class="built_in">NSString</span> *name = [exception name];</div><div class="line">    <span class="built_in">NSString</span> *content = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"========异常错误报告========\\nname:%@\\nreason:\\n%@\\ncallStackSymbols:\\n%@"</span>,name,reason,[callStack componentsJoinedByString:<span class="string">@"\\n"</span>]];</div><div class="line"></div><div class="line">    <span class="comment">//把异常崩溃信息发送至开发者邮件</span></div><div class="line">    <span class="built_in">NSMutableString</span> *mailUrl = [<span class="built_in">NSMutableString</span> string];</div><div class="line">    [mailUrl appendString:<span class="string">@"mailto:xxx@qq.com"</span>];</div><div class="line">    [mailUrl appendString:<span class="string">@"?subject=程序异常崩溃信息，请配合发送异常报告，谢谢合作！"</span>];</div><div class="line">    [mailUrl appendFormat:<span class="string">@"&amp;body=%@"</span>, content];</div><div class="line">    <span class="comment">// 打开地址</span></div><div class="line">    <span class="built_in">NSString</span> *mailPath = [mailUrl stringByAddingPercentEscapesUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</div><div class="line">    [[<span class="built_in">UIApplication</span> sharedApplication] openURL:[<span class="built_in">NSURL</span> URLWithString:mailPath]];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>文／小小外星人（简书作者）<br>原文链接：<a href="http://www.jianshu.com/p/5119f76d93d6" target="_blank" rel="external">http://www.jianshu.com/p/5119f76d93d6</a><br>著作权归作者所有，转载请联系作者获得授权，并标注“简书作者”。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/02/转-XPC/" rel="next" title="[转]关于XPC">
+                <i class="fa fa-chevron-left"></i> [转]关于XPC
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/" rel="prev" title="[转]Explore Facebook iOS Client - Section FBInjectable">
+                [转]Explore Facebook iOS Client - Section FBInjectable <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/14/转-全面的理解和分析IOS的崩溃日志/"
+           data-title="[转]全面的理解和分析IOS的崩溃日志" data-url="http://www.njiang.cn/2016/12/14/转-全面的理解和分析IOS的崩溃日志/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取崩溃和低内存报告"><span class="nav-number">2.</span> <span class="nav-text">获取崩溃和低内存报告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#symbolicating崩溃报告"><span class="nav-number">3.</span> <span class="nav-text">symbolicating崩溃报告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bitcode"><span class="nav-number">4.</span> <span class="nav-text">Bitcode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从Xcode获取dSYMs文件"><span class="nav-number">5.</span> <span class="nav-text">从Xcode获取dSYMs文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#确定崩溃报告是否被符号化"><span class="nav-number">6.</span> <span class="nav-text">确定崩溃报告是否被符号化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号化崩溃报告"><span class="nav-number">7.</span> <span class="nav-text">符号化崩溃报告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析符号化后的崩溃报告"><span class="nav-number">8.</span> <span class="nav-text">分析符号化后的崩溃报告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常信息"><span class="nav-number">9.</span> <span class="nav-text">异常信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bad-Memory-Access-EXC-BAD-ACCESS-SIGSEGV-SIGBUS"><span class="nav-number">10.</span> <span class="nav-text">Bad Memory Access [EXC_BAD_ACCESS // SIGSEGV // SIGBUS]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Abnormal-Exit-异常退出-EXC-CRASH-SIGABRT"><span class="nav-number">11.</span> <span class="nav-text">Abnormal Exit (异常退出)[EXC_CRASH // SIGABRT]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trace-Trap-追踪捕获-EXC-BREAKPOINT-SIGTRAP"><span class="nav-number">12.</span> <span class="nav-text">Trace Trap (追踪捕获)[EXC_BREAKPOINT // SIGTRAP]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Illegal-Instruction-非法指令-EXC-BAD-INSTRUCTION-SIGILL"><span class="nav-number">13.</span> <span class="nav-text">Illegal Instruction(非法指令) [EXC_BAD_INSTRUCTION // SIGILL]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Resource-Limit-EXC-RESOURCE"><span class="nav-number">14.</span> <span class="nav-text">Resource Limit [EXC_RESOURCE]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它的异常信息"><span class="nav-number"></span> <span class="nav-text">其它的异常信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#其它捕捉和符号化崩溃日志的方法"><span class="nav-number">1.</span> <span class="nav-text">其它捕捉和符号化崩溃日志的方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

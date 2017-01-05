@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="##开始首先，需要下载源程序BitWatch-Starter-s2。注意，这个必须要用XCode 6.3以及以上版本运行。
+打开程序，编译运行，如下图所示：
+定位到File\New\Target...，然后选择iOS\Apple Watch\Watch App模板。
+Watch程序会跟随主iOS App，而且会建立一个单独的目标程序，点击Next继续。在下一个页面，Xcode会自动填写信息，并且你">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[iOS]WatchKit简明教程">
+<meta property="og:url" content="http://www.njiang.cn/2015/04/29/-iOS-WatchKit简明教程/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="##开始首先，需要下载源程序BitWatch-Starter-s2。注意，这个必须要用XCode 6.3以及以上版本运行。
+打开程序，编译运行，如下图所示：
+定位到File\New\Target...，然后选择iOS\Apple Watch\Watch App模板。
+Watch程序会跟随主iOS App，而且会建立一个单独的目标程序，点击Next继续。在下一个页面，Xcode会自动填写信息，并且你">
+<meta property="og:image" content="http://www.njiang.cn/uploads/header/meinv.jpg">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[iOS]WatchKit简明教程">
+<meta name="twitter:description" content="##开始首先，需要下载源程序BitWatch-Starter-s2。注意，这个必须要用XCode 6.3以及以上版本运行。
+打开程序，编译运行，如下图所示：
+定位到File\New\Target...，然后选择iOS\Apple Watch\Watch App模板。
+Watch程序会跟随主iOS App，而且会建立一个单独的目标程序，点击Next继续。在下一个页面，Xcode会自动填写信息，并且你">
+<meta name="twitter:image" content="http://www.njiang.cn/uploads/header/meinv.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2015/04/29/-iOS-WatchKit简明教程/"/>
+
+
+
+
+
+  <title> [iOS]WatchKit简明教程 | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2015/04/29/-iOS-WatchKit简明教程/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [iOS]WatchKit简明教程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-04-29T16:24:49+08:00">
+              2015-04-29
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/04/29/-iOS-WatchKit简明教程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/29/-iOS-WatchKit简明教程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="/uploads/header/meinv.jpg" rel="gallery_cixjz0myu008k5ntin2nktkx7"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="/uploads/header/meinv.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <p>##开始<br>首先，需要下载源程序<a href="/uploads/2015/04/29/BitWatch-Starter-s2.zip">BitWatch-Starter-s2</a>。注意，这个必须要用XCode 6.3以及以上版本运行。</p>
+<p>打开程序，编译运行，如下图所示：<br><img src="/uploads/2015/04/29/watch-bitcoinbillionaire-281x500.png" alt=""></p>
+<p>定位到<code>File\New\Target...</code>，然后选择<code>iOS\Apple Watch\Watch App</code>模板。<br><img src="/uploads/2015/04/29/watch-target-700x413.png" alt=""></p>
+<p>Watch程序会跟随主iOS App，而且会建立一个单独的目标程序，点击<code>Next</code>继续。<br>在下一个页面，Xcode会自动填写信息，并且你无法改动程序的名字。<br><img src="/uploads/2015/04/29/watch-targetoptions-700x407.png" alt=""></p>
+<p>确保选择的语言室Swift，<code>Include Notification Scene</code>和<code>Include Glance Scene</code>都没有被选中。点击<code>Finish</code>，Xcode会生成一个目标工程。工程的目录如下图所示：<br><img src="/uploads/2015/04/29/watch-groups.png" alt=""></p>
+<ol>
+<li><code>Watch App</code>包含了storyboard和图片文件，没有代码，你可以将这个看做程序的View。</li>
+<li><code>WatchKit Extension</code>包含了可执行的代码，它会控制上面程序中的View。</li>
+</ol>
+<p><img src="/uploads/2015/04/29/WatchKit_03.jpg" alt=""></p>
+<blockquote>
+<p>与iOS程序不同的是，iOS的程序包括了View，Control和controllers，WatchKit包含的是Inerfaces, Interfact Objects和Interface Controllers.</p>
+</blockquote>
+<p>##Watch Interface<br>当设计Watch App的时候，需要用到storyboard和interface Builder。打开<code>BitWatch Watch App</code>选中<code>Interface.storyboard</code>。<br><img src="/uploads/2015/04/29/watch-storyboard1.png" alt=""></p>
+<p>你会看到一个空的Interface Controller。现在往里面添加一个Label和一个Button，如下图所示：<br><img src="/uploads/2015/04/29/watch-storyboard2.png" alt=""></p>
+<p>##Actions和OUtlets<br>苹果已经负责把Watch和主App之间的无线交流链接起来了。接下来需要添加相应的接口，打开<code>InterfaceController.swift</code>，按住Control+Drag，将label拖拽到InterfaceController，并且命名为<code>priceLabel</code>，点击<code>Connect</code>。<br><img src="/uploads/2015/04/29/watch-outlet.png" alt=""></p>
+<p>##添加WatchKit代码<br>这个初始的工程里面，有一个叫做BitWatchKit的framework，它包含了一些去网站下载比特币价格的代码。现在需要将这个framework添加到工程里面。</p>
+<p>打开导航，选择<code>BitWatch WatchKit Extension</code>，选中<code>Gnenral</code>选项卡，然后翻到<code>Linked Framewoks and Libraries</code>。<br><img src="/uploads/2015/04/29/watch-extension-700x248.png" alt=""></p>
+<p>点击<code>+</code>按钮，你可以看到能够添加到工程里的framework，选择<code>BitWatchKit.framework</code>，然后点击<code>Add</code>。<br><img src="/uploads/2015/04/29/watch-framework.png" alt=""></p>
+<p>现在切换到<code>WatchKit Extension</code>下面的<code>InterfaceController.swift</code>。添加如下代码：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> BitWatchKit</div></pre></td></tr></table></figure></p>
+<p>这段代码允许你访问framework里面的Tracker类。接下来再类的定义中添加如下代码：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> tracker = <span class="type">Tracker</span>()</div><div class="line"><span class="keyword">var</span> updating = <span class="literal">false</span></div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">updatePrice</span><span class="params">(price: NSNumber)</span></span> &#123;</div><div class="line">  priceLabel.setText(<span class="type">Tracker</span>.priceFormatter.stringFromNumber(price))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">update</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="comment">// 1</span></div><div class="line">  <span class="keyword">if</span> !updating &#123;</div><div class="line">    updating = <span class="literal">true</span></div><div class="line">    <span class="comment">// 2</span></div><div class="line">    <span class="keyword">let</span> originalPrice = tracker.cachedPrice()</div><div class="line">    <span class="comment">// 3</span></div><div class="line">    tracker.requestPrice &#123; (price, error) -&gt; () <span class="keyword">in</span></div><div class="line">      <span class="comment">// 4</span></div><div class="line">      <span class="keyword">if</span> error == <span class="literal">nil</span> &#123;</div><div class="line">        <span class="keyword">self</span>.updatePrice(price!)</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">self</span>.updating = <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>以上代码所做的工作是：</p>
+<ol>
+<li>先检测下是否正在更新中。</li>
+<li>临时保存当前的价格。</li>
+<li><code>requestPrice()</code>是在<code>Tracker</code>里面定义的一个方法，是用来获取最新的比特币价格。</li>
+<li>如果请求成功了，会返回到闭包函数里面更新UI。</li>
+</ol>
+<p>##Interface生命周期<br>用户第一次可以在<code>awakeWithContext(_:)</code>函数里面初始化控件，在此时，整个的interface会导入到程序中，outlets也会进行初始化。也就意味着，可以在这个时候，初始化程序所需要的数据。但此时，interface还没有准好显示在屏幕上。</p>
+<p>此时你可以添加一部分代价很高的代码，比如在<code>awakeWithContext:</code>里面添加如下代码，<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">updatePrice(tracker.cachedPrice())</div></pre></td></tr></table></figure></p>
+<p>接下来，在<code>willActive()</code>里面添加<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update()</div></pre></td></tr></table></figure></p>
+<p><code>willActive()</code>与iOS里面的<code>viewWillAppear</code>相似，表示interface快要被激活并显示在watch上。在这个地方用来更新数据是比较好的，所以调用<code>update()</code>，它会发一个网络请求。最终，在<code>refreshTapped</code>中添加<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update()</div></pre></td></tr></table></figure></p>
+<p>##测试你的App<br>为了测试你的程序，需要启用Watch作为<code>external display</code>。在菜单中选择<code>Hardware\External Displays</code>并选中Apple Watch。<br><img src="/uploads/2015/04/29/watch-simulator.png" alt=""></p>
+<p>然后回到Xcode，选择<code>BitWatch Watch App</code>，然后选中<code>iPhone6</code>模拟器。<br><img src="/uploads/2015/04/29/watch-scheme.png" alt=""></p>
+<p>运行程序，然后切换到模拟器，你可以看到比特币的信息已经现在在Watch的模拟器上了。<br><img src="/uploads/2015/04/29/watch-app1.png" alt=""></p>
+<p>##更多Interface<br>接下来，我们再来添加2个功能：</p>
+<ul>
+<li>最近更新时间</li>
+<li>一个向上/向下的图片，表示价格上升还是下降</li>
+</ul>
+<p>首先，需要将2个图片添加到工程里面，打开<code>BitWatch Watch App</code>组底下的<code>Images.xcassets</code>。初始的工程里面已经包含了2个图片文件：Down@2x.png 和 Up@2x.png。在Finder窗口中，将2个文件拖拽到里面，<br><img src="/uploads/2015/04/29/watch-assets-700x491.png" alt=""></p>
+<blockquote>
+<p>WatchKit的程序只需要@2x的图片。</p>
+</blockquote>
+<p>接下来打开<code>Interface.storyboard</code>，拖拽另外一个Label到storyboard，并将它放到更新的按钮上面。将它的text设置为<code>Last updated</code>。<br><img src="/uploads/2015/04/29/watch-storyboard5.png" alt=""></p>
+<p>在iOS程序中，view的顺序是由z-order来决定的。但是针对watch interface，控件之间不会互相的覆盖，所以没有z-order的概念。<br><img src="/uploads/2015/04/29/watch-outline.png" alt=""></p>
+<p>##Groups<br>针对Watch Interface，可以设置top/bottom来设置其上下位置，如果是边横排的布局，可以用到<code>groups</code>来设置。Groups更像一个容器，你可以把Interface放在里面。可以设置里面控件的布局是横着还是竖着。</p>
+<p>在iPhone上面，图片如下图所示：<br><img src="/uploads/2015/04/29/watch-apparrows.png" alt=""></p>
+<p>所以接下来要做的，就是将一个图片放置在Label旁边。拖拽一个group，然后放在price label和last updated label之间，在属性设置里面，将其设为<code>Horizontal</code>。<br><img src="/uploads/2015/04/29/watch-storyboard6.png" alt=""></p>
+<p>接下来，拖拽一个图片放到group里面，然后拖拽一个新的label放到group里面，并将其放到image的右边。<br><img src="/uploads/2015/04/29/watch-storyboard7.png" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/27/-iOS-导入静态库工程/" rel="next" title="[iOS]创建静态库文件简明教程">
+                <i class="fa fa-chevron-left"></i> [iOS]创建静态库文件简明教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/10/-iOS-JSPatch实现原理详解：让JS调用-替换任意OC方法/" rel="prev" title="[iOS]JSPatch实现原理详解：让JS调用/替换任意OC方法">
+                [iOS]JSPatch实现原理详解：让JS调用/替换任意OC方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/04/29/-iOS-WatchKit简明教程/"
+           data-title="[iOS]WatchKit简明教程" data-url="http://www.njiang.cn/2015/04/29/-iOS-WatchKit简明教程/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

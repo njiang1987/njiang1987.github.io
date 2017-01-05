@@ -1,0 +1,753 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="##GCD和NSOperationQueueGCD是基于C的耿底层的API，它可以
+##dispatch_once123456789+ (UIColor *)boringColor;&amp;#123;    static UIColor *color;    static dispatch_once_t onceToken;    dispatch_once(&amp;amp;onceToken, ^&amp;#123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[iOS]底层并发 API-读书笔记">
+<meta property="og:url" content="http://www.njiang.cn/2014/11/04/-iOS-底层并发-API-读书笔记/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="##GCD和NSOperationQueueGCD是基于C的耿底层的API，它可以
+##dispatch_once123456789+ (UIColor *)boringColor;&amp;#123;    static UIColor *color;    static dispatch_once_t onceToken;    dispatch_once(&amp;amp;onceToken, ^&amp;#123">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[iOS]底层并发 API-读书笔记">
+<meta name="twitter:description" content="##GCD和NSOperationQueueGCD是基于C的耿底层的API，它可以
+##dispatch_once123456789+ (UIColor *)boringColor;&amp;#123;    static UIColor *color;    static dispatch_once_t onceToken;    dispatch_once(&amp;amp;onceToken, ^&amp;#123">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2014/11/04/-iOS-底层并发-API-读书笔记/"/>
+
+
+
+
+
+  <title> [iOS]底层并发 API-读书笔记 | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/11/04/-iOS-底层并发-API-读书笔记/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [iOS]底层并发 API-读书笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-04T19:18:59+08:00">
+              2014-11-04
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/11/04/-iOS-底层并发-API-读书笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/04/-iOS-底层并发-API-读书笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##GCD和NSOperationQueue<br>GCD是基于C的耿底层的API，它可以</p>
+<p>##dispatch_once<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">+ (<span class="built_in">UIColor</span> *)boringColor;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">UIColor</span> *color;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">        color = [<span class="built_in">UIColor</span> colorWithRed:<span class="number">0.380</span>f green:<span class="number">0.376</span>f blue:<span class="number">0.376</span>f alpha:<span class="number">1.000</span>f];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> color;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>onceToken 被声明为 static ，或者有全局作用域</li>
+</ol>
+<p>##dispatch_after<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)foo</div><div class="line">&#123;</div><div class="line">    <span class="keyword">double</span> delayInSeconds = <span class="number">2.0</span>;</div><div class="line">    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (delayInSeconds * <span class="built_in">NSEC_PER_SEC</span>));</div><div class="line">    dispatch_after(popTime, dispatch_get_main_queue(), ^(<span class="keyword">void</span>)&#123;</div><div class="line">        [<span class="keyword">self</span> bar];</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>##Queue<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>)init;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> != <span class="literal">nil</span>) &#123;</div><div class="line">        <span class="built_in">NSString</span> *label = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@.isolation.%p"</span>, [<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">self</span>];</div><div class="line">        <span class="keyword">self</span>.isolationQueue = dispatch_queue_create([label UTF8String], <span class="number">0</span>);</div><div class="line"></div><div class="line">        label = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@.work.%p"</span>, [<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">self</span>];</div><div class="line">        <span class="keyword">self</span>.workQueue = dispatch_queue_create([label UTF8String], <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>默认情况下，队列是串行的。</li>
+<li>GCD 通过创建所谓的线程池来大致匹配 CPU 内核数量。</li>
+<li>不应该在GCD队列中以阻塞的方式来做这些操作，比如从文件或者网络中读写数据</li>
+</ol>
+<p>###目标队列<br><code>(lldb) thread list</code> 命令将会在控制台打印出所有队列的名字</p>
+<p>###优先级<br>DISPATCH_QUEUE_PRIORITY_BACKGROUND，理解了 throttled I/O 和 background status as per setpriority(2) 的意义</p>
+<p>##隔离</p>
+<p>###单一资源的多读单写<br>创建队列<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.isolationQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_CONCURRENT);</div></pre></td></tr></table></figure></p>
+<p>读写操作<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)setCount:(<span class="built_in">NSUInteger</span>)count forKey:(<span class="built_in">NSString</span> *)key</div><div class="line">&#123;</div><div class="line">    key = [key <span class="keyword">copy</span>];</div><div class="line">    dispatch_barrier_async(<span class="keyword">self</span>.isolationQueue, ^()&#123;</div><div class="line">        <span class="keyword">if</span> (count == <span class="number">0</span>) &#123;</div><div class="line">            [<span class="keyword">self</span>.counts removeObjectForKey:key];</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">self</span>.counts[key] = @(count);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">- (<span class="built_in">NSUInteger</span>)countForKey:(<span class="built_in">NSString</span> *)key;</div><div class="line">&#123;</div><div class="line">    __block <span class="built_in">NSUInteger</span> count;</div><div class="line">    <span class="built_in">dispatch_sync</span>(<span class="keyword">self</span>.isolationQueue, ^()&#123;</div><div class="line">        <span class="built_in">NSNumber</span> *n = <span class="keyword">self</span>.counts[key];</div><div class="line">        count = [n unsignedIntegerValue];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> count;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>当使用并发队列时，要确保所有的 barrier 调用都是 async 的.</li>
+</ol>
+<p>###锁竞争</p>
+<ol>
+<li>所有对 dispatch_async，dispatch_sync 等等的调用都需要完成某种形式的锁——以确保仅有一个线程或者特定的线程运行指定的代码</li>
+<li><p>性能下降的原因：</p>
+<p> 第一个是独占临界区资源太久的开销，以至于别的线程都因为进入临界区的操作而阻塞。第二个是太频繁出入临界区的开销</p>
+</li>
+</ol>
+<p>###全都使用异步分发<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queueA; <span class="comment">// assume we have this</span></div><div class="line"><span class="built_in">dispatch_sync</span>(queueA, ^()&#123;</div><div class="line">    <span class="built_in">dispatch_sync</span>(queueA, ^()&#123;</div><div class="line">        foo();</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>进入第2个dispatch_sync会发生死锁。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queueA; <span class="comment">// assume we have this</span></div><div class="line"><span class="built_in">dispatch_async</span>(queueA, ^()&#123;</div><div class="line">    <span class="built_in">dispatch_async</span>(queueA, ^()&#123;</div><div class="line">        foo();</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>##如何写出好的异步API<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)processImage:(<span class="built_in">UIImage</span> *)image completionHandler:(<span class="keyword">void</span>(^)(<span class="built_in">BOOL</span> success))handler;</div><div class="line">&#123;</div><div class="line">    <span class="built_in">dispatch_async</span>(<span class="keyword">self</span>.isolationQueue, ^(<span class="keyword">void</span>)&#123;</div><div class="line">        <span class="comment">// do actual processing here</span></div><div class="line">        <span class="built_in">dispatch_async</span>(<span class="keyword">self</span>.resultQueue, ^(<span class="keyword">void</span>)&#123;</div><div class="line">            handler(<span class="literal">YES</span>);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>##迭代执行diapatch_apply<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dispatch_apply(height, dispatch_get_global_queue(<span class="number">0</span>, <span class="number">0</span>), ^(size_t y) &#123;</div><div class="line">    <span class="keyword">for</span> (size_t x = <span class="number">0</span>; x &lt; width; x += <span class="number">2</span>) &#123;</div><div class="line">        <span class="comment">// Do something with x and y here</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>##组<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">dispatch_group_t group = dispatch_group_create();</div><div class="line"></div><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">dispatch_group_async(group, queue, ^()&#123;</div><div class="line">    <span class="comment">// Do something that takes a while</span></div><div class="line">    [<span class="keyword">self</span> doSomeFoo];</div><div class="line">    dispatch_group_async(group, dispatch_get_main_queue(), ^()&#123;</div><div class="line">        <span class="keyword">self</span>.foo = <span class="number">42</span>;</div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line">dispatch_group_async(group, queue, ^()&#123;</div><div class="line">    <span class="comment">// Do something else that takes a while</span></div><div class="line">    [<span class="keyword">self</span> doSomeBar];</div><div class="line">    dispatch_group_async(group, dispatch_get_main_queue(), ^()&#123;</div><div class="line">        <span class="keyword">self</span>.bar = <span class="number">1</span>;</div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// This block will run once everything above is done:</span></div><div class="line">dispatch_group_notify(group, dispatch_get_main_queue(), ^()&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"foo: %d"</span>, <span class="keyword">self</span>.foo);</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"bar: %d"</span>, <span class="keyword">self</span>.bar);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>##对现有API使用dispatch_group_t</p>
+<p>确保自己使用 groups 的代码是成对出现的。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)withGroup:(dispatch_group_t)group performBlock:(dispatch_block_t)block</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (group == <span class="literal">NULL</span>) &#123;</div><div class="line">        [<span class="keyword">self</span> performBlock:block];</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        dispatch_group_enter(group);</div><div class="line">        [<span class="keyword">self</span> performBlock:^()&#123;</div><div class="line">            block();</div><div class="line">            dispatch_group_leave(group);</div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以用<code>dispatch_group_notify</code>来运行一个block</p>
+<p>类似的对于NSURLConnection，也可以做同样的事情<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)withGroup:(dispatch_group_t)group </div><div class="line">        sendAsynchronousRequest:(<span class="built_in">NSURLRequest</span> *)request </div><div class="line">        queue:(<span class="built_in">NSOperationQueue</span> *)queue </div><div class="line">        completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLResponse</span>*, <span class="built_in">NSData</span>*, <span class="built_in">NSError</span>*))handler</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (group == <span class="literal">NULL</span>) &#123;</div><div class="line">        [<span class="keyword">self</span> sendAsynchronousRequest:request </div><div class="line">                                queue:queue </div><div class="line">                    completionHandler:handler];</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        dispatch_group_enter(group);</div><div class="line">        [<span class="keyword">self</span> sendAsynchronousRequest:request </div><div class="line">                                queue:queue </div><div class="line">                    completionHandler:^(<span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSData</span> *data, <span class="built_in">NSError</span> *error)&#123;</div><div class="line">            handler(response, data, error);</div><div class="line">            dispatch_group_leave(group);</div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li><code>dispatch_group_enter()</code> 必须要在 <code>dispatch_group_leave()</code>之前运行。</li>
+<li><code>dispatch_group_enter()</code> 和 <code>dispatch_group_leave()</code> 一直是成对出现的（就算有错误产生时）。</li>
+</ol>
+<p>##事件源</p>
+<p>###监视进程<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSRunningApplication</span> *mail = [<span class="built_in">NSRunningApplication</span> </div><div class="line">  runningApplicationsWithBundleIdentifier:<span class="string">@"com.apple.mail"</span>];</div><div class="line"><span class="keyword">if</span> (mail == <span class="literal">nil</span>) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div><div class="line">pid_t <span class="keyword">const</span> pid = mail.processIdentifier;</div><div class="line"><span class="keyword">self</span>.source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, </div><div class="line">  DISPATCH_PROC_EXIT, DISPATCH_TARGET_QUEUE_DEFAULT);</div><div class="line">dispatch_source_set_event_handler(<span class="keyword">self</span>.source, ^()&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Mail quit."</span>);</div><div class="line">&#125;);</div><div class="line">dispatch_resume(<span class="keyword">self</span>.source);</div></pre></td></tr></table></figure></p>
+<p>在所有的事件源被传递到你的事件处理器之前，必须调用 dispatch_resume()</p>
+<p>###监视文件<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSURL</span> *directoryURL; <span class="comment">// assume this is set to a directory</span></div><div class="line"><span class="keyword">int</span> <span class="keyword">const</span> fd = open([[directoryURL path] fileSystemRepresentation], O_EVTONLY);</div><div class="line"><span class="keyword">if</span> (fd &lt; <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">char</span> buffer[<span class="number">80</span>];</div><div class="line">    strerror_r(errno, buffer, <span class="keyword">sizeof</span>(buffer));</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Unable to open \"%@\": %s (%d)"</span>, [directoryURL path], buffer, errno);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div><div class="line">dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, fd, </div><div class="line">  DISPATCH_VNODE_WRITE | DISPATCH_VNODE_DELETE, DISPATCH_TARGET_QUEUE_DEFAULT);</div><div class="line">dispatch_source_set_event_handler(source, ^()&#123;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">const</span> data = dispatch_source_get_data(source);</div><div class="line">    <span class="keyword">if</span> (data &amp; DISPATCH_VNODE_WRITE) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"The directory changed."</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (data &amp; DISPATCH_VNODE_DELETE) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"The directory has been deleted."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">dispatch_source_set_cancel_handler(source, ^()&#123;</div><div class="line">    close(fd);</div><div class="line">&#125;);</div><div class="line"><span class="keyword">self</span>.source = source;</div><div class="line">dispatch_resume(<span class="keyword">self</span>.source);</div></pre></td></tr></table></figure></p>
+<p>##定时器<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, </div><div class="line">  <span class="number">0</span>, <span class="number">0</span>, DISPATCH_TARGET_QUEUE_DEFAULT);</div><div class="line">dispatch_source_set_event_handler(source, ^()&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Time flies."</span>);</div><div class="line">&#125;);</div><div class="line">dispatch_time_t start</div><div class="line">dispatch_source_set_timer(source, DISPATCH_TIME_NOW, <span class="number">5</span>ull * <span class="built_in">NSEC_PER_SEC</span>, </div><div class="line">  <span class="number">100</span>ull * <span class="built_in">NSEC_PER_MSEC</span>);</div><div class="line"><span class="keyword">self</span>.source = source;</div><div class="line">dispatch_resume(<span class="keyword">self</span>.source);</div></pre></td></tr></table></figure></p>
+<p>##GCD和缓冲区<br>GCD的缓冲区<code>dispatch_data_t</code>，类似于Objective-C的NSData。<br>这个缓冲区要么基于栈，要么基于内存区域。<code>dispatch_data_t</code>是基于零碎的内存区域。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dispatch_data_t a; <span class="comment">// Assume this hold some valid data</span></div><div class="line">dispatch_data_t b; <span class="comment">// Assume this hold some valid data</span></div><div class="line">dispatch_data_t c = dispatch_data_create_concat(a, b);</div></pre></td></tr></table></figure></p>
+<p>以上只是retain了a和b。一下代码用来遍历c持有的内存区域：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dispatch_data_apply(c, ^(dispatch_data_t region, size_t offset, <span class="keyword">const</span> <span class="keyword">void</span> *buffer, size_t size) &#123;</div><div class="line">    fprintf(stderr, <span class="string">"region with offset %zu, size %zu\n"</span>, offset, size);</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p><code>dispatch_data_create_subrange</code> 来创建一个不做任何拷贝操作的子区域</p>
+<p>##读和写<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">dispatch_io_t dispatch_io_create(dispatch_io_type_t type, dispatch_fd_t fd, </div><div class="line">  <span class="built_in">dispatch_queue_t</span> queue, <span class="keyword">void</span> (^cleanup_handler)(<span class="keyword">int</span> error));</div></pre></td></tr></table></figure></p>
+<ol>
+<li>有两种从根本上不同类型的通道：流和随机存取</li>
+<li><code>dispatch_io_create_with_path</code>, GCD会延迟打开这个文件以限制相同时间内同时打开的文件数量</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/11/02/-LeetCode-Exercise-Day2/" rel="next" title="[LeetCode]Exercise(Day2)">
+                <i class="fa fa-chevron-left"></i> [LeetCode]Exercise(Day2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/05/-LeetCode-Exercise-Day3/" rel="prev" title="[LeetCode]Exercise(Day3)">
+                [LeetCode]Exercise(Day3) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/11/04/-iOS-底层并发-API-读书笔记/"
+           data-title="[iOS]底层并发 API-读书笔记" data-url="http://www.njiang.cn/2014/11/04/-iOS-底层并发-API-读书笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

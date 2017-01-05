@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CodeJam," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="http://code.google.com/codejam/contest/32013/dashboard#s=p0&amp;amp;a=0
+
+Problem
+
+The urban legend goes that if you go to the Google homepage and search for “Google”, the universe will implode. We have a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[CodeJam]Qualification Round 2008 Problem A. Saving the Universe">
+<meta property="og:url" content="http://www.njiang.cn/2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="http://code.google.com/codejam/contest/32013/dashboard#s=p0&amp;amp;a=0
+
+Problem
+
+The urban legend goes that if you go to the Google homepage and search for “Google”, the universe will implode. We have a">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[CodeJam]Qualification Round 2008 Problem A. Saving the Universe">
+<meta name="twitter:description" content="http://code.google.com/codejam/contest/32013/dashboard#s=p0&amp;amp;a=0
+
+Problem
+
+The urban legend goes that if you go to the Google homepage and search for “Google”, the universe will implode. We have a">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/"/>
+
+
+
+
+
+  <title> [CodeJam]Qualification Round 2008 Problem A. Saving the Universe | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [CodeJam]Qualification Round 2008 Problem A. Saving the Universe
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-09T00:00:00+08:00">
+              2013-09-09
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a title="http://code.google.com/codejam/contest/32013/dashboard#s=p0&amp;a=0" href="http://code.google.com/codejam/contest/32013/dashboard#s=p0&amp;a=0" target="_blank" rel="external">http://code.google.com/codejam/contest/32013/dashboard#s=p0&amp;a=0</a></p>
+
+<p>Problem</p>
+
+<p>The urban legend goes that if you go to the Google homepage and search for “Google”, the universe will implode. We have a secret to share… It is true! Please don’t try it, or tell anyone. All right, maybe not. We are just kidding.</p>
+
+<p>The same is not true for a universe far far away. In that universe, if you search on any search engine for that search engine’s name, the universe does implode!</p>
+
+<p>To combat this, people came up with an interesting solution. All queries are pooled together. They are passed to a central system that decides which query goes to which search engine. The central system sends a series of queries to one search engine, and can switch to another at any time. Queries must be processed in the order they’re received. The central system must never send a query to a search engine whose name matches the query. In order to reduce costs, the number of switches should be minimized.</p>
+
+<p>Your task is to tell us how many times the central system will have to switch between search engines, assuming that we program it optimally.</p>
+
+<p>Input</p>
+
+<p>The first line of the input file contains the number of cases, <b>N</b>. <b>N</b> test cases follow.</p>
+
+<p>Each case starts with the number <b>S</b> – the number of search engines. The next <b>S</b> lines each contain the name of a search engine. Each search engine name is no more than one hundred characters long and contains only uppercase letters, lowercase letters, spaces, and numbers. There will not be two search engines with the same name.</p>
+
+<p>The following line contains a number <b>Q</b> – the number of incoming queries. The next <b>Q</b>lines will each contain a query. Each query will be the name of a search engine in the case.</p>
+
+<p>Output</p>
+
+<p>For each input case, you should output:<br><pre>Case #<b>X</b>: <b>Y</b></pre><br>where <b>X</b> is the number of the test case and <b>Y</b> is the number of search engine switches. Do not count the initial choice of a search engine as a switch.</p>
+
+<p>&nbsp;</p>
+
+<p>Limits</p>
+
+<p>0 &lt; <b>N</b> ≤ 20</p>
+
+<p>Small dataset</p>
+
+<p>2 ≤ <b>S</b> ≤ 10</p>
+
+<p>0 ≤ <b>Q</b> ≤ 100</p>
+
+<p>Large dataset</p>
+
+<p>2 ≤ <b>S</b> ≤ 100</p>
+
+<p>0 ≤ <b>Q</b> ≤ 1000</p>
+
+<p>Sample<br><div><br><table><br><tbody><br><tr><br><td><br>Input</td><br><td><br>Output</td><br></tr><br><tr><br><td><code>2<br><br>5<br>Yeehaw<br><br>NSM<br><br>Dont Ask<br><br>B9<br><br>Googol<br><br>10<br><br>Yeehaw<br><br>Yeehaw<br><br>Googol<br><br>B9<br><br>Googol<br><br>NSM<br><br>B9<br><br>NSM<br><br>Dont Ask<br><br>Googol<br><br>5<br>Yeehaw<br><br>NSM<br><br>Dont Ask<br><br>B9<br><br>Googol<br><br>7<br>Googol<br><br>Dont Ask<br><br>NSM<br><br>NSM<br><br>Yeehaw<br><br>Yeehaw<br><br>Googol</code></td></tr></tbody></table></div></p>
+
+<p><br><td><code>Case #1: 1<br><br>Case #2: 0</code></td></p>
+
+<p><br><br><br><br><br>In the first case, one possible solution is to start by using Dont Ask, and switch to NSM after query number 8.<br><br>For the second case, you can use B9, and not need to make any switches.</p>
+
+<p><strong>[Analysis]</strong><br>The first task in the new Google Code Jam is about, no surprise, search engines, and also, the grandiose feat of saving the universe in a parsimonious way. However, putting all the fancies aside, the problem itself is easy.</p>
+
+<p>List all queries one by one, and break them up into segments. Each segment will be an interval where we use one search engine, and when we cross from one segment to another we will switch the search engine we use. What can you say about each segment? Well, one thing for sure is:</p>
+
+<p>Never ever ever have all S different search engines appear as queries in one segment. (<em>)<br><br>Why is this? Because if all S names appeared in one segment, then any search engine used for that segment will encounter at least one query that is the same as its name, thus exploding the universe!<br><br>Working in the opposite direction, (</em>) is all we need to achieve; as long as you can partition the list of queries into such segments, it corresponds to a plan of saving the universe. You don’t even care about which engine is used for one segment; any engine not appearing as a query on that segment will do. However, you might sometimes pick the same engine for two consecutive segments, laughing at yourself when you realize it; why don’t I just join the two segments into one? Because your task is to use as few segments as possible, it is obvious that you want to make each segment as long as possible.</p>
+
+<p>This leads to the greedy solution: Starting from the first query, add one query at a time to the current segment until the names of all S search engines have been encountered. Then we continue this process in a new segment until all queries are processed.</p>
+
+<p>Sample code in C++, where st is the set of queries in the current segment, q is the next query, and count is the number of switches.</p>
+
+<p>st.clear();<br><br>count = 0;<br><br>for (int i=0; i&lt;Q; i++) {<br><br>getline(cin, q);<br><br>if (st.find(q) == st.end()) {<br><br>if (st.size() == S-1) {<br><br>st.clear();<br><br>count++;<br><br>}<br>st.insert(q);<br><br>}<br>}<br><br>If st is a hashset, you expect the solution run in O(n) time. Note that this solution uses the fact that each query will be a search engine name and so we can ignore the list of names provided in the input.<br><br>Let us justify that the greedy approach always gives the optimal answer. Think of the procedure as Q steps, and we want to show that, for each i, there is (at least) one optimal choice which agrees with us on the first i steps. We do this inductively for i = 0, then i = 1, and so on. The proposition for i = Q when proven true will imply that our algorithm is correct.</p>
+
+<p>So, the key points in the inductive step i:<br><br>If adding the next query will explode the universe, we must start a new segment. Any optimal choice agrees with us for the first (i-1) steps must also do that.<br><br>If adding the next query will not explode the universe, we do not start a new segment. We know there is an optimal solution R agreed with us for (i-1) steps. Even if in R a new segment is started at step i, we can modify it a little bit. Let R’ be the plan that agrees with R, but instead of starting a new segment on the i-th step, we delay this to the (i+1)st. It is clear that R’ will also make the universe safe, and has no more switches than R does. So, R’ is also an optimal solution, and agrees with our choice for the first i steps.<br><br>The similar lines of justifications work for many greedy algorithms, including the well beloved minimum spanning trees.<br><pre lang="cpp">// CodeJamPratice.cpp : Defines the entry point for the console application.<br>//</pre></p>
+
+<p>#include “stdafx.h”<br><br>#include <br><br>#include <br><br>#include <br><br>#include <br><br>#include <br><br>#include <br><br>using namespace std;</p>
+
+<p>int _tmain(int argc, _TCHAR* argv[])<br><br>{<br>    freopen(“../debug/A-large-practice.in”, “r”, stdin);<br><br>    freopen(“../debug/A-large-practice.out”, “w”, stdout);</p>
+
+<p>    int numCase;<br><br>    scanf(“%d”, &amp;numCase);<br><br>    for(int c = 0; c &lt; numCase; c++)<br><br>    {<br><br>        int engineCount = 0;<br><br>        scanf(“%d”, &amp;engineCount);</p>
+
+<p>        vector engines;</p>
+
+<p>        char tmp[100] = {0};<br><br>        gets(tmp);<br><br>        for(int i = 0; i &lt; engineCount; i++)<br><br>        {<br><br>            gets(tmp);<br><br>            string str = string(tmp);<br><br>            engines.push_back(str);<br><br>        }</p>
+
+<p>        vector st;<br><br>        int count = 0;<br><br>        int queueSize = 0;<br><br>        scanf(“%d”, &amp;queueSize);<br><br>        gets(tmp);<br><br>        for(int i = 0; i &lt; queueSize; i++)<br><br>        {<br><br>            char tmp[100] = {0};<br><br>            gets(tmp);<br><br>            string str = string(tmp);<br><br>            vector::iterator iter = st.begin();</p>
+
+<p>            bool found = false;<br><br>            for(; iter != st.end(); iter++)<br><br>            {<br><br>                if(iter-&gt;compare(str) == 0)<br><br>                    found = true;<br><br>            }</p>
+
+<p>            if(found == false)<br><br>            {<br><br>                if(st.size() == engineCount - 1)<br><br>                {<br><br>                    st.clear();<br><br>                    count++;<br><br>                }<br><br>                st.push_back(str);<br><br>            }<br><br>        }</p>
+
+<p>        printf(“Case #%d: %d\n”, c+1, count);<br><br>    }</p>
+
+<p>    fclose(stdin);<br><br>    fclose(stdout);<br><br>    return 0;<br><br>}</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CodeJam/" rel="tag"># CodeJam</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" rel="next" title="[iOS]关于CALayer和UIView Animation同步问题">
+                <i class="fa fa-chevron-left"></i> [iOS]关于CALayer和UIView Animation同步问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/" rel="prev" title="[CodeJam]Qualification Round 2008 Problem B. Train Timetable">
+                [CodeJam]Qualification Round 2008 Problem B. Train Timetable <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/"
+           data-title="[CodeJam]Qualification Round 2008 Problem A. Saving the Universe" data-url="http://www.njiang.cn/2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

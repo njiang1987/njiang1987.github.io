@@ -1,0 +1,791 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CodeJam," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="http://code.google.com/codejam/contest/32013/dashboard#s=p1&amp;amp;a=1
+
+Problem
+
+A train line has two stations on it, A and B. Trains can take trips from A to B or from B to A multiple times during a day">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[CodeJam]Qualification Round 2008 Problem B. Train Timetable">
+<meta property="og:url" content="http://www.njiang.cn/2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="http://code.google.com/codejam/contest/32013/dashboard#s=p1&amp;amp;a=1
+
+Problem
+
+A train line has two stations on it, A and B. Trains can take trips from A to B or from B to A multiple times during a day">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[CodeJam]Qualification Round 2008 Problem B. Train Timetable">
+<meta name="twitter:description" content="http://code.google.com/codejam/contest/32013/dashboard#s=p1&amp;amp;a=1
+
+Problem
+
+A train line has two stations on it, A and B. Trains can take trips from A to B or from B to A multiple times during a day">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/"/>
+
+
+
+
+
+  <title> [CodeJam]Qualification Round 2008 Problem B. Train Timetable | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [CodeJam]Qualification Round 2008 Problem B. Train Timetable
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-10T00:00:00+08:00">
+              2013-09-10
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://code.google.com/codejam/contest/32013/dashboard#s=p1&amp;a=1" target="_blank" rel="external">http://code.google.com/codejam/contest/32013/dashboard#s=p1&amp;a=1</a></p>
+
+<p>Problem</p>
+
+<p>A train line has two stations on it, A and B. Trains can take trips from A to B or from B to A multiple times during a day. When a train arrives at B from A (or arrives at A from B), it needs a certain amount of time before it is ready to take the return journey - this is the<i>turnaround time</i>. For example, if a train arrives at 12:00 and the turnaround time is 0 minutes, it can leave immediately, at 12:00.</p>
+
+<p>A train timetable specifies departure and arrival time of all trips between A and B. The train company needs to know how many trains have to start the day at A and B in order to make the timetable work: whenever a train is supposed to leave A or B, there must actually be one there ready to go. There are passing sections on the track, so trains don’t necessarily arrive in the same order that they leave. Trains may not travel on trips that do not appear on the schedule.</p>
+
+<p>Input</p>
+
+<p>&nbsp;</p>
+
+<p>The first line of input gives the number of cases, <b>N</b>. <b>N</b> test cases follow.</p>
+
+<p>&nbsp;</p>
+
+<p>Each case contains a number of lines. The first line is the turnaround time, <b>T</b>, in minutes. The next line has two numbers on it, <b>NA</b> and <b>NB</b>. <b>NA</b> is the number of trips from A to B, and <b>NB</b> is the number of trips from B to A. Then there are <b>NA</b> lines giving the details of the trips from A to B.</p>
+
+<p>&nbsp;</p>
+
+<p>Each line contains two fields, giving the HH:MM departure and arrival time for that trip. The departure time for each trip will be earlier than the arrival time. All arrivals and departures occur on the same day. The trips may appear in any order - they are not necessarily sorted by time. The hour and minute values are both two digits, zero-padded, and are on a 24-hour clock (00:00 through 23:59).</p>
+
+<p>&nbsp;</p>
+
+<p>After these <b>NA</b> lines, there are <b>NB</b> lines giving the departure and arrival times for the trips from B to A.</p>
+
+<p>&nbsp;</p>
+
+<p>Output</p>
+
+<p>For each test case, output one line containing “Case #<b>x</b>: “ followed by the number of trains that must start at A and the number of trains that must start at B.</p>
+
+<p>&nbsp;</p>
+
+<p>Limits</p>
+
+<p>1 ≤ <b>N</b> ≤ 100</p>
+
+<p>Small dataset</p>
+
+<p>0 ≤ <b>NA</b>, <b>NB</b> ≤ 20</p>
+
+<p>0 ≤ <b>T</b> ≤ 5</p>
+
+<p>Large dataset</p>
+
+<p>0 ≤ <b>NA</b>, <b>NB</b> ≤ 100</p>
+
+<p>0 ≤ <b>T</b> ≤ 60</p>
+
+<p>Sample<br><div><br><table><br><tbody><br><tr><br><td>Input</td><br><td>Output</td><br></tr><br><tr><br><td><code><code>2<br><br>5<br>3 2<br><br>09:00 12:00<br><br>10:00 13:00<br><br>11:00 12:30<br><br>12:02 15:00<br><br>09:00 10:30<br><br>2<br>2 0<br><br>09:00 09:01<br><br>12:00 12:02</code></code>&nbsp;</td><br><td><code><code>Case #1: 2 2<br><br>Case #2: 2 0</code></code>&nbsp;</td><br></tr><br></tbody><br></table><br>&nbsp;</div></p>
+
+<p>This problem can be solved with a greedy strategy. The simplest way to do this is by scanning through a list of all the trips, sorted by departure time, and keeping track of the set of trains that will be available at each station, and when they will be ready to take a trip.</p>
+
+<p>When we examine a trip, we see if there will be a train ready at the departure station by the departure time. If there is, then we remove that train from the list of available trains. If there is not, then our solution will need one new train added for the departure station. Then we compute when the train taking this trip will be ready at the other station for another trip, and add this train to the set of available trains at the other station. If a train leaves station A at 12:00 and arrives at station B at 13:00, with a 5-minute turnaround time, it will be available for a return journey from B to A at 13:05.</p>
+
+<p>We need to be able to efficiently identify the earliest a train can leave from a station; and update this set of available trains by adding new trains or removing the earliest train. This can be done using a heap data structure for each station.</p>
+
+<p>Sample Python code provided below that solves a test case for this problem:<br><pre lang="python" colla="+">def SolveCase(case_index, case):<br>  T, (tripsa, tripsb) = case<br>  trips = []<br>  for trip in tripsa:<br>    trips.append([trip[0], trip[1], 0])<br>  for trip in tripsb:<br>    trips.append([trip[0], trip[1], 1])</pre></p>
+
+<p>  trips.sort()</p>
+
+<p>  start = [0, 0]<br><br>  trains = [[], []]</p>
+
+<p>  for trip in trips:<br><br>    d = trip[2]<br><br>    if trains[d] and trains[d][0] &lt;= trip[0]:<br><br>      # We’re using the earliest train available, and<br><br>      # we have to delete it from this station’s trains.<br><br>      heappop(trains[d])<br><br>    else:<br><br>      # No train was available for the current trip,<br><br>      # so we’re adding one.<br><br>      start[d] += 1<br><br>    # We add an available train in the arriving station at the<br><br>    # time of arrival plus the turnaround time.<br><br>    heappush(trains[1 - d], trip[1] + T)</p>
+
+<p>  print “Case #%d: %d %d” % (case_index, start[0], start[1])<br><br>Luckily Python has methods that implement the heap data structure operations. This solution takes O(n log n) time, where n is the total number of trips, because at each trip we do at most one insert or one delete operation from the heaps, and heap operations take O(log n) time.</p>
+
+<p></p>
+
+<p><pre lang="cpp" colla="+"></pre></p>
+
+<p>//<br><br>//  main.cpp<br><br>//  CodeJamProject<br><br>//<br><br>//  Created by Jiang, Nan on 8/26/13.<br><br>//  Copyright (c) 2013 Jiang, Nan. All rights reserved.<br><br>//</p>
+
+<p>//#include <iostream><br>#include <stdio.h><br>#include <map><br>#include <vector><br>using namespace std;</vector></map></stdio.h></iostream></p>
+
+<p>struct Trip{<br><br>    int startTime;<br><br>    int arriveTime;<br><br>    int from;<br><br>};</p>
+
+<p>bool sortByMe(Trip&amp; t1, Trip&amp; t2){<br><br>    return t1.startTime &lt; t2.startTime;<br><br>}</p>
+
+<p>int main(int argc, const char <em> argv[])<br><br>{<br>    freopen(“/Users/jiangnan/Develop/Code Jam/2008/CodeJamProject/CodeJamProject/B-large-practice.in.txt”, “r”, stdin);<br><br>    freopen(“/Users/jiangnan/Develop/Code Jam/2008/CodeJamProject/CodeJamProject/B-large-practice.out.txt”, “w”, stdout);<br><br>    <br><br>    int numCase;<br><br>    scanf(“%d”, &amp;numCase);<br><br>    for (int c = 0; c &lt; numCase; c++) {<br><br>        int t = 0, na = 0, nb = 0;<br><br>        scanf(“%d”, &amp;t);<br><br>        scanf(“%d %d”, &amp;na, &amp;nb);<br><br>        vector<trip> trips;<br><br>        for (int i = 0; i &lt; na + nb; i++) {<br><br>            int hh = 0, mm = 0;<br><br>            scanf(“%d:%d”, &amp;hh, &amp;mm);<br><br>            int start = hh </trip></em> 60 + mm;<br><br>            scanf(“%d:%d”, &amp;hh, &amp;mm);<br><br>            int end = hh * 60 + mm;<br><br>            Trip trip;<br><br>            trip.startTime = start;<br><br>            trip.arriveTime = end;<br><br>            if (i &lt; na) {<br><br>                trip.from = 0;<br><br>            }else{<br><br>                trip.from = 1;<br><br>            }<br><br>            trips.push_back(trip);<br><br>        }<br><br>        <br><br>        sort(trips.begin(), trips.end(), sortByMe);<br><br>        vector<int> trainsA;<br><br>        vector<int> trainsB;</int></int></p>
+
+<p>        int countA = 0, countB = 0;<br><br>        <br><br>        for (int i = 0; i &lt; na + nb; i++) {<br><br>            Trip trip = trips[i];<br><br>            if (trip.from == 0) {<br><br>                if (trainsA.size() == 0) {<br><br>                    countA++;<br><br>                }else{<br><br>                    bool found = false;<br><br>                    vector<int>::iterator iter = trainsA.begin();<br><br>                    for (; iter != trainsA.end(); iter++) {<br><br>                        if (<em>iter &lt;= trip.startTime) {<br><br>                            trainsA.erase(iter);<br><br>                            found = true;<br><br>                            break;<br><br>                        }<br><br>                    }<br><br>                    if (found == false) {<br><br>                        countA++;<br><br>                    }<br><br>                }<br><br>                trainsB.push_back(trip.arriveTime + t);<br><br>            }else{<br><br>                if (trainsB.size() == 0) {<br><br>                    countB++;<br><br>                }else{<br><br>                    bool found = false;<br><br>                    vector<int>::iterator iter = trainsB.begin();<br><br>                    for (; iter != trainsB.end(); iter++) {<br><br>                        if (</int></em>iter &lt;= trip.startTime) {<br><br>                            trainsB.erase(iter);<br><br>                            found = true;<br><br>                            break;<br><br>                        }<br><br>                    }<br><br>                    if (found == false) {<br><br>                        countB++;<br><br>                    }<br><br>                }<br><br>                trainsA.push_back(trip.arriveTime + t);<br><br>            }<br><br>        }<br><br>        <br><br>        printf(“Case #%d: %d %d\n”, c+1, countA, countB);<br><br>    }<br><br>    <br><br>    fclose(stdin);<br><br>    fclose(stdout);<br><br>    return 0;<br><br>}<br></int></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CodeJam/" rel="tag"># CodeJam</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/09/09/codejamqualification-round-2008-problem-a-saving-the-universe/" rel="next" title="[CodeJam]Qualification Round 2008 Problem A. Saving the Universe">
+                <i class="fa fa-chevron-left"></i> [CodeJam]Qualification Round 2008 Problem A. Saving the Universe
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/11/xin-qing-wo-de-meng-xiang-you-zhe-me-yi-liang-fang-che-ke-yi-ge-di-lv-you-le/" rel="prev" title="[心情]我的梦想啊！有这么一辆房车可以各地旅游了！">
+                [心情]我的梦想啊！有这么一辆房车可以各地旅游了！ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/"
+           data-title="[CodeJam]Qualification Round 2008 Problem B. Train Timetable" data-url="http://www.njiang.cn/2013/09/10/codejamqualification-round-2008-problem-b-train-timetable/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

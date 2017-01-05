@@ -1,0 +1,855 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。
+
+如何定位设备：iPhone5 越狱 iOS8.4 armv7
+砸壳Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。
+初步查找 strings使用str">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[转]Explore Facebook iOS Client - Section FBInjectable">
+<meta property="og:url" content="http://www.njiang.cn/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。
+
+如何定位设备：iPhone5 越狱 iOS8.4 armv7
+砸壳Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。
+初步查找 strings使用str">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713701978671.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713711043679.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713715442206.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713716052181.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713716295066.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713716878000.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713897883425.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713901424795.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713904842654.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715339253688.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715347620860.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713916594647.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713916821535.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713917406057.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713924113293.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713711043679.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713945376097.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713926308331.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713930823544.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713937815940.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14713938170666.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715360284429.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715363734149.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14715363409527.jpg">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/01/05/14717165824862.jpg">
+<meta property="og:updated_time" content="2017-01-05T07:13:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[转]Explore Facebook iOS Client - Section FBInjectable">
+<meta name="twitter:description" content="现象MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。
+
+如何定位设备：iPhone5 越狱 iOS8.4 armv7
+砸壳Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。
+初步查找 strings使用str">
+<meta name="twitter:image" content="http://www.njiang.cn/uploads/2017/01/05/14713701978671.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/"/>
+
+
+
+
+
+  <title> [转]Explore Facebook iOS Client - Section FBInjectable | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [转]Explore Facebook iOS Client - Section FBInjectable
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-05T14:07:18+08:00">
+              2017-01-05
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2017-01-05T15:13:43+08:00">
+              2017-01-05
+            </time>
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><p>MachOView查看Facebook的可执行文件，发现 FBInjectable 和 fbsessiongks 的数据段，这篇文章就探索下 FBInjectable 数据段的产生与用途。</p>
+<p><img src="/uploads/2017/01/05/14713701978671.jpg" alt="img"></p>
+<h1 id="如何定位"><a href="#如何定位" class="headerlink" title="如何定位"></a>如何定位</h1><p>设备：iPhone5 越狱 iOS8.4 armv7</p>
+<h2 id="砸壳"><a href="#砸壳" class="headerlink" title="砸壳"></a>砸壳</h2><p>Clutch 或 dumpdecrypted，获取到未加密的Facebook armv7 可执行文件。</p>
+<h2 id="初步查找-strings"><a href="#初步查找-strings" class="headerlink" title="初步查找 strings"></a>初步查找 strings</h2><p>使用strings 搜搜关键词FBInjectable，可知可以通过字符串作为切入点。</p>
+<p><img src="/uploads/2017/01/05/14713711043679.jpg" alt="img"></p>
+<h2 id="使用Hopper和IDA分析"><a href="#使用Hopper和IDA分析" class="headerlink" title="使用Hopper和IDA分析"></a>使用Hopper和IDA分析</h2><p>使用Hopper和IDA分析好。两个App各有优缺点，配合使用。</p>
+<p>分析较慢，我的MBP CPU2.2 i7 分析1个小时以上。</p>
+<p>分析完成后就可以畅游arm了。</p>
+<h2 id="Hopper中初步定位"><a href="#Hopper中初步定位" class="headerlink" title="Hopper中初步定位"></a>Hopper中初步定位</h2><p>搜索字符串FBInjectable</p>
+<p><img src="/uploads/2017/01/05/14713715442206.jpg" alt="img"></p>
+<p>查看存在交叉引用的一个</p>
+<p><img src="/uploads/2017/01/05/14713716052181.jpg" alt="img"></p>
+<p><img src="/uploads/2017/01/05/14713716295066.jpg" alt="img"></p>
+<p>跳转过去查看，可知地址在 0x0334cc1c，且FBInjectable是作为 getsectiondata 的第三个参数。</p>
+<p><img src="/uploads/2017/01/05/14713716878000.jpg" alt="img"></p>
+<p>getsectiondata 的调用地址为 0x0334cc20。</p>
+<p>getsectiondata 的定义如下：</p>
+<p><img src="/uploads/2017/01/05/14713897883425.jpg" alt="img"></p>
+<p>反汇编：</p>
+<p><img src="/uploads/2017/01/05/14713901424795.jpg" alt="img"></p>
+<p>需要重点关注下，r11这个变量。Hopper反汇编的代码貌似丢掉一些很关键的r2的信息。但看完能大概知道这里在遍历 getsectiondata的返回值，每4个字节做了一些处理。</p>
+<p>如果IDA 有F5 反汇编功能，可以看到下图。这里没有丢掉关键的信息。v19作为返回值，转换为DWORD指针（做Windows开发比较熟悉，double word，word 是双字节，DWORD就是四字节），然后又把这个指针解引用。</p>
+<p>也就是把getsectiondata的返回值buffer中的前四个字节当做字符串的内存地址。</p>
+<p><img src="/uploads/2017/01/05/14713904842654.jpg" alt="img"></p>
+<h2 id="MachOView-确认FBInjectable含义"><a href="#MachOView-确认FBInjectable含义" class="headerlink" title="MachOView 确认FBInjectable含义"></a>MachOView 确认FBInjectable含义</h2><p>再次看 FBInjectable 段的前四个字节，B8DB8404，由于little-endian的原因，内存地址为0x0484DBB8。</p>
+<p><img src="/uploads/2017/01/05/14715339253688.jpg" alt="img"></p>
+<p>Hopper中跳转到这个地址：<img src="/uploads/2017/01/05/14715347620860.jpg" alt="img"></p>
+<p>其他四个字节都是这样。</p>
+<h2 id="lldb-确认getsectiondata返回值含义"><a href="#lldb-确认getsectiondata返回值含义" class="headerlink" title="lldb 确认getsectiondata返回值含义"></a>lldb 确认getsectiondata返回值含义</h2><p>为确认Facebook启动后是否调用了 getsectiondata，并传入了FBInjectable，可以先条件断点。</p>
+<p>使用debugserver启动App：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">everettjfs-iPhone:~ root# debugserver -x backboard *:1234 /var/mobile/Containers/Bundle/Application/A7811200-13B6-4053-BAED-8D3E8DE7C929/Facebook.app/Facebook</div></pre></td></tr></table></figure>
+<p>添加条件断点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">70 = F</div><div class="line">95 = _</div><div class="line"></div><div class="line">(lldb) br set -n getsectiondata -c &apos;(int)*(char*)$r2 == 70&apos;</div></pre></td></tr></table></figure>
+<p>继续运行，发现可以断下来。</p>
+<p>单步运行，打印返回值 r0的数据。<img src="/uploads/2017/01/05/14713916594647.jpg" alt="img"></p>
+<p><img src="/uploads/2017/01/05/14713916821535.jpg" alt="img"></p>
+<p>到这里我们发现个问题，与FBInjectable section的数据不一样。</p>
+<p><img src="/uploads/2017/01/05/14713917406057.jpg" alt="img"></p>
+<p>但发现个规律，每4位相减正好是 ASLR 偏移地址。（例如： 0x0488bbb8 - 0x0484dbb8 = 0x3e000）</p>
+<p>也就是说 FBInjectable 数据段 的数据在调用getsectiondata之前就被修改了。这里暂且忽略修改的方法（下文会介绍一种修改方法），继续探索。</p>
+<p>打印当前方法的 返回值。<img src="/uploads/2017/01/05/14713924113293.jpg" alt="img"></p>
+<p>可见这里与开始strings查找FBInjectable时的结果很相似，<img src="/uploads/2017/01/05/14713711043679.jpg" alt="img"></p>
+<p>PS：这一步使用条件断点会导致启动特别慢。但条件断点的目的只是为了确认是否有这个调用。由于调试中要多次启动App，也可以直接断点到目标地址。（启动时，先断点到start，然后image list 查看ASLR偏移地址，再计算出getsectiondata的地址，然后 br s -a ADDRESS）</p>
+<h2 id="初步结论"><a href="#初步结论" class="headerlink" title="初步结论"></a>初步结论</h2><p>由此可知，FBInjectable中存储的是<img src="/uploads/2017/01/05/14713945376097.jpg" alt="img"></p>
+<p>这类字符串的地址，armv7（32位）下每个地址占用4个字节，上图18个地址总共占用72个字节。通过FBInjectable的数据可以获取到这18个字符串。</p>
+<h2 id="class-dump查看"><a href="#class-dump查看" class="headerlink" title="class-dump查看"></a>class-dump查看</h2><p>在头文件中搜索fb_injectable，</p>
+<p><img src="/uploads/2017/01/05/14713926308331.jpg" alt="img"></p>
+<h2 id="再看lldb调用栈"><a href="#再看lldb调用栈" class="headerlink" title="再看lldb调用栈"></a>再看lldb调用栈</h2><p><img src="/uploads/2017/01/05/14713930823544.jpg" alt="img"></p>
+<p>图中看到好多folly的符号，folly是Facebook开源的专注于性能的C++ Library，但不知为何会对lldb的符号有这么大的影响。（有时间需要进一步了解下lldb的符号如何查找的）。不过，地址都是正确的。可以通过frame中的地址减去ASLR偏移地址，得到文件中的地址。</p>
+<p>根据调用堆栈，可以跟踪到如下位置：</p>
+<p>这里跨度可能有点大，但根据调用栈中的那些frame的地址，很容易看到下图内容（这只是18个配置中的一个）。</p>
+<p><img src="/uploads/2017/01/05/14713937815940.jpg" alt="img"><img src="/uploads/2017/01/05/14713938170666.jpg" alt="img"></p>
+<p>大概流程如下：</p>
+<p>FBNavigationBarSearchFieldLayout 类的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">+ (float)_calculateLeftOffsetForController:(id)arg1 isRoot:(BOOL)arg2 hasLeftMessengerButton:(BOOL)arg3;</div></pre></td></tr></table></figure>
+<p>调用了 FBIntegrationManager 类的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">+ (Class)classForProtocol:(id)arg1;</div></pre></td></tr></table></figure>
+<p>进一步调用了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">+ (id)classesForProtocol_internal:(id)arg1;</div></pre></td></tr></table></figure>
+<p>classesForProtocol_internal 会在首次调用时（dispatch_once）时加载FBInjectable的内容并获取这18个字符串，进而转化为对应的类。</p>
+<p>classForProtocol的参数是 协议 FBNavigationBarConfiguration，通过这个协议获取到 类FBNavigationBarDefaultConfiguration。</p>
+<p>最终调用静态方法，<img src="/uploads/2017/01/05/14715360284429.jpg" alt="img"></p>
+<h2 id="再看头文件"><a href="#再看头文件" class="headerlink" title="再看头文件"></a>再看头文件</h2><p>这18个类有几个共同点</p>
+<ol>
+<li>都包含方法 fb_injectable。</li>
+<li>都包含方法 integrationPriority。</li>
+<li>都是静态方法。</li>
+<li>都会实现一个类似名称的协议。例如：FBNavigationBarDefaultConfiguration 实现协议 FBNavigationBarConfiguration。<img src="/uploads/2017/01/05/14715363734149.jpg" alt="img"></li>
+<li>第4条提到的协议都会继承另一个协议 FBIntegrationToOne。<img src="/uploads/2017/01/05/14715363409527.jpg" alt="img"></li>
+</ol>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>至此，基本能知道FBInjectable的作用了，可以得出如下结论。</p>
+<p>FBInjectable section用于在打包阶段更改一些配置。这个配置可能影响到界面（UI）、功能（Policy）等各个方面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">FBNewAccountNUXPYMKVCFactory,</div><div class="line">FBPersonContextualTimelineHeaderDataSourceDefaultConfiguration,</div><div class="line">FBTimelineActionBarDefaultConfiguration,</div><div class="line">FBTimelineActionBarNuxPresentersDefaultConfiguration,</div><div class="line">FBTimelineNavTilesFriendsFollowersDefaultConfiguration,</div><div class="line">FBGroupsModuleDefaultConfiguration,</div><div class="line">FBGroupsLandingWildeCoordinator,</div><div class="line">FBEventsModuleDefaultConfiguration,</div><div class="line">FBEventMessageGuestsDefaultCapability,</div><div class="line">FBPhotoModuleDefaultConfiguration,</div><div class="line">FBGrowthModuleDefaultConfiguration,</div><div class="line">FBEventComposerKitDefaultConfiguration,</div><div class="line">FBComposerDestinationOptionsDefaultPolicy,</div><div class="line">FBBookmarksDownloaderConfiguration,</div><div class="line">FBGroupCreationViewControllerDefaultStepsFactory,</div><div class="line">FBNavigationBarDefaultConfiguration,</div><div class="line">FBPersonalAppSuiteDefinitionProvider,</div><div class="line">WildeKeys</div></pre></td></tr></table></figure>
+<p>这些类有以下共同信息：</p>
+<ol>
+<li>+(void)fb_injectable 方法。<ul>
+<li>这个方法只是个标记。</li>
+<li>用于方便的查找到这个类。</li>
+</ul>
+</li>
+<li>都会实现一个与当前类对应的协议。<ul>
+<li>例如：FBNewAccountNUXPYMKVCFactory类 对应 FBNewAccountNUXPYMKVCFactory协议。</li>
+<li>再例如：FBNavigationBarDefaultConfiguration类 对应 FBNavigationBarConfiguration协议。</li>
+<li>再例如：FBEventsModuleDefaultConfiguration类 对应 FBEventsModuleConfiguration协议。</li>
+</ul>
+</li>
+<li>这个对应的协议一定会实现 FBIntegrationToOne。也就是说当前类还包括 + (unsigned int)integrationPriority; 方法。<ul>
+<li>例如：FBNewAccountNUXPYMKVCFactory、FBNavigationBarConfiguration、FBEventsModuleConfiguration都会继承 FBIntegrationToOne 协议。就导致 FBNewAccountNUXPYMKVCFactory等类也都包含 + (unsigned int)integrationPriority; 方法。</li>
+<li>这个方法用于指定查找优先级。</li>
+<li>FBIntegrationToOne 从名称看，只能集成1个。就是根据优先级选择1个的意思。</li>
+</ul>
+</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">float __cdecl +[FBNavigationBarSearchFieldLayout _calculateLeftOffsetForController:isRoot:hasLeftMessengerButton:]</div><div class="line"></div><div class="line">FBNavigationBarConfiguration</div><div class="line"></div><div class="line">循环判断哪个类实现了这个协议，最后找到FBNavigationBarDefaultConfiguration，然后获取shouldShowBackButton。</div></pre></td></tr></table></figure>
+<h1 id="FBInjectable的创建"><a href="#FBInjectable的创建" class="headerlink" title="FBInjectable的创建"></a>FBInjectable的创建</h1><p>可以使用 <code>__attribute((used,section(&quot;segmentname,sectionname&quot;)))</code> 关键字把某个变量的放入特殊的section中。</p>
+<p>attribute 参考 <a href="http://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Variable-Attributes.html" target="_blank" rel="external">http://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Variable-Attributes.html</a></p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char * kString1 __attribute((used,section(&quot;__DATA,FBInjectable&quot;))) = &quot;string 1&quot;;</div><div class="line">char * kString2 __attribute((used,section(&quot;__DATA,FBInjectable&quot;))) = &quot;string 2&quot;;</div><div class="line">char * kString3 __attribute((used,section(&quot;__DATA,FBInjectable&quot;))) = &quot;string 3&quot;;</div></pre></td></tr></table></figure>
+<p>PS:文章修改：上面代码unused改为used。不需要引用，即可避免release下被优化掉。</p>
+<h1 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h1><p>编译时的配置选择机制。</p>
+<p>编译时期选择某些配置类加入编译（精确说是，链接时期选择某些配置类的目标文件加入链接）或者配置优先级，App运行时通过FBInjectable获取到所有配置类，并使用每个配置类对应的协议获取当前使用的具体配置。</p>
+<h1 id="例子及进一步说明"><a href="#例子及进一步说明" class="headerlink" title="例子及进一步说明"></a>例子及进一步说明</h1><p>Demo中模仿了这个机制。</p>
+<p>代码： <a href="https://github.com/everettjf/FBInjectableTest" target="_blank" rel="external">https://github.com/everettjf/FBInjectableTest</a></p>
+<p><img src="/uploads/2017/01/05/14717165824862.jpg" alt="img"></p>
+<p>Demo中实现了三种配置类，每个配置类使用类似下面的代码自动创建FBInjectable 段。 （<del>printf只是为了防止被编译器优化掉，应该有其他方法防止优化掉，暂时没找到，如果你知道，请告诉我哈</del> ，感谢iOS逆向工程群内的vr2d同学，attribute的第一个参数改为used，就可以避免release下被优化掉。还需认真呀，当时看到unused就感觉有点怪，但没有仔细查找含义。）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#define FBInjectableDATA __attribute((used, section(&quot;__DATA,FBInjectable&quot;)))</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">char * kNoteDisplayDefaultConfiguration FBInjectableDATA = &quot;+[NoteDisplayDefaultConfiguration(FBInjectable) fb_injectable]&quot;;</div><div class="line"></div><div class="line">@implementation NoteDisplayDefaultConfiguration</div><div class="line"></div><div class="line">+ (void)fb_injectable&#123;</div><div class="line">&#125;</div><div class="line">+ (NSUInteger)integrationPriority&#123;</div><div class="line">    return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (BOOL)showDeleteButton&#123;</div><div class="line">    return YES;</div><div class="line">&#125;</div><div class="line">+ (UIColor *)noteBackgroundColor&#123;</div><div class="line">    return [UIColor blackColor];</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>读取FBInjectable段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">        Dl_info info;</div><div class="line">        dladdr(readConfigurationClasses, &amp;info);</div><div class="line">        </div><div class="line">#ifndef __LP64__</div><div class="line">//        const struct mach_header *mhp = _dyld_get_image_header(0); // both works as below line</div><div class="line">        const struct mach_header *mhp = (struct mach_header*)info.dli_fbase;</div><div class="line">        unsigned long size = 0;</div><div class="line">        uint32_t *memory = (uint32_t*)getsectiondata(mhp, &quot;__DATA&quot;, InjectableSectionName, &amp; size);</div><div class="line">#else /* defined(__LP64__) */</div><div class="line">        const struct mach_header_64 *mhp = (struct mach_header_64*)info.dli_fbase;</div><div class="line">        unsigned long size = 0;</div><div class="line">        uint64_t *memory = (uint64_t*)getsectiondata(mhp, &quot;__DATA&quot;, InjectableSectionName, &amp; size);</div><div class="line">#endif /* defined(__LP64__) */</div></pre></td></tr></table></figure>
+<p>最后使用方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Class config = [FBIntegrationManager classForProtocol:@protocol(NoteDisplayConfiguration)];</div><div class="line">NSLog(@&quot;cls = %@&quot;,config);</div><div class="line">NSLog(@&quot;color = %@&quot;,[config noteBackgroundColor]);</div></pre></td></tr></table></figure>
+<h1 id="这样有什么好处"><a href="#这样有什么好处" class="headerlink" title="这样有什么好处"></a>这样有什么好处</h1><p>配置文件可分散在各自文件中，省去了统一注册配置文件的代码。这样配置文件更容易添加和删除。</p>
+<h1 id="探索中遇到的困难"><a href="#探索中遇到的困难" class="headerlink" title="探索中遇到的困难"></a>探索中遇到的困难</h1><p><a href="http://iosre.com/t/facebook-app-fbinjectable-section/4685" target="_blank" rel="external">http://iosre.com/t/facebook-app-fbinjectable-section/4685</a></p>
+<p>当时还没有些Demo，以为需要手动修改，但写Demo的过程中才恍然大悟。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上步骤只是我在探索后重新整理的步骤，真正探索过程中可能步骤相互穿插。</p>
+<p>奇怪的是Facebook 貌似没有在任何文章中提到这个“配置选择”的小方法。Twitter和Google都没有搜到任何关于FBInjectable的信息。还好可以通过逆向来探索。</p>
+<p>转自：<a href="http://everettjf.github.io/2016/08/20/facebook-explore-section-fbinjectable#machoview-fbinjectable" target="_blank" rel="external">http://everettjf.github.io/2016/08/20/facebook-explore-section-fbinjectable#machoview-fbinjectable</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/14/转-全面的理解和分析IOS的崩溃日志/" rel="next" title="[转]全面的理解和分析IOS的崩溃日志">
+                <i class="fa fa-chevron-left"></i> [转]全面的理解和分析IOS的崩溃日志
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/"
+           data-title="[转]Explore Facebook iOS Client - Section FBInjectable" data-url="http://www.njiang.cn/2017/01/05/转-Explore-Facebook-iOS-Client-Section-FBInjectable/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#现象"><span class="nav-number">1.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何定位"><span class="nav-number">2.</span> <span class="nav-text">如何定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#砸壳"><span class="nav-number">2.1.</span> <span class="nav-text">砸壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初步查找-strings"><span class="nav-number">2.2.</span> <span class="nav-text">初步查找 strings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Hopper和IDA分析"><span class="nav-number">2.3.</span> <span class="nav-text">使用Hopper和IDA分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hopper中初步定位"><span class="nav-number">2.4.</span> <span class="nav-text">Hopper中初步定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MachOView-确认FBInjectable含义"><span class="nav-number">2.5.</span> <span class="nav-text">MachOView 确认FBInjectable含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lldb-确认getsectiondata返回值含义"><span class="nav-number">2.6.</span> <span class="nav-text">lldb 确认getsectiondata返回值含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初步结论"><span class="nav-number">2.7.</span> <span class="nav-text">初步结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#class-dump查看"><span class="nav-number">2.8.</span> <span class="nav-text">class-dump查看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再看lldb调用栈"><span class="nav-number">2.9.</span> <span class="nav-text">再看lldb调用栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再看头文件"><span class="nav-number">2.10.</span> <span class="nav-text">再看头文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结论"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FBInjectable的创建"><span class="nav-number">4.</span> <span class="nav-text">FBInjectable的创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概括"><span class="nav-number">5.</span> <span class="nav-text">概括</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#例子及进一步说明"><span class="nav-number">6.</span> <span class="nav-text">例子及进一步说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#这样有什么好处"><span class="nav-number">7.</span> <span class="nav-text">这样有什么好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#探索中遇到的困难"><span class="nav-number">8.</span> <span class="nav-text">探索中遇到的困难</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

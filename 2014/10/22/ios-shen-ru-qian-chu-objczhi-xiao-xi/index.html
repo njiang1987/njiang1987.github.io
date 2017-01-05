@@ -1,0 +1,769 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在入门级别的ObjC 教程中，我们常对从C++或Java 或其他面向对象语言转过来的程序员说，ObjC 中的方法调用（ObjC中的术语为消息）跟其他语言中的方法调用差不多，只是形式有些不同而已。譬如Ｃ++ 中的：
+12Bird * aBird = new Bird();aBird-&amp;gt;fly();
+在ObjC 中则如下：
+12Bird * aBird = [[Bird alloc] init]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[iOS]深入浅出ObjC之消息">
+<meta property="og:url" content="http://www.njiang.cn/2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="在入门级别的ObjC 教程中，我们常对从C++或Java 或其他面向对象语言转过来的程序员说，ObjC 中的方法调用（ObjC中的术语为消息）跟其他语言中的方法调用差不多，只是形式有些不同而已。譬如Ｃ++ 中的：
+12Bird * aBird = new Bird();aBird-&amp;gt;fly();
+在ObjC 中则如下：
+12Bird * aBird = [[Bird alloc] init]">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2014/10/22/1.gif">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[iOS]深入浅出ObjC之消息">
+<meta name="twitter:description" content="在入门级别的ObjC 教程中，我们常对从C++或Java 或其他面向对象语言转过来的程序员说，ObjC 中的方法调用（ObjC中的术语为消息）跟其他语言中的方法调用差不多，只是形式有些不同而已。譬如Ｃ++ 中的：
+12Bird * aBird = new Bird();aBird-&amp;gt;fly();
+在ObjC 中则如下：
+12Bird * aBird = [[Bird alloc] init]">
+<meta name="twitter:image" content="http://www.njiang.cn/uploads/2014/10/22/1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/"/>
+
+
+
+
+
+  <title> [iOS]深入浅出ObjC之消息 | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [iOS]深入浅出ObjC之消息
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-10-22T21:57:41+08:00">
+              2014-10-22
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在入门级别的ObjC 教程中，我们常对从C++或Java 或其他面向对象语言转过来的程序员说，ObjC 中的方法调用（ObjC中的术语为消息）跟其他语言中的方法调用差不多，只是形式有些不同而已。<br>譬如Ｃ++ 中的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Bird * aBird = <span class="keyword">new</span> Bird();</div><div class="line">aBird-&gt;fly();</div></pre></td></tr></table></figure>
+<p>在ObjC 中则如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Bird * aBird = [[Bird alloc] init];</div><div class="line">[aBird fly];</div></pre></td></tr></table></figure>
+<p>初看起来，好像只是书写形式不同而已，实则差异大矣。Ｃ++中的方法调用可能是动态的，也可能是静态的；而ObjC中的消息都为动态的。下文将详细介绍为什么是动态的，以及编译器在这背后做了些什么事情。<br>要说清楚消息这个话题，我们必须先来了解三个概念Class, SEL, IMP，它们在objc/objc.h 中定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_class *Class;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_object &#123;</div><div class="line">	Class isa;</div><div class="line">&#125; *id;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_selector *SEL;</div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">id</span> <span class="params">(*IMP)</span><span class="params">(id, SEL, ...)</span></span>;</div><div class="line"><span class="comment">///Class 的含义</span></div><div class="line"><span class="comment">///Class 被定义为一个指向 objc_class的结构体指针，这个结构体表示每一个类的类结构。而 objc_class 在objc/objc_class.h中定义如下:</span></div><div class="line"><span class="keyword">struct</span> objc_class &#123;</div><div class="line">	<span class="keyword">struct</span> objc_class super_class; <span class="comment">/*父类*/</span></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *name; <span class="comment">/*类名字*/</span></div><div class="line">	<span class="keyword">long</span> version; <span class="comment">/*版本信息*/</span></div><div class="line">	<span class="keyword">long</span> info; <span class="comment">/*类信息*/</span></div><div class="line">	<span class="keyword">long</span> instance_size; <span class="comment">/*实例大小*/</span></div><div class="line">	<span class="keyword">struct</span> objc_ivar_list *ivars; <span class="comment">/*实例参数链表*/</span></div><div class="line">	<span class="keyword">struct</span> objc_method_list **methodLists; <span class="comment">/*方法链表*/</span></div><div class="line">	<span class="keyword">struct</span> objc_cache *cache; <span class="comment">/*方法缓存*/</span></div><div class="line">	<span class="keyword">struct</span> objc_protocol_list *protocols; <span class="comment">/*协议链表*/</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>由此可见，Class 是指向类结构体的指针，该类结构体含有一个指向其父类类结构的指针，该类方法的链表，该类方法的缓存以及其他必要信息。</p>
+<p>NSObject 的class 方法就返回这样一个指向其类结构的指针。每一个类实例对象的第一个实例变量是一个指向该对象的类结构的指针，叫做isa。通过该指针，对象可以访问它对应的类以及相应的父类。如图一所示：</p>
+<img src="/uploads/2014/10/22/1.gif" class="center">
+<p>如图一所示，圆形所代表的实例对象的第一个实例变量为 isa，它指向该类的类结构 The object’s class。而该类结构有一个指向其父类类结构的指针superclass， 以及自身消息名称(selector)/实现地址(address)的方法链表。</p>
+<p>##方法的含义：<br>注意这里所说的方法链表里面存储的是Method 类型的。图一中selector 就是指 Method的 SEL, address就是指Method的 IMP。 Method 在头文件 objc_class.h中定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_method *Method;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_ method &#123;</div><div class="line">SEL method_name;</div><div class="line"><span class="keyword">char</span> *method_types;</div><div class="line">IMP method_imp;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>一个方法 Method，其包含一个方法选标 SEL – 表示该方法的名称，一个types – 表示该方法的参数，一个 IMP - 指向该方法的具体实现的函数指针。</p>
+<p>##SEL 的含义：</p>
+<p>在前面我们看到方法选标 SEL 的定义为：<br><code>typedef struct objc_selector *SEL;</code></p>
+<p>它是一个指向 objc_selector 指针，表示方法的名字。如下所示，打印出 selector。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-(<span class="built_in">NSInteger</span>)maxIn:(<span class="built_in">NSInteger</span>)a theOther:(<span class="built_in">NSInteger</span>)b</div><div class="line">&#123;</div><div class="line"><span class="keyword">return</span> (a &gt; b) ? a : b;</div><div class="line">&#125;</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"SEL=%s"</span>, <span class="keyword">@selector</span>(maxIn:theOther:));</div></pre></td></tr></table></figure>
+<p>输出：SEL=maxIn:theOther:</p>
+<p>不同的类可以拥有相同的 selector，这个没有问题，因为不同类的实例对象performSelector相同的 selector 时，会在各自的消息选标(selector)/实现地址(address) 方法链表中根据 selector 去查找具体的方法实现IMP, 然后用这个方法实现去执行具体的实现代码。这是一个动态绑定的过程，在编译的时候，我们不知道最终会执行哪一些代码，只有在执行的时候，通过selector去查询，我们才能确定具体的执行代码。</p>
+<p>##IMP 的含义：<br>在前面我们也看到 IMP 的定义为：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">id</span> (*IMP)(<span class="keyword">id</span>, SEL, ...);</div></pre></td></tr></table></figure>
+<p>根据前面id 的定义，我们知道 id是一个指向 objc_object 结构体的指针，该结构体只有一个成员isa，所以任何继承自 NSObject 的类对象都可以用id 来指代，因为 NSObject 的第一个成员实例就是isa。</p>
+<p>至此，我们就很清楚地知道 IMP 的含义：IMP 是一个函数指针，这个被指向的函数包含一个接收消息的对象<br>id(self 指针), 调用方法的选标 SEL (方法名)，以及不定个数的方法参数，并返回一个id。也就是说 IMP 是消息最终调用的执行代码，是方法真正的实现代码 。我们可以像在Ｃ语言里面一样使用这个函数指针。<br>NSObject 类中的methodForSelector：方法就是这样一个获取指向方法实现IMP 的指针，methodForSelector：返回的指针和赋值的变量类型必须完全一致，包括方法的参数类型和返回值类型。<br>下面的例子展示了怎么使用指针来调用setFilled:的方法实现：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> (*<span class="keyword">setter</span>)(<span class="keyword">id</span>, SEL, <span class="built_in">BOOL</span>);</div><div class="line"><span class="keyword">int</span> i;</div><div class="line"><span class="keyword">setter</span> = (<span class="keyword">void</span>(*)(<span class="keyword">id</span>, SEL, <span class="built_in">BOOL</span>))[target methodForSelector:<span class="keyword">@selector</span>(setFilled:)];</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++)</div><div class="line">	<span class="keyword">setter</span>(targetList[i], <span class="keyword">@selector</span>(setFilled:), <span class="literal">YES</span>);</div></pre></td></tr></table></figure>
+<p>使用methodForSelector：来避免动态绑定将减少大部分消息的开销，但是这只有在指定的消息被重复发送很多次时才有意义，例如上面的for循环。<br>注意，methodForSelector：是Cocoa运行时系统的提供的功能，而不是Objective-C语言本身的功能。</p>
+<p>##消息调用过程：<br>至此我们对ObjC 中的消息应该有个大致思路了：示例</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Bird * aBird = [[Bird alloc] init];</div><div class="line">[aBird fly];</div></pre></td></tr></table></figure>
+<p>中对 fly 的调用，编译器通过插入一些代码，将之转换为对方法具体实现IMP的调用，这个 IMP是通过在 Bird 的类结构中的方法链表中查找名称为fly 的 选标SEL 对应的具体方法实现找到的。<br>上面的思路还有一些没有提及的话题，比如说编译器插入了什么代码，如果在方法链表中没有找到对应的 IMP又会如何，这些话题在下面展开。</p>
+<p>##消息函数 obj_msgSend：<br>编译器会将消息转换为对消息函数 objc_msgSend的调用，该函数有两个主要的参数：消息接收者id 和消息对应的方法选标 SEL, 同时接收消息中的任意参数：<br>id objc_msgSend(id theReceiver, SELtheSelector, …)<br>如上面的消息 [aBird fly]会被转换为如下形式的函数调用：<br>objc_msgSend(aBird, @selector(fly));<br>该消息函数做了动态绑定所需要的一切工作：<br>1，它首先找到 SEL 对应的方法实现 IMP。因为不同的类对同一方法可能会有不同的实现，所以找到的方法实现依赖于消息接收者的类型。<br>2，然后将消息接收者对象(指向消息接收者对象的指针)以及方法中指定的参数传递给方法实现 IMP。<br>3，最后，将方法实现的返回值作为该函数的返回值返回。</p>
+<p>编译器会自动插入调用该消息函数objc_msgSend的代码，我们无须在代码中显示调用该消息函数。当objc_msgSend找到方法对应的实现时，它将直接调用该方法实现，并将消息中所有的参数都传递给方法实现，同时，它还将传递两个隐藏的参数：消息的接收者以及方法名称 SEL。这些参数帮助方法实现获得了消息表达式的信息。它们被认为是”隐藏“的是因为它们并没有在定义方法的源代码中声明，而是在代码编译时是插入方法的实现中的。</p>
+<p>尽管这些参数没有被显示声明，但在源代码中仍然可以引用它们（就象可以引用消息接收者对象的实例变量一样）。在方法中可以通过self来引用消息接收者对象，通过选标_cmd来引用方法本身。在下面的例子中，_cmd 指的是strange方法，self指的收到strange消息的对象。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- strange</div><div class="line">&#123;</div><div class="line">	<span class="keyword">id</span> target = getTheReceiver();</div><div class="line">	SEL method = getTheMethod();</div><div class="line">	<span class="keyword">if</span> (target == <span class="keyword">self</span> || mothod == _cmd)</div><div class="line">	<span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">	<span class="keyword">return</span> [target performSelector:method];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这两个参数中，self更有用一些。实际上，它是在方法实现中访问消息接收者对象的实例变量的途径。</p>
+<p>##查找 IMP 的过程：</p>
+<p>前面说了，objc_msgSend 会根据方法选标 SEL 在类结构的方法列表中查找方法实现IMP。这里头有一些文章，我们在前面的类结构中也看到有一个叫objc_cache *cache 的成员，这个缓存为提高效率而存在的。每个类都有一个独立的缓存，同时包括继承的方法和在该类中定义的方法。。<br>查找IMP 时：</p>
+<ol>
+<li>首先去该类的方法 cache 中查找，如果找到了就返回它；</li>
+<li>如果没有找到，就去该类的方法列表中查找。如果在该类的方法列表中找到了，则将 IMP 返回，并将它加入cache中缓存起来。根据最近使用原则，这个方法再次调用的可能性很大，缓存起来可以节省下次调用再次查找的开销。</li>
+<li>如果在该类的方法列表中没找到对应的 IMP，在通过该类结构中的 super_class指针在其父类结构的方法列表中去查找，直到在某个父类的方法列表中找到对应的IMP，返回它，并加入cache中。</li>
+<li>如果在自身以及所有父类的方法列表中都没有找到对应的 IMP，则进入下文中要讲的消息转发流程。</li>
+</ol>
+<p>##便利函数：<br>我们可以通过NSObject的一些方法获取运行时信息或动态执行一些消息：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> 返回对象的类；</div><div class="line">isKindOfClass 和 isMemberOfClass检查对象是否在指定的类继承体系中；</div><div class="line">respondsToSelector 检查对象能否相应指定的消息；</div><div class="line">conformsToProtocol 检查对象是否实现了指定协议类的方法；</div><div class="line">methodForSelector 返回指定方法实现的地址。</div><div class="line">performSelector:withObject 执行SEL 所指代的方法。</div></pre></td></tr></table></figure>
+<p>##消息转发：<br>通常，给一个对象发送它不能处理的消息会得到出错提示，然而，Objective-C运行时系统在抛出错误之前，会给消息接收对象发送一条特别的消息forwardInvocation 来通知该对象，该消息的唯一参数是个NSInvocation类型的对象——该对象封装了原始的消息和消息的参数。<br>我们可以实现forwardInvocation:方法来对不能处理的消息做一些默认的处理，也可以将消息转发给其他对象来处理，而不抛出错误。</p>
+<p>关于消息转发的作用，可以考虑如下情景：假设，我们需要设计一个能够响应negotiate消息的对象，并且能够包括其它类型的对象对消息的响应。 通过在negotiate方法的实现中将negotiate消息转发给其它的对象来很容易的达到这一目的。</p>
+<p>更进一步，假设我们希望我们的对象和另外一个类的对象对negotiate的消息的响应完全一致。一种可能的方式就是让我们的类继承其它类的方法实现。 然后，有时候这种方式不可行，因为我们的类和其它类可能需要在不同的继承体系中响应negotiate消息。</p>
+<p>虽然我们的类无法继承其它类的negotiate方法，但我们仍然可以提供一个方法实现，这个方法实现只是简单的将negotiate消息转发给其他类的对象，就好像从其它类那儿“借”来的现一样。如下所示：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- negotiate</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span> ([someOtherObject respondsToSelector:<span class="keyword">@selector</span>(negotiate)])</div><div class="line">		<span class="keyword">return</span> [someOtherObject negotiate];</div><div class="line">	<span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方式显得有欠灵活，特别是有很多消息都希望传递给其它对象时，我们就必须为每一种消息提供方法实现。此外，这种方式不能处理未知的消息。当我们写下代码时，所有我们需要转发的消息的集合都必须确定。然而，实际上，这个集合会随着运行时事件的发生，新方法或者新类的定义而变化。</p>
+<p><code>forwardInvocation:</code>消息给这个问题提供了一个更特别的，动态的解决方案：当一个对象由于没有相应的方法实现而无法响应某消息时，运行时系统将通过forwardInvocation:消息通知该对象。每个对象都从NSObject类中继承了<code>forwardInvocation:</code>方法。然而，NSObject中的方法实现只是简单地调用了doesNotRecognizeSelector:。通过实现我们自己的<code>forwardInvocation:</code>方法，我们可以在该方法实现中将消息转发给其它对象。</p>
+<p>要转发消息给其它对象，forwardInvocation:方法所必须做的有：</p>
+<ol>
+<li>决定将消息转发给谁，并且</li>
+<li>将消息和原来的参数一块转发出去。</li>
+</ol>
+<p>消息可以通过invokeWithTarget:方法来转发：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>) forwardInvocation:(<span class="built_in">NSInvocation</span> *)anInvocation</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span> ([someOtherObject respondsToSelector:[anInvocation selector]])</div><div class="line">		[anInvocation invokeWithTarget:someOtherObject];</div><div class="line">	<span class="keyword">else</span></div><div class="line">		[<span class="keyword">super</span> forwardInvocation:anInvocation];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>转发消息后的返回值将返回给原来的消息发送者。您可以将返回任何类型的返回值，包括: id，结构体，浮点数等。</p>
+<p><code>forwardInvocation:</code>方法就像一个不能识别的消息的分发中心，将这些消息转发给不同接收对象。或者它也可以象一个运输站将所有的消息都发送给同一个接收对象。它可以将一个消息翻译成另外一个消息，或者简单的”吃掉“某些消息，因此没有响应也没有错误。forwardInvocation:方法也可以对不同的消息提供同样的响应，这一切都取决于方法的具体实现。该方法所提供是将不同的对象链接到消息链的能力。</p>
+<p>注意： <code>forwardInvocation:</code>方法只有在消息接收对象中无法正常响应消息时才会被调用。 所以，如果我们希望一个对象将negotiate消息转发给其它对象，则这个对象不能有negotiate方法。否则，forwardInvocation:将不可能会被调用。</p>
+<p>##参考资料：<br>Objective-CRuntime Reference:<br><a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html" target="_blank" rel="external">http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html</a><br>Objective-C Runtime Programming Guide:<br><a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html" target="_blank" rel="external">http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html</a></p>
+<p>转自：<br>罗朝辉（<a href="http://blog.csdn.net/kesalin）" target="_blank" rel="external">http://blog.csdn.net/kesalin）</a><br><a href="http://hi.baidu.com/jt_one/blog/item/96f972cf411a7027f9dc61d8.html" target="_blank" rel="external">http://hi.baidu.com/jt_one/blog/item/96f972cf411a7027f9dc61d8.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/10/22/ios-iosmian-shi-wen-ti-zong-jie/" rel="next" title="[iOS]IOS面试问题总结">
+                <i class="fa fa-chevron-left"></i> [iOS]IOS面试问题总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/10/23/ios-ioskai-fa-zhi-bridge,-bridge-transferhe-bridge-retained/" rel="prev" title="[iOS]IOS开发之__bridge，__bridge_transfer和__bridge_retained">
+                [iOS]IOS开发之__bridge，__bridge_transfer和__bridge_retained <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/"
+           data-title="[iOS]深入浅出ObjC之消息" data-url="http://www.njiang.cn/2014/10/22/ios-shen-ru-qian-chu-objczhi-xiao-xi/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

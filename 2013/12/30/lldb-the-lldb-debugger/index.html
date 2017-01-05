@@ -1,0 +1,780 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="lldb," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="GDB TO LLDB COMMAND MAP
+
+Below is a table of GDB commands with the LLDB counterparts. The built in GDB-compatibility aliases in LLDB are also listed. The full lldb command names are often long, but an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[lldb] The LLDB Debugger">
+<meta property="og:url" content="http://www.njiang.cn/2013/12/30/lldb-the-lldb-debugger/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="GDB TO LLDB COMMAND MAP
+
+Below is a table of GDB commands with the LLDB counterparts. The built in GDB-compatibility aliases in LLDB are also listed. The full lldb command names are often long, but an">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[lldb] The LLDB Debugger">
+<meta name="twitter:description" content="GDB TO LLDB COMMAND MAP
+
+Below is a table of GDB commands with the LLDB counterparts. The built in GDB-compatibility aliases in LLDB are also listed. The full lldb command names are often long, but an">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2013/12/30/lldb-the-lldb-debugger/"/>
+
+
+
+
+
+  <title> [lldb] The LLDB Debugger | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/12/30/lldb-the-lldb-debugger/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [lldb] The LLDB Debugger
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-12-30T00:00:00+08:00">
+              2013-12-30
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/30/lldb-the-lldb-debugger/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/30/lldb-the-lldb-debugger/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p></p><h1>GDB TO LLDB COMMAND MAP</h1><br><div><p></p>
+
+<p>Below is a table of GDB commands with the LLDB counterparts. The built in GDB-compatibility aliases in LLDB are also listed. The full lldb command names are often long, but any unique short form can be used. Instead of “<b>breakpoint set</b>“, “<b>br se</b>“ is also acceptable.</p>
+
+<p><br><div></div><br></p><h1>EXECUTION COMMANDS</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Launch a process no arguments.</td><br></tr><br><tr><br><td><b>(gdb)</b> run<br><b>(gdb)</b> r</td><br><td><b>(lldb)</b> process launch<br><b>(lldb)</b> run<br><b>(lldb)</b> r</td><br></tr><br><tr><br><td colspan="2">Launch a process with arguments <code>&lt;args&gt;</code>.</td><br></tr><br><tr><br><td><b>(gdb)</b> run &lt;args&gt;<br><b>(gdb)</b> r &lt;args&gt;</td><br><td><b>(lldb)</b> process launch – &lt;args&gt;<br><b>(lldb)</b> r &lt;args&gt;</td><br></tr><br><tr><br><td colspan="2">Launch a process for with arguments <b><code>a.out 1 2 3</code></b> without having to supply the args every time.</td><br></tr><br><tr><br><td><b>%</b> gdb –args a.out 1 2 3<br><b>(gdb)</b> run<br><br>…<br><b>(gdb)</b> run<br><br>…</td><br><td><b>%</b> lldb – a.out 1 2 3<br><b>(lldb)</b> run<br><br>…<br><b>(lldb)</b> run<br><br>…</td><br></tr><br><tr><br><td colspan="2">Or:</td><br></tr><br><tr><br><td><b>(gdb)</b> set args 1 2 3<br><b>(gdb)</b> run<br><br>…<br><b>(gdb)</b> run<br><br>…</td><br><td><b>(lldb)</b> settings set target.run-args 1 2 3<br><b>(lldb)</b> run<br><br>…<br><b>(lldb)</b> run<br><br>…</td><br></tr><br><tr><br><td colspan="2">Launch a process with arguments in new terminal window (Mac OS X only).</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> process launch –tty – &lt;args&gt;<br><b>(lldb)</b> pro la -t – &lt;args&gt;</td><br></tr><br><tr><br><td colspan="2">Launch a process with arguments in existing terminal /dev/ttys006 (Mac OS X only).</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> process launch –tty=/dev/ttys006 – &lt;args&gt;<br><b>(lldb)</b> pro la -t/dev/ttys006 – &lt;args&gt;</td><br></tr><br><tr><br><td colspan="2">Set environment variables for process before launching.</td><br></tr><br><tr><br><td><b>(gdb)</b> set env DEBUG 1</td><br><td><b>(lldb)</b> settings set target.env-vars DEBUG=1<br><b>(lldb)</b> set se target.env-vars DEBUG=1<br><b>(lldb)</b> env DEBUG=1</td><br></tr><br><tr><br><td colspan="2">Show the arguments that will be or were passed to the program when run.</td><br></tr><br><tr><br><td><b>(gdb)</b> show args<br><br>Argument list to give program being debugged when it is started is “1 2 3”.</td><br><td><b>(lldb)</b> settings show target.run-args<br><br>target.run-args (array of strings) =<br><br>[0]: “1”<br><br>[1]: “2”<br><br>[2]: “3”</td><br></tr><br><tr><br><td colspan="2">Set environment variables for process and launch process in one command.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> process launch -v DEBUG=1</td><br></tr><br><tr><br><td colspan="2">Attach to a process with process ID 123.</td><br></tr><br><tr><br><td><b>(gdb)</b> attach 123</td><br><td><b>(lldb)</b> process attach –pid 123<br><b>(lldb)</b> attach -p 123</td><br></tr><br><tr><br><td colspan="2">Attach to a process named “a.out”.</td><br></tr><br><tr><br><td><b>(gdb)</b> attach a.out</td><br><td><b>(lldb)</b> process attach –name a.out<br><b>(lldb)</b> pro at -n a.out</td><br></tr><br><tr><br><td colspan="2">Wait for a process named “a.out” to launch and attach.</td><br></tr><br><tr><br><td><b>(gdb)</b> attach -waitfor a.out</td><br><td><b>(lldb)</b> process attach –name a.out –waitfor<br><b>(lldb)</b> pro at -n a.out -w</td><br></tr><br><tr><br><td colspan="2">Attach to a remote gdb protocol server running on system “eorgadd”, port 8000.</td><br></tr><br><tr><br><td><b>(gdb)</b> target remote eorgadd:8000</td><br><td><b>(lldb)</b> gdb-remote eorgadd:8000</td><br></tr><br><tr><br><td colspan="2">Attach to a remote gdb protocol server running on the local system, port 8000.</td><br></tr><br><tr><br><td><b>(gdb)</b> target remote localhost:8000</td><br><td><b>(lldb)</b> gdb-remote 8000</td><br></tr><br><tr><br><td colspan="2">Attach to a Darwin kernel in kdp mode on system “eorgadd”.</td><br></tr><br><tr><br><td><b>(gdb)</b> kdp-reattach eorgadd</td><br><td><b>(lldb)</b> kdp-remote eorgadd</td><br></tr><br><tr><br><td colspan="2">Do a source level single step in the currently selected thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> step<br><b>(gdb)</b> s</td><br><td><b>(lldb)</b> thread step-in<br><b>(lldb)</b> step<br><b>(lldb)</b> s</td><br></tr><br><tr><br><td colspan="2">Do a source level single step over in the currently selected thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> next<br><b>(gdb)</b> n</td><br><td><b>(lldb)</b> thread step-over<br><b>(lldb)</b> next<br><b>(lldb)</b> n</td><br></tr><br><tr><br><td colspan="2">Do an instruction level single step in the currently selected thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> stepi<br><b>(gdb)</b> si</td><br><td><b>(lldb)</b> thread step-inst<br><b>(lldb)</b> si</td><br></tr><br><tr><br><td colspan="2">Do an instruction level single step over in the currently selected thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> nexti<br><b>(gdb)</b> ni</td><br><td><b>(lldb)</b> thread step-inst-over<br><b>(lldb)</b> ni</td><br></tr><br><tr><br><td colspan="2">Step out of the currently selected frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> finish</td><br><td><b>(lldb)</b> thread step-out<br><b>(lldb)</b> finish</td><br></tr><br><tr><br><td colspan="2">Return immediately from the currently selected frame, with an optional return value.</td><br></tr><br><tr><br><td><b>(gdb)</b> return &lt;RETURN EXPRESSION&gt;</td><br><td><b>(lldb)</b> thread return &lt;RETURN EXPRESSION&gt;</td><br></tr><br><tr><br><td colspan="2">Backtrace and disassemble every time you stop.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> target stop-hook add<br><br>Enter your stop hook command(s). Type ‘DONE’ to end.<br><br>&gt; bt<br><br>&gt; disassemble –pc<br><br>&gt; DONE<br><br>Stop hook #1 added.</td><br></tr><br></tbody><br></table><br>&nbsp;</p>
+
+<p><br><div></div><br></p><h1>BREAKPOINT COMMANDS</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint at all functions named <b>main</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> break main</td><br><td><b>(lldb)</b> breakpoint set –name main<br><b>(lldb)</b> br s -n main<br><b>(lldb)</b> b main</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint in file <b>test.c</b> at line <b>12</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> break test.c:12</td><br><td><b>(lldb)</b> breakpoint set –file test.c –line 12<br><b>(lldb)</b> br s -f test.c -l 12<br><b>(lldb)</b> b test.c:12</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint at all C++ methods whose basename is <b>main</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> break main<br><i>(Hope that there are no C funtions named <b>main</b>)</i>.</td><br><td><b>(lldb)</b> breakpoint set –method main<br><b>(lldb)</b> br s -M main</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint at and object C function: <b>-[NSString stringWithFormat:]</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> break -[NSString stringWithFormat:]</td><br><td><b>(lldb)</b> breakpoint set –name “-[NSString stringWithFormat:]”<br><b>(lldb)</b> b -[NSString stringWithFormat:]</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint at all Objective C methods whose selector is <b>count</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> break count<br><i>(Hope that there are no C or C++ funtions named<b>count</b>)</i>.</td><br><td><b>(lldb)</b> breakpoint set –selector count<br><b>(lldb)</b> br s -S count</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint by regular expression on function name.</td><br></tr><br><tr><br><td><b>(gdb)</b> rbreak regular-expression</td><br><td><b>(lldb)</b> breakpoint set –func-regex regular-expression<br><b>(lldb)</b> br s -r regular-expression</td><br></tr><br><tr><br><td colspan="2">Ensure that breakpoints by file and line work for #included .c/.cpp/.m files.</td><br></tr><br><tr><br><td><b>(gdb)</b> b foo.c:12</td><br><td><b>(lldb)</b> settings set target.inline-breakpoint-strategy always<br><b>(lldb)</b> br s -f foo.c -l 12</td><br></tr><br><tr><br><td colspan="2">Set a breakpoint by regular expression on source file contents.</td><br></tr><br><tr><br><td><b>(gdb)</b> shell grep -e -n pattern source-file<br><b>(gdb)</b> break source-file:CopyLineNumbers</td><br><td><b>(lldb)</b> breakpoint set –source-pattern regular-expression –file SourceFile<br><b>(lldb)</b> br s -p regular-expression -f file</td><br></tr><br><tr><br><td colspan="2">List all breakpoints.</td><br></tr><br><tr><br><td><b>(gdb)</b> info break</td><br><td><b>(lldb)</b> breakpoint list<br><b>(lldb)</b> br l</td><br></tr><br><tr><br><td colspan="2">Delete a breakpoint.</td><br></tr><br><tr><br><td><b>(gdb)</b> delete 1</td><br><td><b>(lldb)</b> breakpoint delete 1<br><b>(lldb)</b> br del 1</td><br></tr><br></tbody><br></table><br>&nbsp;</p>
+
+<p><br><div></div><br></p><h1>WATCHPOINT COMMANDS</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Set a watchpoint on a variable when it is written to.</td><br></tr><br><tr><br><td><b>(gdb)</b> watch global_var</td><br><td><b>(lldb)</b> watchpoint set variable global_var<br><b>(lldb)</b> wa s v global_var</td><br></tr><br><tr><br><td colspan="2">Set a watchpoint on a memory location when it is written into. The size of the region to watch for defaults to the pointer size if no ‘-x byte_size’ is specified. This command takes raw input, evaluated as an expression returning an unsigned integer pointing to the start of the region, after the ‘–’ option terminator.</td><br></tr><br><tr><br><td><b>(gdb)</b> watch -location g_char_ptr</td><br><td><b>(lldb)</b> watchpoint set expression – my_ptr<br><b>(lldb)</b> wa s e – my_ptr</td><br></tr><br><tr><br><td colspan="2">Set a condition on a watchpoint.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> watch set var global<br><b>(lldb)</b> watchpoint modify -c ‘(global==5)’<br><b>(lldb)</b> c<br><br>…<br><b>(lldb)</b> bt<br><br>* thread #1: tid = 0x1c03, 0x0000000100000ef5 a.out<code>modify + 21 at main.cpp:16, stop reason = watchpoint 1&lt;br /&gt;
+frame #0: 0x0000000100000ef5 a.out</code>modify + 21 at main.cpp:16<br><br>frame #1: 0x0000000100000eac a.out<code>main + 108 at main.cpp:25&lt;br /&gt;
+frame #2: 0x00007fff8ac9c7e1 libdyld.dylib</code>start + 1<br><b>(lldb)</b> frame var global<br><br>(int32_t) global = 5</td><br></tr><br><tr><br><td colspan="2">List all watchpoints.</td><br></tr><br><tr><br><td><b>(gdb)</b> info break</td><br><td><b>(lldb)</b> watchpoint list<br><b>(lldb)</b> watch l</td><br></tr><br><tr><br><td colspan="2">Delete a watchpoint.</td><br></tr><br><tr><br><td><b>(gdb)</b> delete 1</td><br><td><b>(lldb)</b> watchpoint delete 1<br><b>(lldb)</b> watch del 1</td><br></tr><br></tbody><br></table><br>&nbsp;</p>
+
+<p><br><div></div><br></p><h1>EXAMINING VARIABLES</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Show the arguments and local variables for the current frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> info args<br><br>and<br><b>(gdb)</b> info locals</td><br><td><b>(lldb)</b> frame variable<br><b>(lldb)</b> fr v</td><br></tr><br><tr><br><td colspan="2">Show the local variables for the current frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> info locals</td><br><td><b>(lldb)</b> frame variable –no-args<br><b>(lldb)</b> fr v -a</td><br></tr><br><tr><br><td colspan="2">Show the contents of local variable “bar”.</td><br></tr><br><tr><br><td><b>(gdb)</b> p bar</td><br><td><b>(lldb)</b> frame variable bar<br><b>(lldb)</b> fr v bar<br><b>(lldb)</b> p bar</td><br></tr><br><tr><br><td colspan="2">Show the contents of local variable “bar” formatted as hex.</td><br></tr><br><tr><br><td><b>(gdb)</b> p/x bar</td><br><td><b>(lldb)</b> frame variable –format x bar<br><b>(lldb)</b> fr v -f x bar</td><br></tr><br><tr><br><td colspan="2">Show the contents of global variable “baz”.</td><br></tr><br><tr><br><td><b>(gdb)</b> p baz</td><br><td><b>(lldb)</b> target variable baz<br><b>(lldb)</b> ta v baz</td><br></tr><br><tr><br><td colspan="2">Show the global/static variables defined in the current source file.</td><br></tr><br><tr><br><td>n/a</td><br><td><b>(lldb)</b> target variable<br><b>(lldb)</b> ta v</td><br></tr><br><tr><br><td colspan="2">Display a the variable “argc” and “argv” every time you stop.</td><br></tr><br><tr><br><td><b>(gdb)</b> display argc<br><b>(gdb)</b> display argv</td><br><td><b>(lldb)</b> target stop-hook add –one-liner “frame variable argc argv”<br><b>(lldb)</b> ta st a -o “fr v argc argv”<br><b>(lldb)</b> display argc<br><b>(lldb)</b> display argv</td><br></tr><br><tr><br><td colspan="2">Display a the variable “argc” and “argv” only when you stop in the function named <b>main</b>.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> target stop-hook add –name main –one-liner “frame variable argc argv”<br><b>(lldb)</b> ta st a -n main -o “fr v argc argv”</td><br></tr><br><tr><br><td colspan="2">Display the variable “<em>this” only when you stop in c class named <b>MyClass</b>.</em></td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> target stop-hook add –classname MyClass –one-liner “frame variable this”<br><b>(lldb)</b> ta st a -c MyClass -o “fr v *this”</td><br></tr><br></tbody><br></table><br>&nbsp;</p>
+
+<p><br></p><h1>EVALUATING EXPRESSIONS</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Evaluating a generalized expression in the current frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> print (int) printf (“Print nine: %d.”, 4 + 5)<br><br>or if you don’t want to see void returns:<br><b>(gdb)</b> call (int) printf (“Print nine: %d.”, 4 + 5)</td><br><td><b>(lldb)</b> expr (int) printf (“Print nine: %d.”, 4 + 5)<br><br>or using the print alias:<br><b>(lldb)</b> print (int) printf (“Print nine: %d.”, 4 + 5)</td><br></tr><br><tr><br><td colspan="2">Creating and assigning a value to a convenience variable.</td><br></tr><br><tr><br><td><b>(gdb)</b> set $foo = 5<br><b>(gdb)</b> set variable $foo = 5<br><br>or using the print command<br><b>(gdb)</b> print $foo = 5<br><br>or using the call command<br><b>(gdb)</b> call $foo = 5<br><br>and if you want to specify the type of the variable:<b>(gdb)</b> set $foo = (unsigned int) 5</td><br><td>In lldb you evaluate a variable declaration expression as you would write it in C:<br><b>(lldb)</b> expr unsigned int $foo = 5</td><br></tr><br><tr><br><td colspan="2">Printing the ObjC “description” of an object.</td><br></tr><br><tr><br><td><b>(gdb)</b> po [SomeClass returnAnObject]</td><br><td><b>(lldb)</b> expr -o – [SomeClass returnAnObject]<br><br>or using the po alias:<br><b>(lldb)</b> po [SomeClass returnAnObject]</td><br></tr><br><tr><br><td colspan="2">Print the dynamic type of the result of an expression.</td><br></tr><br><tr><br><td><b>(gdb)</b> set print object 1<br><b>(gdb)</b> p someCPPObjectPtrOrReference<br><br>only works for C++ objects.</td><br><td><b>(lldb)</b> expr -d 1 – [SomeClass returnAnObject]<br><b>(lldb)</b> expr -d 1 – someCPPObjectPtrOrReference<br><br>or set dynamic type printing to be the default: <b>(lldb)</b>settings set target.prefer-dynamic run-target</td><br></tr><br><tr><br><td colspan="2">Calling a function so you can stop at a breakpoint in the function.</td><br></tr><br><tr><br><td><b>(gdb)</b> set unwindonsignal 0<br><b>(gdb)</b> p function_with_a_breakpoint()</td><br><td><b>(lldb)</b> expr -i 0 – function_with_a_breakpoint()</td><br></tr><br><tr><br><td colspan="2">Calling a function that crashes, and stopping when the function crashes.</td><br></tr><br><tr><br><td><b>(gdb)</b> set unwindonsignal 0<br><b>(gdb)</b> p function_which_crashes()</td><br><td><b>(lldb)</b> expr -u 0 – function_which_crashes()</td><br></tr><br></tbody><br></table><br>&nbsp;</p>
+
+<p><br></p><h1>EXAMINING THREAD STATE</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Show the stack backtrace for the current thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> bt</td><br><td><b>(lldb)</b> thread backtrace<br><b>(lldb)</b> bt</td><br></tr><br><tr><br><td colspan="2">Show the stack backtraces for all threads.</td><br></tr><br><tr><br><td><b>(gdb)</b> thread apply all bt</td><br><td><b>(lldb)</b> thread backtrace all<br><b>(lldb)</b> bt all</td><br></tr><br><tr><br><td colspan="2">Backtrace the first five frames of the current thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> bt 5</td><br><td><b>(lldb)</b> thread backtrace -c 5<br><b>(lldb)</b> bt 5 (<i>lldb-169 and later</i>)<br><b>(lldb)</b> bt -c 5 (<i>lldb-168 and earlier</i>)</td><br></tr><br><tr><br><td colspan="2">Select a different stack frame by index for the current thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> frame 12</td><br><td><b>(lldb)</b> frame select 12<br><b>(lldb)</b> fr s 12<br><b>(lldb)</b> f 12</td><br></tr><br><tr><br><td colspan="2">List information about the currently selected frame in the current thread.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> frame info</td><br></tr><br><tr><br><td colspan="2">Select the stack frame that called the current stack frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> up</td><br><td><b>(lldb)</b> up<br><b>(lldb)</b> frame select –relative=1</td><br></tr><br><tr><br><td colspan="2">Select the stack frame that is called by the current stack frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> down</td><br><td><b>(lldb)</b> down<br><b>(lldb)</b> frame select –relative=-1<br><b>(lldb)</b> fr s -r-1</td><br></tr><br><tr><br><td colspan="2">Select a different stack frame using a relative offset.</td><br></tr><br><tr><br><td><b>(gdb)</b> up 2<br><b>(gdb)</b> down 3</td><br><td><b>(lldb)</b> frame select –relative 2<br><b>(lldb)</b> fr s -r2</td></tr></tbody></table></p>
+
+<p><b>(lldb)</b> frame select –relative -3<br><b>(lldb)</b> fr s -r-3<br><br><tr><br><td colspan="2">Show the general purpose registers for the current thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> info registers</td><br><td><b>(lldb)</b> register read</td><br></tr><br><tr><br><td colspan="2">Write a new decimal value ‘123’ to the current thread register ‘rax’.</td><br></tr><br><tr><br><td><b>(gdb)</b> p $rax = 123</td><br><td><b>(lldb)</b> register write rax 123</td><br></tr><br><tr><br><td colspan="2">Skip 8 bytes ahead of the current program counter (instruction pointer). Note that we use backticks to evaluate an expression and insert the scalar result in LLDB.</td><br></tr><br><tr><br><td><b>(gdb)</b> jump *$pc+8</td><br><td><b>(lldb)</b> register write pc <code>$pc+8</code></td><br></tr><br><tr><br><td colspan="2">Show the general purpose registers for the current thread formatted as <b>signed decimal</b>. LLDB tries to use the same format characters as <b>printf(3)</b> when possible. Type “help format” to see the full list of format specifiers.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> register read –format i<br><b>(lldb)</b> re r -f i</td></tr></p>
+
+<p><i>LLDB now supports the GDB shorthand format syntax but there can’t be space after the command:</i><br><b>(lldb)</b> register read/d<br><br><tr><br><td colspan="2">Show all registers in all register sets for the current thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> info all-registers</td><br><td><b>(lldb)</b> register read –all<br><b>(lldb)</b> re r -a</td><br></tr><br><tr><br><td colspan="2">Show the values for the registers named “rax”, “rsp” and “rbp” in the current thread.</td><br></tr><br><tr><br><td><b>(gdb)</b> info all-registers rax rsp rbp</td><br><td><b>(lldb)</b> register read rax rsp rbp</td><br></tr><br><tr><br><td colspan="2">Show the values for the register named “rax” in the current thread formatted as <b>binary</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> p/t $rax</td><br><td><b>(lldb)</b> register read –format binary rax<br><b>(lldb)</b> re r -f b rax</td></tr></p>
+
+<p><i>LLDB now supports the GDB shorthand format syntax but there can’t be space after the command:</i><br><b>(lldb)</b> register read/t rax<br><b>(lldb)</b> p/t $rax<br><br><tr><br><td colspan="2">Read memory from address 0xbffff3c0 and show 4 hex uint32_t values.</td><br></tr><br><tr><br><td><b>(gdb)</b> x/4xw 0xbffff3c0</td><br><td><b>(lldb)</b> memory read –size 4 –format x –count 4 0xbffff3c0<br><b>(lldb)</b> me r -s4 -fx -c4 0xbffff3c0<br><b>(lldb)</b> x -s4 -fx -c4 0xbffff3c0</td></tr></p>
+
+<p><i>LLDB now supports the GDB shorthand format syntax but there can’t be space after the command:</i><br><b>(lldb)</b> memory read/4xw 0xbffff3c0<br><b>(lldb)</b> x/4xw 0xbffff3c0<br><b>(lldb)</b> memory read –gdb-format 4xw 0xbffff3c0<br><br><tr><br><td colspan="2">Read memory starting at the expression “argv[0]”.</td><br></tr><br><tr><br><td><b>(gdb)</b> x argv[0]</td><br><td><b>(lldb)</b> memory read <code>argv[0]</code><br><i><b>NOTE:</b> any command can inline a scalar expression result (as long as the target is stopped) using backticks around any expression:</i><br><b>(lldb)</b> memory read –size <code>sizeof(int)</code> <code>argv[0]</code></td><br></tr><br><tr><br><td colspan="2">Read 512 bytes of memory from address 0xbffff3c0 and save results to a local file as <b>text</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> set logging on<br><b>(gdb)</b> set logging file /tmp/mem.txt<br><b>(gdb)</b> x/512bx 0xbffff3c0<br><b>(gdb)</b> set logging off</td><br><td><b>(lldb)</b> memory read –outfile /tmp/mem.txt –count 512 0xbffff3c0<br><b>(lldb)</b> me r -o/tmp/mem.txt -c512 0xbffff3c0<br><b>(lldb)</b> x/512bx -o/tmp/mem.txt 0xbffff3c0</td><br></tr><br><tr><br><td colspan="2">Save binary memory data starting at 0x1000 and ending at 0x2000 to a file.</td><br></tr><br><tr><br><td><b>(gdb)</b> dump memory /tmp/mem.bin 0x1000 0x2000</td><br><td><b>(lldb)</b> memory read –outfile /tmp/mem.bin –binary 0x1000 0x1200<br><b>(lldb)</b> me r -o /tmp/mem.bin -b 0x1000 0x1200</td><br></tr><br><tr><br><td colspan="2">Get information about a specific heap allocation (available on Mac OS X only).</td><br></tr><br><tr><br><td><b>(gdb)</b> info malloc 0x10010d680</td><br><td><b>(lldb)</b> command script import lldb.macosx.heap<br><b>(lldb)</b> process launch –environment MallocStackLogging=1 – [ARGS]<br><b>(lldb)</b> malloc_info –stack-history 0x10010d680</td><br></tr><br><tr><br><td colspan="2">Get information about a specific heap allocation and cast the result to any dynamic type that can be deduced (available on Mac OS X only)</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> command script import lldb.macosx.heap<br><b>(lldb)</b> malloc_info –type 0x10010d680</td><br></tr><br><tr><br><td colspan="2">Find all heap blocks that contain a pointer specified by an expression EXPR (available on Mac OS X only).</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> command script import lldb.macosx.heap<br><b>(lldb)</b> ptr_refs EXPR</td><br></tr><br><tr><br><td colspan="2">Find all heap blocks that contain a C string anywhere in the block (available on Mac OS X only).</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> command script import lldb.macosx.heap<br><b>(lldb)</b> cstr_refs CSTRING</td><br></tr><br><tr><br><td colspan="2">Disassemble the current function for the current frame.</td><br></tr><br><tr><br><td><b>(gdb)</b> disassemble</td><br><td><b>(lldb)</b> disassemble –frame<br><b>(lldb)</b> di -f</td><br></tr><br><tr><br><td colspan="2">Disassemble any functions named <b>main</b>.</td><br></tr><br><tr><br><td><b>(gdb)</b> disassemble main</td><br><td><b>(lldb)</b> disassemble –name main<br><b>(lldb)</b> di -n main</td><br></tr><br><tr><br><td colspan="2">Disassemble an address range.</td><br></tr><br><tr><br><td><b>(gdb)</b> disassemble 0x1eb8 0x1ec3</td><br><td><b>(lldb)</b> disassemble –start-address 0x1eb8 –end-address 0x1ec3<br><b>(lldb)</b> di -s 0x1eb8 -e 0x1ec3</td><br></tr><br><tr><br><td colspan="2">Disassemble 20 instructions from a given address.</td><br></tr><br><tr><br><td><b>(gdb)</b> x/20i 0x1eb8</td><br><td><b>(lldb)</b> disassemble –start-address 0x1eb8 –count 20<br><b>(lldb)</b> di -s 0x1eb8 -c 20</td><br></tr><br><tr><br><td colspan="2">Show mixed source and disassembly for the current function for the current frame.</td><br></tr><br><tr><br><td>n/a</td><br><td><b>(lldb)</b> disassemble –frame –mixed<br><b>(lldb)</b> di -f -m</td><br></tr><br><tr><br><td colspan="2">Disassemble the current function for the current frame and show the opcode bytes.</td><br></tr><br><tr><br><td>n/a</td><br><td><b>(lldb)</b> disassemble –frame –bytes<br><b>(lldb)</b> di -f -b</td><br></tr><br><tr><br><td colspan="2">Disassemble the current source line for the current frame.</td><br></tr><br><tr><br><td>n/a</td><br><td><b>(lldb)</b> disassemble –line<br><b>(lldb)</b> di -l</td><br></tr><br><br><br>&nbsp;</p>
+
+<p><br><div></div><br></p><h1>EXECUTABLE AND SHARED LIBRARY QUERY COMMANDS</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">List the main executable and all dependent shared libraries.</td><br></tr><br><tr><br><td><b>(gdb)</b> info shared</td><br><td><b>(lldb)</b> image list</td><br></tr><br><tr><br><td colspan="2">Look up information for a raw address in the executable or any shared libraries.</td><br></tr><br><tr><br><td><b>(gdb)</b> info symbol 0x1ec4</td><br><td><b>(lldb)</b> image lookup –address 0x1ec4<br><b>(lldb)</b> im loo -a 0x1ec4</td><br></tr><br><tr><br><td colspan="2">Look up functions matching a regular expression in a binary.</td><br></tr><br><tr><br><td><b>(gdb)</b> info function &lt;FUNC_REGEX&gt;</td><br><td>This one finds debug symbols:<br><b>(lldb)</b> image lookup -r -n &lt;FUNC_REGEX&gt;</td></tr></tbody></table></p>
+
+<p>This one finds non-debug symbols:<br><b>(lldb)</b> image lookup -r -s &lt;FUNC_REGEX&gt;</p>
+
+<p>Provide a list of binaries as arguments to limit the search.<br><br><tr><br><td colspan="2">Find full souce line information.</td><br></tr><br><tr><br><td><b>(gdb)</b> info line 0x1ec4</td><br><td>This one is a bit messy at present. Do:</td></tr></p>
+
+<p><b>(lldb)</b> image lookup -v –address 0x1ec4</p>
+
+<p>and look for the LineEntry line, which will have the full source path and line range information.<br><br><tr><br><td colspan="2">Look up information for an address in <b>a.out</b> only.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> image lookup –address 0x1ec4 a.out<br><b>(lldb)</b> im loo -a 0x1ec4 a.out</td><br></tr><br><tr><br><td colspan="2">Look up information for for a type <code>Point</code> by name.</td><br></tr><br><tr><br><td><b>(gdb)</b> ptype Point</td><br><td><b>(lldb)</b> image lookup –type Point<br><b>(lldb)</b> im loo -t Point</td><br></tr><br><tr><br><td colspan="2">Dump all sections from the main executable and any shared libraries.</td><br></tr><br><tr><br><td><b>(gdb)</b> maintenance info sections</td><br><td><b>(lldb)</b> image dump sections</td><br></tr><br><tr><br><td colspan="2">Dump all sections in the <b>a.out</b> module.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> image dump sections a.out</td><br></tr><br><tr><br><td colspan="2">Dump all symbols from the main executable and any shared libraries.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> image dump symtab</td><br></tr><br><tr><br><td colspan="2">Dump all symbols in <b>a.out</b> and <b>liba.so</b>.</td><br></tr><br><tr><br><td></td><br><td><b>(lldb)</b> image dump symtab a.out liba.so</td><br></tr><br><br><br>&nbsp;</p>
+
+<p><br><div></div><br></p><h1>MISCELLANEOUS</h1><br><div><p></p>
+
+<p>&nbsp;<br><table width="620" cellspacing="0"><br><tbody><br><tr><br><td width="50%">GDB</td><br><td width="50%">LLDB</td><br></tr><br><tr><br><td colspan="2">Echo text to the screen.</td><br></tr><br><tr><br><td><b>(gdb)</b> echo Here is some text\n</td><br><td><b>(lldb)</b> script print “Here is some text”</td><br></tr><br><tr><br><td colspan="2">Remap source file pathnames for the debug session. If your source files are no longer located in the same location as when the program was built — maybe the program was built on a different computer — you need to tell the debugger how to find the sources at their local file path instead of the build system’s file path.</td><br></tr><br><tr><br><td><b>(gdb)</b> set pathname-substitutions /buildbot/path /my/path</td><br><td><b>(lldb)</b> settings set target.source-map /buildbot/path /my/path</td><br></tr><br><tr><br><td colspan="2">Supply a catchall directory to search for source files in.</td><br></tr><br><tr><br><td><b>(gdb)</b> directory /my/path</td><br><td>(<i>No equivalent command - use the source-map instead.)<br></i></td><br></tr><br></tbody><br></table><br></p>
+</div></div></div></div></div></div></div></div></div>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/lldb/" rel="tag"># lldb</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/12/09/google-objective-c-style-guide-中文版/" rel="next" title="Google Objective-C Style Guide 中文版">
+                <i class="fa fa-chevron-left"></i> Google Objective-C Style Guide 中文版
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/12/31/yuan-chuang-xie-zai-2013-nian-mo-wei/" rel="prev" title="[原创] 写在2013年末尾">
+                [原创] 写在2013年末尾 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013/12/30/lldb-the-lldb-debugger/"
+           data-title="[lldb] The LLDB Debugger" data-url="http://www.njiang.cn/2013/12/30/lldb-the-lldb-debugger/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">GDB TO LLDB COMMAND MAP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">EXECUTION COMMANDS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">BREAKPOINT COMMANDS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">WATCHPOINT COMMANDS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">EXAMINING VARIABLES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">EVALUATING EXPRESSIONS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">EXAMINING THREAD STATE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">EXECUTABLE AND SHARED LIBRARY QUERY COMMANDS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">MISCELLANEOUS</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

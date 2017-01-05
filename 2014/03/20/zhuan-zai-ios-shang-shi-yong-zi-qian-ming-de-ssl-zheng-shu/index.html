@@ -1,0 +1,841 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="[转]http://beyondvincent.com/blog/2014/03/17/five-tips-for-using-self-signed-ssl-certificates-with-ios/
+
+上周苹果release了iOS 7.1，用户升级至此版本，去下载企业级应用时，如果应用不是用https部署的，那么会提示服务器上的证书无效，如下图所示：
+
+
+
+小引:
+
+在iOS 7.1中需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[转]在iOS上使用自签名的SSL证书">
+<meta property="og:url" content="http://www.njiang.cn/2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/index.html">
+<meta property="og:site_name" content="天空の城">
+<meta property="og:description" content="[转]http://beyondvincent.com/blog/2014/03/17/five-tips-for-using-self-signed-ssl-certificates-with-ios/
+
+上周苹果release了iOS 7.1，用户升级至此版本，去下载企业级应用时，如果应用不是用https部署的，那么会提示服务器上的证书无效，如下图所示：
+
+
+
+小引:
+
+在iOS 7.1中需要">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/11.PNG">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/01.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/02.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/03.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/04.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/05.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/06.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/07.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/08.png">
+<meta property="og:image" content="http://beyondvincent.com/images/2014/03/10.png">
+<meta property="og:updated_time" content="2016-12-26T08:40:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[转]在iOS上使用自签名的SSL证书">
+<meta name="twitter:description" content="[转]http://beyondvincent.com/blog/2014/03/17/five-tips-for-using-self-signed-ssl-certificates-with-ios/
+
+上周苹果release了iOS 7.1，用户升级至此版本，去下载企业级应用时，如果应用不是用https部署的，那么会提示服务器上的证书无效，如下图所示：
+
+
+
+小引:
+
+在iOS 7.1中需要">
+<meta name="twitter:image" content="http://beyondvincent.com/images/2014/03/11.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.njiang.cn/2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/"/>
+
+
+
+
+
+  <title> [转]在iOS上使用自签名的SSL证书 | 天空の城 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-43682645-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天空の城</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">愤怒的程序员，梦想着有一天也能飞！</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                [转]在iOS上使用自签名的SSL证书
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-03-20T00:00:00+08:00">
+              2014-03-20
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[转]<a href="http://beyondvincent.com/blog/2014/03/17/five-tips-for-using-self-signed-ssl-certificates-with-ios/" target="_blank" rel="external">http://beyondvincent.com/blog/2014/03/17/five-tips-for-using-self-signed-ssl-certificates-with-ios/</a></p>
+
+<p>上周苹果release了iOS 7.1，用户升级至此版本，去下载企业级应用时，如果应用不是用https部署的，那么会提示服务器上的证书无效，如下图所示：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/11.PNG" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/11.PNG"></a></p>
+
+<p>小引:</p>
+
+<p>在iOS 7.1中需要将plists文件的url路径设置为https才能下载安装，如果之前是用http部署的，这就需要对服务器做一些修改。网上流传着(<a href="http://stackoverflow.com/questions/20276907/enterprise-app-deployment-doesnt-work-on-ios-7-1/22325916#22325916" target="_blank" rel="external">Enterprise app deployment doesn’t work on iOS 7.1</a>)把plist放到公开的具有https功能的文件服务器上即可(dropbox或SkyDrive)，经试验，都是可行的。不过如要企业内部的网络无法访问外网，这又如何是好呢？网上也流传需要受信任的证书才行，这样一来对于某些企业的内部部署就比较麻烦了(局域网、主机名变动等都会引起很麻烦的事情)，各区域可能还要用不同的证书(对应不同的host name)。</p>
+
+<p>经查苹果的相关文档(2014年2月份)，是可以使用http或者https的，后来打电话咨询苹果技术支持人员，告知文档还没来得及更新，不过自签名的证书也可以使用，最好首先要把证书(最好是CA根证书)通过mail或者配置工具安装到iOS设备上，然后根据这个CA构建web 服务器上用到的证书，这样当iOS设备访问web服务器来安装app时，就可以正常进行了。这样的话，我们只需要根据不同的服务器制作对应的自签名证书即可，有问题也方便修改跟进。</p>
+
+<p>下面这篇文章就是介绍如何在iOS上面使用自签名的SSL证书。</p>
+
+<p>先来看看目录：<br><ol><br>    <li>在iPhone或者iPad上的Safari中不要接受自签名证书</li><br>    <li>像安装iOS的Configuration Profile一样安装自签名证书</li><br>    <li>不要用IIS创建自签名证书</li><br>    <li>利用OpenSSL创建自签名证书</li><br>    <li>创建自己的证书颁发机构(CA)</li><br></ol><br>虽说SSL证书的购买价格不是太贵，不过有时候我们自行创建的话要更加方便一些，例如我们需要在开发环境配置SSL时、我们的测试服务器有不同的主机名或者开发的系统只有本地局域网才能访问。</p>
+
+<p>实际上我们可以免费的创建<a href="http://en.wikipedia.org/wiki/Self-signed_certificate" target="_blank" rel="external">自签名SSL证书</a>，并不需要给证书颁发机构(CA)支付任何费用，也不需要遵守任何审计要求。</p>
+
+<p>使用自签名SSL证书的缺点就是浏览器不会自动的信任相关的站点。如果用iPhone或者iPad上的Safari打开相关站点，会看到如下提示界面：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/01.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/01.png"></a></p>
+
+<p>这里的HttpWatch iOS app还会有更详细的提示内容：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/02.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/02.png"></a></p>
+
+<p>本文剩余内容将介绍如何对iOS做配置，以避免上面遇到的问题，以及如何方便的创建和管理自签名证书。<br></p><h2>在iPhone或者iPad上的Safari中不要接受自签名证书</h2><br>当在Safari中第一次访问自签名证书的站点时，会有如下提示(Continue或Details-&gt;Accept)：<p></p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/03.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/03.png"></a></p>
+
+<p>如果你照着选择的话，是可以在Safari中打开站点的，不过这样会有两个明显的缺点：<br><ol><br>    <li>在Safari中接受证书只会添加一个<code>SSL例外</code>：防止Safari对此站点做出的警告提示。实际上并不会将证书安装到iOS中，以成为可信任的证书。同台设备的其它程序在连接该站点时仍然会失败。</li><br>    <li>一旦将<code>SSL例外</code>添加到iOS 7中了，就无法从iOS 7中移除。在之前的版本还可以通过Settings-&gt;Safari，选中”Clear Cookies and Data”进行删除。在iOS 7中这好像没有效果。———除非<code>General &gt; Reset &gt; Reset Settings</code>。</li><br></ol><br>当然，苹果官方也提供了一个工具<a href="http://support.apple.com/downloads/#iphone%20configuration%20utility" target="_blank" rel="external">iPhone configuration utility for Mac and PC</a>，通过该工具可以把证书安装至设备中。如果邮件不可用，或者要批量安装的话，这是一个好方法。<br></p><h2>像安装iOS的Configuration Profile一样安装自签名证书</h2><br>要想把SSL证书在iOS设备上安装为可信任的，可以通过发邮件到设备上，并将证书以附件的形式带在邮件中：<p></p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/04.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/04.png"></a></p>
+
+<p>选择邮件中的附件，以将证书安装至iOS设备中。选择附件之后，选择<code>Install</code>来安装证书。完成安装之后，再在Safari或者其它iOS应用中使用该证书时，就不会有相关提醒了。</p>
+
+<p>并且这与Safari添加的<code>SSL例外</code>有一个很大的区别，你可以在任意时刻通过<code>Settings-&gt;General-&gt;Profiles</code>来查看相关证书，如果有必要的话，还可以将其移除：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/05.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/05.png"></a></p>
+
+<p>当然，苹果也提供了一个工具<a href="http://support.apple.com/downloads/#iphone%20configuration%20utility" target="_blank" rel="external">iPhone configuration utility for Mac and PC</a>，通过该工具可以把证书安装到设备中，如果邮件不可用，或者要批量安装证书的话，可以用这个工具。<br></p><h2>不要用IIS创建自签名证书</h2><br>在IIS中创建自签名证书非常的简单。只需要选择菜单中的<code>Create Self-Signed Certificate</code>即可：<p></p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/06.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/06.png"></a></p>
+
+<p>不过IIS简单的使用计算机名称当做证书的主机名：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/07.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/07.png"></a></p>
+
+<p>大多数时候，计算机名称与主机名是不匹配的，这样的话自签名的证书永远都不会受信任——即使已经安装至iOS设备中：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/08.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/08.png"></a></p>
+
+<p>要修复这个问题可以安装并运行IIS 6 Toolkit中的SelfSSL。不过，要是使用OpenSSL则非常简单，下面我们就来看看吧。<br></p><h2>利用OpenSSL创建自签名证书</h2><br>创建自签名证书最简单的一种方法就是使用<a href="http://www.openssl.org/related/binaries.html" target="_blank" rel="external">OpenSSL命令行工具</a>，这个工具在许多平台上面都可以使用，并且在Mac OSX上面是默认安装好了的。<p></p>
+
+<p>首先，创建一个私钥文件：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1</pre><br></td><br><td><br><pre><code>openssl genrsa -out myselfsigned.key 2048</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>然后创建自签名证书：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1<br>2</pre><br></td><br><td><br><pre><code>openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 365<br>-subj /CN=www.mysite.com</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>上面的命令中，关于私钥和证书(cer)的文件名可以是任意的。其中<code>CN</code>参数需要设置为主机名(例如<a href="https://www.mysite.com/" target="_blank" rel="external">https://www.mysite.com</a>)。而<code>days</code>参数则指定证书从创建开始的有效天数。</p>
+
+<p>在Apache服务器上面可以直接使用私钥和证书文件(做相关的SSL配置即可)。在IIS中需要一个PFX文件，通过该文件，可以将证书导入至IIS的Server Certificates中。当然通过OpenSSL可以创建PFX文件：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1<br>2</pre><br></td><br><td><br><pre><code>openssl pkcs12 -export -out myselfsigned.pfx -inkey myselfsigned.key<br>-in myselfsigned.cer</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure><br></p><h2>创建自己的证书颁发机构(CA)</h2><br>使用自签名证书会有这样的问题：需要为每台设备中用到的每个证书设置相关的信任关系。有一个解决办法就是创建自己的证书颁发机构(CA)根证书，然后基于该根证书创建别的证书。<p></p>
+
+<p>这样一来就是自己扮演着CA，取代了商业性质的CA。这样做的好处就是自己的CA证书只需要在每台设备上安装一次即可。之后，设备会自动的信任基于CA根证书创建的证书。</p>
+
+<p>创建CA证书只需要两个步骤即可，首先是创建私钥文件(跟之前的一样)：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1</pre><br></td><br><td><br><pre><code>openssl genrsa -out myCA.key 2048</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>然后是创建证书：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1<br>2</pre><br></td><br><td><br><pre><code>openssl req -x509 -new -key myCA.key -out myCA.cer -days 730<br>-subj /CN=”My Custom CA”</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>上面创建的证书(myCA.key)可以公开发布出去，并安装在iOS或者其它OS上，以此当做内置的受信任根CA。自制的CA证书存储在<code>General-&gt;Settings-&gt;Profile</code>：</p>
+
+<p><a title="" href="http://beyondvincent.com/images/2014/03/10.png" rel="external" target="_blank"><img alt="" src="http://beyondvincent.com/images/2014/03/10.png"></a></p>
+
+<p>其中私钥文件(myCA.key)只用是再创建新的SSL证书时使用。</p>
+
+<p>上面的CA创建好之后，我们可以基于该证书创建许多证书。注意，这里多了一个步骤：必须创建一个CSR(客户端证书请求文件)——就像购买商业的SSL证书一样。</p>
+
+<p>首先需要创建一个私钥文件：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1</pre><br></td><br><td><br><pre><code>openssl genrsa -out mycert1.key 2048</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>然后是创建CSR:</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1</pre><br></td><br><td><br><pre><code>openssl req -new -out mycert1.req -key mycert1.key -subj /CN=www2.mysite.com</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>接着用这个CSR创建证书：</p>
+
+<p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1<br>2</pre><br></td><br><td><br><pre><code>openssl x509 -req -in mycert1.req -out mycert1.cer -CAkey myCA.key<br>-CA myCA.cer -days 365 -CAcreateserial -CAserial serial</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>这里创建的证书(mycert.cer)可以安装在一台web服务器上，并且已经安装了相关CA证书的iOS设备都可以访问该web服务器。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/19/zhuan-zhao-gong-zuo-de-yi-xie-gan-wu-qian-duan-xiao-cai-de-cheng-zhang/" rel="next" title="[转]找工作的一些感悟——前端小菜的成长">
+                <i class="fa fa-chevron-left"></i> [转]找工作的一些感悟——前端小菜的成长
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/20/iis7-download-cer-file/" rel="prev" title="IIS7 download cer file">
+                IIS7 download cer file <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/"
+           data-title="[转]在iOS上使用自签名的SSL证书" data-url="http://www.njiang.cn/2014/03/20/zhuan-zai-ios-shang-shi-yong-zi-qian-ming-de-ssl-zheng-shu/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar/avatar.jpg"
+               alt="姜楠" />
+          <p class="site-author-name" itemprop="name">姜楠</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/njiang1987" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">在iPhone或者iPad上的Safari中不要接受自签名证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">像安装iOS的Configuration Profile一样安装自签名证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">不要用IIS创建自签名证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">利用OpenSSL创建自签名证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">创建自己的证书颁发机构(CA)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">姜楠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"njiang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
