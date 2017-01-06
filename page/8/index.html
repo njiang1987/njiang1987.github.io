@@ -701,7 +701,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="姜楠">
@@ -726,8 +726,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/" itemprop="url">
-                  git创建、删除库，分支管理
+                <a class="post-title-link" href="/2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/" itemprop="url">
+                  git ignore file, Git增加忽略文件
                 </a>
               
             
@@ -780,8 +780,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/" itemprop="commentCount"></span>
+                <a href="/2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -809,8 +809,43 @@
       
         
           
-            <p><div><span style="font-family: 'Arial Black';"><b>一、创建库</b></span></div><br><div><span style="color: #008080; font-family: 'Arial Black';"><b>git init &lt;库名&gt;</b></span></div><br><span style="font-family: 'Arial Black';"><b>二、创建分支 </b>(打开刚创建的库: <span style="color: #800080;">cd &lt;库名&gt;</span>)</span><br><div><span style="color: #008080; font-family: 'Arial Black';">git branch &lt;分支名&gt;</span></div><br><div><span style="font-family: 'Arial Black';">注：如果创建分支失败，建立一个测试文本文件即可。</span></div><br><div><span style="font-family: 'Arial Black';">1) <span style="color: #008080;">git add .</span></span></div><br><div><span style="font-family: 'Arial Black';">2) <span style="color: #008080;">git commit -a -m “test”</span></span></div><br><div><span style="font-family: 'Arial Black';"><b>三、切换分支</b></span></div><br><div><br><div><span style="color: #008080; font-family: 'Arial Black';">git checkout &lt;分支名&gt; </span></div><br><div><span style="font-family: 'Arial Black';">该语句和上一个语句可以和起来用一个语句表示：<span style="color: #008080;">git checkout -b &lt;分支名&gt;</span></span></div><br></div><br><div><span style="font-family: 'Arial Black';"><b>四、查看当前库所有分支</b></span></div><br><div><span style="font-family: 'Arial Black';"><span style="color: #008080;">git branch</span></span></div><br><div><br><div><span style="font-family: 'Arial Black';"><b>五、分支合并</b></span></div><br><div><span style="font-family: 'Arial Black';">比如，如果要将当前的分支<span style="color: #800080;">develop</span>，合并到主分支<span style="color: #800080;">master</span></span></div><br><div><span style="font-family: 'Arial Black';">首先我们需要切换到<span style="color: #800080;">master</span>主分支：<span style="color: #008080;">git checkout master</span></span></div><br><div><span style="font-family: 'Arial Black';">然后执行合并操作：<span style="color: #008080;">git merge develop</span></span></div><br><div><span style="font-family: 'Arial Black';">如果有冲突，会提示你，调用<span style="color: #008080;">git status</span>查看冲突文件。 </span></div><br><div><span style="font-family: 'Arial Black';">解决冲突，然后调用<span style="color: #008080;">git add</span>或<span style="color: #008080;">git rm</span>将解决后的文件暂存。 </span></div><br><div><span style="font-family: 'Arial Black';">所有冲突解决后，<span style="color: #008080;">git commit </span>提交更改。</span></div><br><div><span style="font-family: 'Arial Black';"><b>六、分支衍合</b></span></div><br><div><span style="font-family: 'Arial Black';">分支衍合和分支合并的差别在于，分支衍合不会保留合并的日志，不留痕迹，而 分支合并则会保留合并的日志。 </span></div><br><div><span style="font-family: 'Arial Black';">要将开发中的分支<span style="color: #800080;">develop</span>，衍合到主分支<span style="color: #800080;">master</span></span></div><br><div><span style="font-family: 'Arial Black';">首先切换的<span style="color: #800080;">master</span>分支：<span style="color: #008080;">git checkout master</span></span></div><br><div><span style="font-family: 'Arial Black';">然后执行衍和操作：<span style="color: #008080;">git rebase develop</span></span></div><br><div><span style="font-family: 'Arial Black';">如果有冲突，会提示你，调用<span style="color: #008080;">git status</span>查看冲突文件。 </span></div><br><div><span style="font-family: 'Arial Black';">解决冲突，然后调用<span style="color: #008080;">git add</span>或<span style="color: #008080;">git rm</span>将解决后的文件暂存。 </span></div><br><div><span style="font-family: 'Arial Black';">所有冲突解决后，<span style="color: #008080;">git rebase –continue</span> 提交更改。</span></div><br><div><span style="font-family: 'Arial Black';"><b>七、删除分支</b></span></div><br><div><span style="color: #008080; font-family: 'Arial Black';">git branch -d &lt;分支名&gt; </span></div><br><div><span style="font-family: 'Arial Black';">如果该分支没有合并到主分支会报错，可以用以下命令强制删除<span style="color: #008080;">git branch -D &lt;分支名&gt;</span></span></div><br></div><br><div><span style="font-family: 'Arial Black';"><b>八、删除库</b></span></div><br><div><span style="color: #008080; font-family: 'Arial Black';">rm -rf &lt;库名&gt;</span></div></p>
+            <p></p><h1><span style="font-size: 16px; font-weight: 400; line-height: 1.5;">最简单的方法在项目根目录与.git目录同一位置创建一个文件: .gitignore</span></h1><br><div><br><div id="cnblogs_post_body"></div><p></p>
 
+<p>touch .gitignore<br><br>vi .gitignore<br><br>:wq</p>
+
+<p>注:如果要忽略的文件已被git管理,需要先移除,命令如下:</p>
+
+<p>e.g.:<br><br>git rm -r –cached  WebRoot/WEB-INF/classes/<em>*/</em><br><br>-r:递归<br><br>git commit</p>
+
+<p>然后.gitignore中的忽略,起作用以下参考//——————-</p>
+
+<p>from:</p>
+
+<p><a href="http://gitready.com/beginner/2009/01/19/ignoring-files.html" target="_blank" rel="external">http://gitready.com/beginner/2009/01/19/ignoring-files.html</a></p>
+
+<p>The easiest and simplest way is to create a <code>.gitignore</code> file in your project’s root directory. The files you choose to ignore here take affect for all directories in your project, unless if they include their own <code>.gitignore</code> file. This is nice since you have one place to configure ignores unlike SVN’s svn:ignore which must be set on every folder. Also, the file itself can be versioned, which is definitely good.</p>
+
+<p>Here’s a basic <code>.gitignore</code>:<br><pre>$ cat .gitignore</pre></p>
+
+<p># Can ignore specific files<br><br>.DS_Store</p>
+
+<p># Use wildcards as well<br><br><em>~<br>
+</em>.swp</p>
+
+<p># Can also ignore all directories and files in a directory.<br><br>tmp/<em>*/</em><br>Of course, this could get a lot more complex. You can also add exceptions to ignore rules by starting the line with <code>!</code>. See an example of this at the <a href="http://github.com/guides/ignore-for-git" target="_blank" rel="external">GitHub guide on ignores</a>.</p>
+
+<p>Two things to keep in mind with ignoring files: First, if a file is already being tracked by Git, adding the file to <code>.gitignore</code> won’t stop Git from tracking it. You’ll need to do <code>git rm –cached &lt;file&gt;</code> to keep the file in your tree and then ignore it. Secondly, empty directories do not get tracked by Git. If you want them to be tracked, they need to have something in them. Usually doing a <code>touch .gitignore</code> is enough to keep the folder tracked.</p>
+
+<p>You can also open up <code>$GIT_DIR/info/exclude</code> (<code>$GIT_DIR</code> is usually your <code>.git</code> folder) and edit that file for project-only ignores. The problem with this is that those changes aren’t checked in, so use this only if you have some personal files that don’t need to be shared with others on the same project.</p>
+
+<p>Your final option with ignoring folders is adding a per-user ignore by setting up a<code>core.excludesfiles</code> option in your config file. You can set up a <code>.gitignore</code> file in yourHOME directory that will affect all of your repositories by running this command:</p>
+
+<p><code>git config –global core.excludesfile ~/.gitignore</code></p>
+
+<p>Read up on the <a href="http://www.kernel.org/pub/software/scm/git/docs/gitignore.html" target="_blank" rel="external">manpage</a> if you’d like to learn more about how ignores work. As always, if you have other ignore-related tips let us know in the comments.</p>
+
+<p><br></p>
+</div>
           
         
       
@@ -1030,7 +1065,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="姜楠">
@@ -1055,8 +1090,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/" itemprop="url">
-                  git ignore file, Git增加忽略文件
+                <a class="post-title-link" href="/2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/" itemprop="url">
+                  git创建、删除库，分支管理
                 </a>
               
             
@@ -1109,8 +1144,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/07/git-ignore-file-git-zeng-jia-hu-lve-wen-jian/" itemprop="commentCount"></span>
+                <a href="/2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/07/git-chuang-jian-shan-chu-ku-fen-zhi-guan-li/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1138,43 +1173,8 @@
       
         
           
-            <p></p><h1><span style="font-size: 16px; font-weight: 400; line-height: 1.5;">最简单的方法在项目根目录与.git目录同一位置创建一个文件: .gitignore</span></h1><br><div><br><div id="cnblogs_post_body"></div><p></p>
+            <p><div><span style="font-family: 'Arial Black';"><b>一、创建库</b></span></div><br><div><span style="color: #008080; font-family: 'Arial Black';"><b>git init &lt;库名&gt;</b></span></div><br><span style="font-family: 'Arial Black';"><b>二、创建分支 </b>(打开刚创建的库: <span style="color: #800080;">cd &lt;库名&gt;</span>)</span><br><div><span style="color: #008080; font-family: 'Arial Black';">git branch &lt;分支名&gt;</span></div><br><div><span style="font-family: 'Arial Black';">注：如果创建分支失败，建立一个测试文本文件即可。</span></div><br><div><span style="font-family: 'Arial Black';">1) <span style="color: #008080;">git add .</span></span></div><br><div><span style="font-family: 'Arial Black';">2) <span style="color: #008080;">git commit -a -m “test”</span></span></div><br><div><span style="font-family: 'Arial Black';"><b>三、切换分支</b></span></div><br><div><br><div><span style="color: #008080; font-family: 'Arial Black';">git checkout &lt;分支名&gt; </span></div><br><div><span style="font-family: 'Arial Black';">该语句和上一个语句可以和起来用一个语句表示：<span style="color: #008080;">git checkout -b &lt;分支名&gt;</span></span></div><br></div><br><div><span style="font-family: 'Arial Black';"><b>四、查看当前库所有分支</b></span></div><br><div><span style="font-family: 'Arial Black';"><span style="color: #008080;">git branch</span></span></div><br><div><br><div><span style="font-family: 'Arial Black';"><b>五、分支合并</b></span></div><br><div><span style="font-family: 'Arial Black';">比如，如果要将当前的分支<span style="color: #800080;">develop</span>，合并到主分支<span style="color: #800080;">master</span></span></div><br><div><span style="font-family: 'Arial Black';">首先我们需要切换到<span style="color: #800080;">master</span>主分支：<span style="color: #008080;">git checkout master</span></span></div><br><div><span style="font-family: 'Arial Black';">然后执行合并操作：<span style="color: #008080;">git merge develop</span></span></div><br><div><span style="font-family: 'Arial Black';">如果有冲突，会提示你，调用<span style="color: #008080;">git status</span>查看冲突文件。 </span></div><br><div><span style="font-family: 'Arial Black';">解决冲突，然后调用<span style="color: #008080;">git add</span>或<span style="color: #008080;">git rm</span>将解决后的文件暂存。 </span></div><br><div><span style="font-family: 'Arial Black';">所有冲突解决后，<span style="color: #008080;">git commit </span>提交更改。</span></div><br><div><span style="font-family: 'Arial Black';"><b>六、分支衍合</b></span></div><br><div><span style="font-family: 'Arial Black';">分支衍合和分支合并的差别在于，分支衍合不会保留合并的日志，不留痕迹，而 分支合并则会保留合并的日志。 </span></div><br><div><span style="font-family: 'Arial Black';">要将开发中的分支<span style="color: #800080;">develop</span>，衍合到主分支<span style="color: #800080;">master</span></span></div><br><div><span style="font-family: 'Arial Black';">首先切换的<span style="color: #800080;">master</span>分支：<span style="color: #008080;">git checkout master</span></span></div><br><div><span style="font-family: 'Arial Black';">然后执行衍和操作：<span style="color: #008080;">git rebase develop</span></span></div><br><div><span style="font-family: 'Arial Black';">如果有冲突，会提示你，调用<span style="color: #008080;">git status</span>查看冲突文件。 </span></div><br><div><span style="font-family: 'Arial Black';">解决冲突，然后调用<span style="color: #008080;">git add</span>或<span style="color: #008080;">git rm</span>将解决后的文件暂存。 </span></div><br><div><span style="font-family: 'Arial Black';">所有冲突解决后，<span style="color: #008080;">git rebase –continue</span> 提交更改。</span></div><br><div><span style="font-family: 'Arial Black';"><b>七、删除分支</b></span></div><br><div><span style="color: #008080; font-family: 'Arial Black';">git branch -d &lt;分支名&gt; </span></div><br><div><span style="font-family: 'Arial Black';">如果该分支没有合并到主分支会报错，可以用以下命令强制删除<span style="color: #008080;">git branch -D &lt;分支名&gt;</span></span></div><br></div><br><div><span style="font-family: 'Arial Black';"><b>八、删除库</b></span></div><br><div><span style="color: #008080; font-family: 'Arial Black';">rm -rf &lt;库名&gt;</span></div></p>
 
-<p>touch .gitignore<br><br>vi .gitignore<br><br>:wq</p>
-
-<p>注:如果要忽略的文件已被git管理,需要先移除,命令如下:</p>
-
-<p>e.g.:<br><br>git rm -r –cached  WebRoot/WEB-INF/classes/<em>*/</em><br><br>-r:递归<br><br>git commit</p>
-
-<p>然后.gitignore中的忽略,起作用以下参考//——————-</p>
-
-<p>from:</p>
-
-<p><a href="http://gitready.com/beginner/2009/01/19/ignoring-files.html" target="_blank" rel="external">http://gitready.com/beginner/2009/01/19/ignoring-files.html</a></p>
-
-<p>The easiest and simplest way is to create a <code>.gitignore</code> file in your project’s root directory. The files you choose to ignore here take affect for all directories in your project, unless if they include their own <code>.gitignore</code> file. This is nice since you have one place to configure ignores unlike SVN’s svn:ignore which must be set on every folder. Also, the file itself can be versioned, which is definitely good.</p>
-
-<p>Here’s a basic <code>.gitignore</code>:<br><pre>$ cat .gitignore</pre></p>
-
-<p># Can ignore specific files<br><br>.DS_Store</p>
-
-<p># Use wildcards as well<br><br><em>~<br>
-</em>.swp</p>
-
-<p># Can also ignore all directories and files in a directory.<br><br>tmp/<em>*/</em><br>Of course, this could get a lot more complex. You can also add exceptions to ignore rules by starting the line with <code>!</code>. See an example of this at the <a href="http://github.com/guides/ignore-for-git" target="_blank" rel="external">GitHub guide on ignores</a>.</p>
-
-<p>Two things to keep in mind with ignoring files: First, if a file is already being tracked by Git, adding the file to <code>.gitignore</code> won’t stop Git from tracking it. You’ll need to do <code>git rm –cached &lt;file&gt;</code> to keep the file in your tree and then ignore it. Secondly, empty directories do not get tracked by Git. If you want them to be tracked, they need to have something in them. Usually doing a <code>touch .gitignore</code> is enough to keep the folder tracked.</p>
-
-<p>You can also open up <code>$GIT_DIR/info/exclude</code> (<code>$GIT_DIR</code> is usually your <code>.git</code> folder) and edit that file for project-only ignores. The problem with this is that those changes aren’t checked in, so use this only if you have some personal files that don’t need to be shared with others on the same project.</p>
-
-<p>Your final option with ignoring folders is adding a per-user ignore by setting up a<code>core.excludesfiles</code> option in your config file. You can set up a <code>.gitignore</code> file in yourHOME directory that will affect all of your repositories by running this command:</p>
-
-<p><code>git config –global core.excludesfile ~/.gitignore</code></p>
-
-<p>Read up on the <a href="http://www.kernel.org/pub/software/scm/git/docs/gitignore.html" target="_blank" rel="external">manpage</a> if you’d like to learn more about how ignores work. As always, if you have other ignore-related tips let us know in the comments.</p>
-
-<p><br></p>
-</div>
           
         
       
