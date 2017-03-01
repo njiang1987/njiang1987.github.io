@@ -265,7 +265,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/24/zhuan-longest-path-in-a-directed-acyclic-graph/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="姜楠">
@@ -290,8 +290,8 @@
             
               
                 
-                <a class="post-title-link" href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="url">
-                  [StackOverflow]NSOperation和dispatch_async的区别
+                <a class="post-title-link" href="/2013/09/24/zhuan-longest-path-in-a-directed-acyclic-graph/" itemprop="url">
+                  [转]Longest Path in a Directed Acyclic Graph
                 </a>
               
             
@@ -304,8 +304,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-16T00:00:00+08:00">
-              2013-09-16
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-24T00:00:00+08:00">
+              2013-09-24
             </time>
 
             &nbsp;|&nbsp;
@@ -344,8 +344,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="commentCount"></span>
+                <a href="/2013/09/24/zhuan-longest-path-in-a-directed-acyclic-graph/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/24/zhuan-longest-path-in-a-directed-acyclic-graph/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -373,13 +373,51 @@
       
         
           
-            <p><code>NSOperation*</code> classes are the higher level api. They hide GCD’s lower level api from you so that you can concentrate on getting the task done.</p>
+            <p><div><br><div></div><br><div>September 19, 2013</div><br><div></div><br></div><br><div id="post-content"></div></p>
 
-<p>The rule of thumb is: <strong>Use the api of the highest level first and then degrade based on what you need to accomplish.</strong></p>
+<p>Given a Weighted <strong>D</strong>irected <strong>A</strong>cyclic <strong>G</strong>raph (DAG) and a source vertex s in it, find the longest distances from s to all other vertices in the given graph.</p>
 
-<p>The advantage of this approach is that your code stays most agnostic to the specific implementation the vendor provides. In this example, using <code>NSOperation</code>, you’ll be using Apple’s implementation of execution queueing (using GCD). Should Apple ever decide to change the details of implementation behind the scenes they can do so without breaking your application’s code.<br><br>One such example would be Apple deprecating GCD and using a completely different library (which is unlikely because Apple created GCD and everybody seems to love it).</p>
+<p>The longest path problem for a general graph is not as easy as the shortest path problem because the longest path problem doesn’t have <a href="http://www.geeksforgeeks.org/dynamic-programming-set-2-optimal-substructure-property/" target="_blank">optimal substructure property</a>. In fact, <a href="http://en.wikipedia.org/wiki/Longest_path_problem" target="_blank">the Longest Path problem is NP-Hard for a general graph</a>. However, the longest path problem has a linear time solution for directed acyclic graphs. The idea is similar to <a href="http://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/" target="_blank">linear time solution for shortest path in a directed acyclic graph.</a>, we use <a href="http://www.geeksforgeeks.org/topological-sorting/" target="_blank">Tological Sorting</a>.</p>
 
-<p>Regarding the matter i recommend consulting the following resources:<br><ul><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html</a></li><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html</a></li><br>    <li><a href="http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues" target="_blank" rel="external">http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues</a></li><br>    <li><a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html" target="_blank" rel="external">https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html</a></li><br></ul></p>
+<p>We initialize distances to all vertices as minus infinite and distance to source as 0, then we find a<a href="http://www.geeksforgeeks.org/topological-sorting/" target="_blank">topological sorting</a> of the graph. Topological Sorting of a graph represents a linear ordering of the graph (See below, figure (b) is a linear representation of figure (a) ). Once we have topological order (or linear representation), we one by one process all vertices in topological order. For every vertex being processed, we update distances of its adjacent using distance of current vertex.</p>
+
+<p>Following figure shows step by step process of finding longest paths.</p>
+
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/LongestPath.png" target="_blank" rel="external"><span style="color: #333333;"><img alt="LongestPath" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/LongestPath.png" width="600" height="578"></span></a></p>
+
+<p>&nbsp;</p>
+
+<p>Following is complete algorithm for finding longest distances.</p>
+
+<p><strong>1)</strong> Initialize dist[] = {NINF, NINF, ….} and dist[s] = 0 where s is the source vertex. Here NINF means negative infinite.</p>
+
+<p><strong>2)</strong> Create a toplogical order of all vertices.</p>
+
+<p><strong>3)</strong> Do following for every vertex u in topological order.</p>
+
+<p>………..Do following for every adjacent vertex v of u</p>
+
+<p>………………if (dist[v] &lt; dist[u] + weight(u, v))</p>
+
+<p>………………………dist[v] = dist[u] + weight(u, v)</p>
+
+<p>&nbsp;</p>
+
+<p>Following is C++ implementation of the above algorithm.</p>
+
+<p><pre lang="cpp" colla="+"><br>// A C++ program to find single source longest distances in a DAG<br>#include <iostream><br>#include <list><br>#include <stack><br>#include <limits.h><br>#define NINF INT_MIN<br>using namespace std;<br><br>// Graph is represented using adjacency list. Every node of adjacency list<br>// contains vertex number of the vertex to which edge connects. It also<br>// contains weight of the edge<br>class AdjListNode<br>{<br>    int v;<br>    int weight;<br>public:<br>    AdjListNode(int _v, int _w)  { v = _v;  weight = _w;}<br>    int getV()       {  return v;  }<br>    int getWeight()  {  return weight; }<br>};<br><br>// Class to represent a graph using adjacency list representation<br>class Graph<br>{<br>    int V;    // No. of vertices’<br><br>    // Pointer to an array containing adjacency lists<br>    list<adjlistnode> <em>adj;<br><br>    // A function used by longestPath<br>    void topologicalSortUtil(int v, bool visited[], stack<int> &amp;Stack);<br>public:<br>    Graph(int V);   // Constructor<br><br>    // function to add an edge to graph<br>    void addEdge(int u, int v, int weight);<br><br>    // Finds longest distances from given source vertex<br>    void longestPath(int s);<br>};<br><br>Graph::Graph(int V) // Constructor<br>{<br>    this-&gt;V = V;<br>    adj = new list<adjlistnode>[V];<br>}<br><br>void Graph::addEdge(int u, int v, int weight)<br>{<br>    AdjListNode node(v, weight);<br>    adj[u].push_back(node); // Add v to u’s list<br>}<br><br>// A recursive function used by longestPath. See below link for details<br>// <a href="http://www.geeksforgeeks.org/topological-sorting/" target="_blank" rel="external">http://www.geeksforgeeks.org/topological-sorting/</a><br>void Graph::topologicalSortUtil(int v, bool visited[], stack<int> &amp;Stack)<br>{<br>    // Mark the current node as visited<br>    visited[v] = true;<br><br>    // Recur for all the vertices adjacent to this vertex<br>    list<adjlistnode>::iterator i;<br>    for (i = adj[v].begin(); i != adj[v].end(); ++i)<br>    {<br>        AdjListNode node = </adjlistnode></int></adjlistnode></int></em>i;<br>        if (!visited[node.getV()])<br>            topologicalSortUtil(node.getV(), visited, Stack);<br>    }<br><br>    // Push current vertex to stack which stores topological sort<br>    Stack.push(v);<br>}<br><br>// The function to find longest distances from a given vertex. It uses<br>// recursive topologicalSortUtil() to get topological sorting.<br>void Graph::longestPath(int s)<br>{<br>    stack<int> Stack;<br>    int dist[V];<br><br>    // Mark all the vertices as not visited<br>    bool *visited = new bool[V];<br>    for (int i = 0; i &lt; V; i++)<br>        visited[i] = false;<br><br>    // Call the recursive helper function to store Topological Sort<br>    // starting from all vertices one by one<br>    for (int i = 0; i &lt; V; i++)<br>        if (visited[i] == false)<br>            topologicalSortUtil(i, visited, Stack);<br><br>    // Initialize distances to all vertices as infinite and distance<br>    // to source as 0<br>    for (int i = 0; i &lt; V; i++)<br>        dist[i] = NINF;<br>    dist[s] = 0;<br><br>    // Process vertices in topological order<br>    while (Stack.empty() == false)<br>    {<br>        // Get the next vertex from topological order<br>        int u = Stack.top();<br>        Stack.pop();<br><br>        // Update distances of all adjacent vertices<br>        list<adjlistnode>::iterator i;<br>        if (dist[u] != NINF)<br>        {<br>          for (i = adj[u].begin(); i != adj[u].end(); ++i)<br>             if (dist[i-&gt;getV()] &lt; dist[u] + i-&gt;getWeight())<br>                dist[i-&gt;getV()] = dist[u] + i-&gt;getWeight();<br>        }<br>    }<br><br>    // Print the calculated longest distances<br>    for (int i = 0; i &lt; V; i++)<br>        (dist[i] == NINF)? cout &lt;&lt; “INF “: cout &lt;&lt; dist[i] &lt;&lt; “ “;<br>}<br><br>// Driver program to test above functions<br>int main()<br>{<br>    // Create a graph given in the above diagram.  Here vertex numbers are<br>    // 0, 1, 2, 3, 4, 5 with following mappings:<br>    // 0=r, 1=s, 2=t, 3=x, 4=y, 5=z<br>    Graph g(6);<br>    g.addEdge(0, 1, 5);<br>    g.addEdge(0, 2, 3);<br>    g.addEdge(1, 3, 6);<br>    g.addEdge(1, 2, 2);<br>    g.addEdge(2, 4, 4);<br>    g.addEdge(2, 5, 2);<br>    g.addEdge(2, 3, 7);<br>    g.addEdge(3, 5, 1);<br>    g.addEdge(3, 4, -1);<br>    g.addEdge(4, 5, -2);<br><br>    int s = 1;<br>    cout &lt;&lt; “Following are longest distances from source vertex “ &lt;&lt; s &lt;&lt;” \n”;<br>    g.longestPath(s);<br><br>    return 0;<br>}<br></adjlistnode></int></adjlistnode></limits.h></stack></list></iostream></pre></p>
+
+<p><div><br><div id="highlighter_793017">Output:</div><br></div><br><span style="font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif; font-size: small;">Following are longest distances from source vertex 1</span></p>
+
+<p><span style="font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif; font-size: small;">INF 0 2 9 8 10</span></p>
+
+<p><strong>Time Complexity:</strong> Time complexity of topological sorting is O(V+E). After finding topological order, the algorithm process all vertices and for every vertex, it runs a loop for all adjacent vertices. Total adjacent vertices in a graph is O(E). So the inner loop runs O(V+E) times. Therefore, overall time complexity of this algorithm is O(V+E).</p>
+
+<p><strong>Exercise:</strong> The above solution print longest distances, extend the code to print paths also.</p>
+
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed abov<br><div></div></p>
+
+<p><b>You may also like following posts</b><br><ol><br>    <li><a title="Breadth First Traversal for a Graph" href="http://www.geeksforgeeks.org/breadth-first-traversal-for-a-graph/" rel="external" target="_blank"><span style="color: #333333;">Breadth First Traversal for a Graph</span></a></li><br>    <li><a title="Find if there is a path between two vertices in a directed graph" href="http://www.geeksforgeeks.org/find-if-there-is-a-path-between-two-vertices-in-a-given-graph/" rel="external" target="_blank"><span style="color: #333333;">Find if there is a path between two vertices in a directed graph</span></a></li><br>    <li><a title="Topological Sorting" href="http://www.geeksforgeeks.org/topological-sorting/" rel="external" target="_blank"><span style="color: #333333;">Topological Sorting</span></a></li><br>    <li><a title="Shortest Path in Directed Acyclic Graph" href="http://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/" rel="external" target="_blank"><span style="color: #333333;">Shortest Path in Directed Acyclic Graph</span></a></li><br>    <li><a title="Connectivity in a directed graph" href="http://www.geeksforgeeks.org/connectivity-in-a-directed-graph/" rel="external" target="_blank"><span style="color: #333333;">Connectivity in a d</span></a><a title="Connectivity in a directed graph" href="http://www.geeksforgeeks.org/connectivity-in-a-directed-graph/" rel="external" target="_blank">irected graph</a></li><br></ol><br><br><br><a href="http://www.geeksforgeeks.org/find-longest-path-directed-acyclic-graph/" target="_blank" rel="external"> http://www.geeksforgeeks.org/find-longest-path-directed-acyclic-graph/ </a></p>
 
           
         
@@ -694,6 +732,159 @@
 <p>    pthread_mutex_unlock(&amp;mutex);<br><br>}<br>&nbsp;</p>
 
 <p><br><blockquote><strong>注意：</strong><em>上述代码是显示使用POSIX线程条件函数的简单例子。你自己的代码应该检测这些函数返回错误码并恰当的处理它们。</em></blockquote><br></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="url">
+                  [StackOverflow]NSOperation和dispatch_async的区别
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-16T00:00:00+08:00">
+              2013-09-16
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>NSOperation*</code> classes are the higher level api. They hide GCD’s lower level api from you so that you can concentrate on getting the task done.</p>
+
+<p>The rule of thumb is: <strong>Use the api of the highest level first and then degrade based on what you need to accomplish.</strong></p>
+
+<p>The advantage of this approach is that your code stays most agnostic to the specific implementation the vendor provides. In this example, using <code>NSOperation</code>, you’ll be using Apple’s implementation of execution queueing (using GCD). Should Apple ever decide to change the details of implementation behind the scenes they can do so without breaking your application’s code.<br><br>One such example would be Apple deprecating GCD and using a completely different library (which is unlikely because Apple created GCD and everybody seems to love it).</p>
+
+<p>Regarding the matter i recommend consulting the following resources:<br><ul><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html</a></li><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html</a></li><br>    <li><a href="http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues" target="_blank" rel="external">http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues</a></li><br>    <li><a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html" target="_blank" rel="external">https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html</a></li><br></ul></p>
 
           
         
@@ -1588,332 +1779,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/" itemprop="url">
-                  [原创][iOS]关于实现iOS7上面Blur效果的实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-04T00:00:00+08:00">
-              2013-09-04
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>前几个月iOS7发布，说实话界面扁平化，个人不是很喜欢，但是它的一些效果还是比较炫的，比如Blur效果，看下图<br><a href="http://www.njiang1987.com/wp-content/uploads/2013/09/photo1_normal.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/photo1_normal-169x300.png" alt="photo1_normal" width="169" height="300" class="alignnone size-medium wp-image-43"></a>  <a href="http://www.njiang1987.com/wp-content/uploads/2013/09/photo2_normal.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/photo2_normal-169x300.png" alt="photo2_normal" width="169" height="300" class="alignnone size-medium wp-image-44"></a><br>右边的图片，有个Blur效果，最近PM正想将这个效果添加到我们的产品中，查看网上说，苹果是通过直接从GPU里面取出图片信息，然后render出来的，也没有公用的API可以调用。不过有类似的方法可以模拟这个效果，比如Gaussian Blur，这个是通过CoreImage.framework里面的CIFilter实现的，具体实现如下：<br><pre lang="objc" colla="+"><br>CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, frame);<br><br>CIImage <em>imageToBlur = [CIImage imageWithCGImage:imageRef];<br>CIFilter </em>blurFilter = [CIFilter filterWithName:@”CIGaussianBlur”];<br>[blurFilter setValue:imageToBlur forKey:@”inputImage”];<br>[blurFilter setValue:[NSNumber numberWithFloat:0.1f] forKey:@”inputRadius”];<br>CIImage<em> result = [blurFilter valueForKey:@”outputImage”];<br><br>CIContext</em> context = [CIContext contextWithOptions:nil];<br>CGImageRef cgImage = [context createCGImage:result fromRect:[imageToBlur extent]];<br><br>UIImage* newImage = [UIImage imageWithCGImage:cgImage];<br></pre><br>这样就可以得到一个模糊的效果。但是这种模糊有2个缺点：<br><br>1.如果设置的半径比较大，效率会很低<br><br>2.模糊以后的效果不好</p>
-
-<p>后来在网上查到可以用boxblur算法，这个会用到Accelerate.framework里面的一个函数vImageBoxConvolve_ARGB8888，具体实现如下：<br><pre lang="objc" colla="+"><br>- (UIImage<em>)imageWithBoxBlur:(CGFloat)blur withBoxSize:(int)iSize<br>{<br>    if (blur &lt; 0.f || blur &gt; 1.f) {<br>        blur = 0.5f;<br>    }<br>    int boxSize = (int)(blur </em> iSize);<br>    boxSize = boxSize - (boxSize % 2) + 1;</pre></p>
-
-<p>    CGImageRef img = self.CGImage;<br><br>    vImage_Buffer inBuffer, outBuffer;<br><br>    vImage_Error error;<br><br>    void *pixelBuffer;</p>
-
-<p>    //create vImage_Buffer with data from CGImageRef<br><br>    CGDataProviderRef inProvider = CGImageGetDataProvider(img);<br><br>    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);</p>
-
-<p>    inBuffer.width = CGImageGetWidth(img);<br><br>    inBuffer.height = CGImageGetHeight(img);<br><br>    inBuffer.rowBytes = CGImageGetBytesPerRow(img);</p>
-
-<p>    inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);</p>
-
-<p>    //create vImage_Buffer for output<br><br>    pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));</p>
-
-<p>    if(pixelBuffer == NULL)<br><br>        NSLog(@”No pixelbuffer”);</p>
-
-<p>    outBuffer.data = pixelBuffer;<br><br>    outBuffer.width = CGImageGetWidth(img);<br><br>    outBuffer.height = CGImageGetHeight(img);<br><br>    outBuffer.rowBytes = CGImageGetBytesPerRow(img);</p>
-
-<p>    //perform convolution<br><br>    error = vImageBoxConvolve_ARGB8888(&amp;inBuffer, &amp;outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);</p>
-
-<p>    if (error) {<br><br>        NSLog(@”error from convolution %ld”, error);<br><br>    }</p>
-
-<p>    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();<br><br>    CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,<br><br>                                             outBuffer.width,<br><br>                                             outBuffer.height,<br><br>                                             8,<br><br>                                             outBuffer.rowBytes,<br><br>                                             colorSpace,<br><br>                                             (CGBitmapInfo)kCGImageAlphaNoneSkipLast);<br><br>    CGImageRef imageRef = CGBitmapContextCreateImage (ctx);<br><br>    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];</p>
-
-<p>    //clean up<br><br>    CGContextRelease(ctx);<br><br>    CGColorSpaceRelease(colorSpace);</p>
-
-<p>    free(pixelBuffer);<br><br>    //free(pixelBuffer2);<br><br>    CFRelease(inBitmapData);</p>
-
-<p>    CGColorSpaceRelease(colorSpace);<br><br>    CGImageRelease(imageRef);</p>
-
-<p>    return returnImage;<br><br>}<br><br>这个boxblur有个2个优点：<br><br>1. 速度很快<br><br>2. 模糊以后的效果很好<br><br>正好弥补了Gaussian Blur的缺点，但是这个boxblur也有个致命的缺点就是，如果一张图片既有深色区域又有浅色区域，模糊以后，深色区域的颜色就不对了。过几天我再来补图。<br><br>后来无意中发现，如果先用Gaussian blur以后，再用boxblur几次，效果比较好。还是过几天来补图，呵呵，这几天比较忙，一直在做PM的Spec，虽然都是界面的东西，对我一个计算机半路出家的人来说还是优点难度的。以下是效果图，外加公司的产品。<br><br>[caption id=”attachment_48” align=”aligncenter” width=”300”]<a href="http://www.njiang1987.com/wp-content/uploads/2013/09/iOS-Simulator-Screen-shot-Sep-4-2013-7.43.34-PM.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/iOS-Simulator-Screen-shot-Sep-4-2013-7.43.34-PM-300x225.png" alt="blur以后的效果图" width="300" height="225" class="size-medium wp-image-48"></a> blur以后的效果图[/caption]</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" itemprop="url">
-                  [iOS]关于CALayer和UIView Animation同步问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-04T00:00:00+08:00">
-              2013-09-04
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今天在做项目的时候, 同时用到了CABasicAnimation和UIView的animation， 发现会有问题，calayer的animation和uiview的animation不同步，比如CALayer设置position的animation<br><pre lang="objc" colla="+">CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@”position”];<br>animation.fromValue = [NSValue valueWithCGPoint:startpoint];<br>animation.toValue = [NSValue valueWithCGPoint:endpoint];<br>animation.duration = INFO_WINDOW_SLIDE_ANIMATION_TIME;<br>animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];<br>[blurredLayer addAnimation:animation forKey:@”appear”];<br></pre></p>
-
-<p>UIView 的animation：<br><pre lang="objc" colla="+">backgroundView.frame = startframe;<br>[UIView animateWithDuration:INFO_WINDOW_SLIDE_ANIMATION_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{<br>        backgroundView.frame = endframe;<br>} completion:NULL];<br></pre><br>blurredLayer会抖动。后来再stackoverflow上面找到解决方法是将CALayer的animation换成<br><pre lang="objc" colla="+"><br>blurredLayer.position = startpoint;<br>[CATransaction begin];<br>[CATransaction setAnimationDuration:INFO_WINDOW_SLIDE_ANIMATION_TIME];<br>[CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];<br>blurredLayer.position = endpoint;<br>[CATransaction commit];<br></pre><br>这样两个animation就同步了，具体原因不详。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/codejamproblem-a-alien-numbers/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2101,7 +1966,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/02/guan-yu-zen-yao-yong-instrumentcha-kan-object-retainqing-kuang/">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="姜楠">
@@ -2126,8 +1991,8 @@
             
               
                 
-                <a class="post-title-link" href="/2013/09/02/guan-yu-zen-yao-yong-instrumentcha-kan-object-retainqing-kuang/" itemprop="url">
-                  关于怎么用Instrument查看object retain情况
+                <a class="post-title-link" href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" itemprop="url">
+                  [iOS]关于CALayer和UIView Animation同步问题
                 </a>
               
             
@@ -2140,8 +2005,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-02T13:53:06+08:00">
-              2013-09-02
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-04T00:00:00+08:00">
+              2013-09-04
             </time>
 
             &nbsp;|&nbsp;
@@ -2180,8 +2045,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/02/guan-yu-zen-yao-yong-instrumentcha-kan-object-retainqing-kuang/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/02/guan-yu-zen-yao-yong-instrumentcha-kan-object-retainqing-kuang/" itemprop="commentCount"></span>
+                <a href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2209,19 +2074,186 @@
       
         
           
-            <p>You can use the Allocations instrument to track the lifecycle of your objects. If you use the “Allocations” template, it is configured to record malloc and free events. You may want to configure it to also record retain, release, and autorelease events by turning on the “Record reference counts” checkbox in the Allocations instrument settings:</p>
-<p><img alt="record reference counts checkbox" src="http://i.stack.imgur.com/SotDR.png"></p>
-<p>(You cannot toggle this while Instruments is recording, which it starts by default as soon as you choose your template.)</p>
-<p>After your run, you can find your objects using the Allocations &gt; Statistics &gt; Object Summary view, which is the default setting for the Detail pane (the bottom half of the window):</p>
-<p><img alt="Object Summary setting for Detail pane" src="http://i.stack.imgur.com/08ued.png"></p>
-<p>If you want to see objects that had been deallocated before you stopped the run, you need to change the Allocation Lifespan setting from “Created &amp; Still Living” (the default) to “All Objects Created”:</p>
-<p><img alt="Allocation Lifespan setting" src="http://i.stack.imgur.com/4SVf2.png"></p>
-<p>To find objects of a specific class, start by typing the class name into the Search field at the right end of the window toolbar. Then find the class name in the Category column of the list view, mouse over it, and click the arrow that appears next to it. For example, my app has a class named Tile, so I search for that and then click the arrow next to Tile in the list view:</p>
-<p><img alt="Searching" src="http://i.stack.imgur.com/GtLnh.gif"></p>
-<p>Now the list view shows every instance of Tile. (Note that you have to enter the actual class of the object, not a superclass. Entering NSObject will only find objects that were created by [NSObject alloc], not objects that were created by [Tile alloc].) I can see the history for any particular instance by clicking the arrow next to that instance’s address:</p>
-<p><img alt="Getting detail" src="http://i.stack.imgur.com/53Lou.gif"></p>
-<p>In the detail view for an object, I can see the malloc and free events and, since I turned on “Record reference counts”, I can also see the retain, release, and autorelease messages and their effect on the object’s retain count. If I want to see the call stack for any of those events, I can open the extended detail panel on the right side of the window:</p>
-<p><img alt="extended detail of call stack" src="http://i.stack.imgur.com/KKrT1.gif"></p>
+            <p>今天在做项目的时候, 同时用到了CABasicAnimation和UIView的animation， 发现会有问题，calayer的animation和uiview的animation不同步，比如CALayer设置position的animation<br><pre lang="objc" colla="+">CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@”position”];<br>animation.fromValue = [NSValue valueWithCGPoint:startpoint];<br>animation.toValue = [NSValue valueWithCGPoint:endpoint];<br>animation.duration = INFO_WINDOW_SLIDE_ANIMATION_TIME;<br>animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];<br>[blurredLayer addAnimation:animation forKey:@”appear”];<br></pre></p>
+
+<p>UIView 的animation：<br><pre lang="objc" colla="+">backgroundView.frame = startframe;<br>[UIView animateWithDuration:INFO_WINDOW_SLIDE_ANIMATION_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{<br>        backgroundView.frame = endframe;<br>} completion:NULL];<br></pre><br>blurredLayer会抖动。后来再stackoverflow上面找到解决方法是将CALayer的animation换成<br><pre lang="objc" colla="+"><br>blurredLayer.position = startpoint;<br>[CATransaction begin];<br>[CATransaction setAnimationDuration:INFO_WINDOW_SLIDE_ANIMATION_TIME];<br>[CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];<br>blurredLayer.position = endpoint;<br>[CATransaction commit];<br></pre><br>这样两个animation就同步了，具体原因不详。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/" itemprop="url">
+                  [原创][iOS]关于实现iOS7上面Blur效果的实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-04T00:00:00+08:00">
+              2013-09-04
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前几个月iOS7发布，说实话界面扁平化，个人不是很喜欢，但是它的一些效果还是比较炫的，比如Blur效果，看下图<br><a href="http://www.njiang1987.com/wp-content/uploads/2013/09/photo1_normal.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/photo1_normal-169x300.png" alt="photo1_normal" width="169" height="300" class="alignnone size-medium wp-image-43"></a>  <a href="http://www.njiang1987.com/wp-content/uploads/2013/09/photo2_normal.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/photo2_normal-169x300.png" alt="photo2_normal" width="169" height="300" class="alignnone size-medium wp-image-44"></a><br>右边的图片，有个Blur效果，最近PM正想将这个效果添加到我们的产品中，查看网上说，苹果是通过直接从GPU里面取出图片信息，然后render出来的，也没有公用的API可以调用。不过有类似的方法可以模拟这个效果，比如Gaussian Blur，这个是通过CoreImage.framework里面的CIFilter实现的，具体实现如下：<br><pre lang="objc" colla="+"><br>CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, frame);<br><br>CIImage <em>imageToBlur = [CIImage imageWithCGImage:imageRef];<br>CIFilter </em>blurFilter = [CIFilter filterWithName:@”CIGaussianBlur”];<br>[blurFilter setValue:imageToBlur forKey:@”inputImage”];<br>[blurFilter setValue:[NSNumber numberWithFloat:0.1f] forKey:@”inputRadius”];<br>CIImage<em> result = [blurFilter valueForKey:@”outputImage”];<br><br>CIContext</em> context = [CIContext contextWithOptions:nil];<br>CGImageRef cgImage = [context createCGImage:result fromRect:[imageToBlur extent]];<br><br>UIImage* newImage = [UIImage imageWithCGImage:cgImage];<br></pre><br>这样就可以得到一个模糊的效果。但是这种模糊有2个缺点：<br><br>1.如果设置的半径比较大，效率会很低<br><br>2.模糊以后的效果不好</p>
+
+<p>后来在网上查到可以用boxblur算法，这个会用到Accelerate.framework里面的一个函数vImageBoxConvolve_ARGB8888，具体实现如下：<br><pre lang="objc" colla="+"><br>- (UIImage<em>)imageWithBoxBlur:(CGFloat)blur withBoxSize:(int)iSize<br>{<br>    if (blur &lt; 0.f || blur &gt; 1.f) {<br>        blur = 0.5f;<br>    }<br>    int boxSize = (int)(blur </em> iSize);<br>    boxSize = boxSize - (boxSize % 2) + 1;</pre></p>
+
+<p>    CGImageRef img = self.CGImage;<br><br>    vImage_Buffer inBuffer, outBuffer;<br><br>    vImage_Error error;<br><br>    void *pixelBuffer;</p>
+
+<p>    //create vImage_Buffer with data from CGImageRef<br><br>    CGDataProviderRef inProvider = CGImageGetDataProvider(img);<br><br>    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);</p>
+
+<p>    inBuffer.width = CGImageGetWidth(img);<br><br>    inBuffer.height = CGImageGetHeight(img);<br><br>    inBuffer.rowBytes = CGImageGetBytesPerRow(img);</p>
+
+<p>    inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);</p>
+
+<p>    //create vImage_Buffer for output<br><br>    pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));</p>
+
+<p>    if(pixelBuffer == NULL)<br><br>        NSLog(@”No pixelbuffer”);</p>
+
+<p>    outBuffer.data = pixelBuffer;<br><br>    outBuffer.width = CGImageGetWidth(img);<br><br>    outBuffer.height = CGImageGetHeight(img);<br><br>    outBuffer.rowBytes = CGImageGetBytesPerRow(img);</p>
+
+<p>    //perform convolution<br><br>    error = vImageBoxConvolve_ARGB8888(&amp;inBuffer, &amp;outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);</p>
+
+<p>    if (error) {<br><br>        NSLog(@”error from convolution %ld”, error);<br><br>    }</p>
+
+<p>    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();<br><br>    CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,<br><br>                                             outBuffer.width,<br><br>                                             outBuffer.height,<br><br>                                             8,<br><br>                                             outBuffer.rowBytes,<br><br>                                             colorSpace,<br><br>                                             (CGBitmapInfo)kCGImageAlphaNoneSkipLast);<br><br>    CGImageRef imageRef = CGBitmapContextCreateImage (ctx);<br><br>    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];</p>
+
+<p>    //clean up<br><br>    CGContextRelease(ctx);<br><br>    CGColorSpaceRelease(colorSpace);</p>
+
+<p>    free(pixelBuffer);<br><br>    //free(pixelBuffer2);<br><br>    CFRelease(inBitmapData);</p>
+
+<p>    CGColorSpaceRelease(colorSpace);<br><br>    CGImageRelease(imageRef);</p>
+
+<p>    return returnImage;<br><br>}<br><br>这个boxblur有个2个优点：<br><br>1. 速度很快<br><br>2. 模糊以后的效果很好<br><br>正好弥补了Gaussian Blur的缺点，但是这个boxblur也有个致命的缺点就是，如果一张图片既有深色区域又有浅色区域，模糊以后，深色区域的颜色就不对了。过几天我再来补图。<br><br>后来无意中发现，如果先用Gaussian blur以后，再用boxblur几次，效果比较好。还是过几天来补图，呵呵，这几天比较忙，一直在做PM的Spec，虽然都是界面的东西，对我一个计算机半路出家的人来说还是优点难度的。以下是效果图，外加公司的产品。<br><br>[caption id=”attachment_48” align=”aligncenter” width=”300”]<a href="http://www.njiang1987.com/wp-content/uploads/2013/09/iOS-Simulator-Screen-shot-Sep-4-2013-7.43.34-PM.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/iOS-Simulator-Screen-shot-Sep-4-2013-7.43.34-PM-300x225.png" alt="blur以后的效果图" width="300" height="225" class="size-medium wp-image-48"></a> blur以后的效果图[/caption]</p>
 
           
         
@@ -2296,7 +2328,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">115</span>
+              <span class="site-state-item-count">116</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
