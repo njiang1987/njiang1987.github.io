@@ -265,6 +265,163 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/04/17/nsstying-yong-retainhuan-shi-copy/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/04/17/nsstying-yong-retainhuan-shi-copy/" itemprop="url">
+                  NSString应用retain还是copy
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-04-17T19:41:07+08:00">
+              2014-04-17
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/04/17/nsstying-yong-retainhuan-shi-copy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/04/17/nsstying-yong-retainhuan-shi-copy/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>对NSString应用retain，效率无疑是最好的</p>
+</li>
+<li><p>用copy最安全，因为NSString 为 NSMutableString 的基类，如果将NSMutableString 以retain的形式赋值给NSString后，后续修改NSMutableString会导致NSString内容的变化，这通常不是我们希望的，所以用copy最安全。</p>
+</li>
+<li><p>到底用哪个？貌似还是用copy，因为copy并不一定导致一个新对对象创建，而牺牲效率。copy会调用NSCopying中的 -(id)copyWithZone:(NSZone *)，我们可以判断下self是NSString还是NSMutableString，如果是NSString，就地[self  retain]，[return self]。否则老老实实拷贝对象赋值，这样可以实现效率和安全的结合，实验的结果也是如此。</p>
+</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span>* strOrgin = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"curr time is %@"</span>, [<span class="built_in">NSDate</span> date]];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"strOrgin = %p, retainCount = %d"</span>, strOrgin, [strOrgin retainCount]);</div><div class="line"><span class="built_in">NSString</span>* strCopy = [strOrgin <span class="keyword">copy</span>];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"strCopy = %p, retainCount=%d"</span>, strCopy, [strCopy retainCount]);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"strOrgin = %p, retainCount = %d"</span>, strOrgin, [strOrgin retainCount]);</div></pre></td></tr></table></figure>
+<hr>
+<p>output<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Test[<span class="number">50250</span>:<span class="number">707</span>] strOrgin = <span class="number">0x1e52e4d0</span>, retainCount = <span class="number">1</span></div><div class="line">Test[<span class="number">50250</span>:<span class="number">707</span>] strCopy = <span class="number">0x1e52e4d0</span>, retainCount=<span class="number">2</span></div><div class="line">Test[<span class="number">50250</span>:<span class="number">707</span>] strOrgin = <span class="number">0x1e52e4d0</span>, retainCount = <span class="number">2</span></div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/21/merge-two-repo/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -382,6 +539,153 @@
 <p>If you’re not already in the master branch, check it out, then merge <code>B-master</code> into A’s master.<br><code><br>$ git merge B-master<br></code></p>
 
 <p>Assuming you have no merge conflicts, you’re done!</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/20/iis7-download-cer-file/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/03/20/iis7-download-cer-file/" itemprop="url">
+                  IIS7 download cer file
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-03-20T00:00:00+08:00">
+              2014-03-20
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/03/20/iis7-download-cer-file/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/20/iis7-download-cer-file/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>To add a file type CER IIS7 and allow it to download, you have to make these changes:<br><ol><br>    <li>Add MIME type: .cer - application/x-x509-ca-cert</li><br>    <li>Remove Handler Mappings: SecurityCertificate *.cer</li><br></ol></p>
 
           
         
@@ -613,153 +917,6 @@
 <p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1</pre><br></td><br><td><br><pre><code>openssl req -new -out mycert1.req -key mycert1.key -subj /CN=www2.mysite.com</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>接着用这个CSR创建证书：</p>
 
 <p><figure><br><div><br><table><br><tbody><br><tr><br><td><br><pre>1<br>2</pre><br></td><br><td><br><pre><code>openssl x509 -req -in mycert1.req -out mycert1.cer -CAkey myCA.key<br>-CA myCA.cer -days 365 -CAcreateserial -CAserial serial</code></pre><br></td><br></tr><br></tbody><br></table><br></div><br></figure>这里创建的证书(mycert.cer)可以安装在一台web服务器上，并且已经安装了相关CA证书的iOS设备都可以访问该web服务器。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/03/20/iis7-download-cer-file/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/20/iis7-download-cer-file/" itemprop="url">
-                  IIS7 download cer file
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-03-20T00:00:00+08:00">
-              2014-03-20
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/03/20/iis7-download-cer-file/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/20/iis7-download-cer-file/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>To add a file type CER IIS7 and allow it to download, you have to make these changes:<br><ol><br>    <li>Add MIME type: .cer - application/x-x509-ca-cert</li><br>    <li>Remove Handler Mappings: SecurityCertificate *.cer</li><br></ol></p>
 
           
         
@@ -1824,152 +1981,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/02/27/iosduo-xian-cheng-bian-cheng-xian-cheng-tong-bu/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/02/27/iosduo-xian-cheng-bian-cheng-xian-cheng-tong-bu/" itemprop="url">
-                  iOS多线程编程-线程同步
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-02-27T18:58:58+08:00">
-              2014-02-27
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/02/27/iosduo-xian-cheng-bian-cheng-xian-cheng-tong-bu/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/02/27/iosduo-xian-cheng-bian-cheng-xian-cheng-tong-bu/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <div><br>应用程序里面多个线程的存在引发了多个执行线程安全访问资源的潜在问题。两个线程同时修改同一资源有可能以意想不到的方式互相干扰。比如，一个线程可能覆盖其他线程改动的地方，或让应用程序进入一个未知的潜在无效状态。如果你幸运的话，受损的资源可能会导致明显的性能问题或崩溃，这样比较容易跟踪并修复它。然而如果你不走运，资源受损可能导致微妙的错误，这些错误不会立即显现出来，而是很久之后才出现，或者导致其他可能需要一个底层的编码来显著修复的错误。<br><br>但涉及到线程安全时，一个好的设计是最好的保护。避免共享资源，并尽量减少线程间的相互作用，这样可以让它们减少互相的干扰。但是一个完全无干扰的设计是不可能的。在线程必须交互的情况下，你需要使用同步工具，来确保当它们交互的时候是安全的。<br><br>Mac OS X和iOS提供了你可以使用的多个同步工具，从提供互斥访问你程序的有序的事件的工具等。以下个部分介绍了这些工具和如何在代码中使用他们来影响安全的访问程序的资源。<br><h2>1.1        同步工具</h2><br>为了防止不同线程意外修改数据，你可以设计你的程序没有同步问题，或你也可以使用同步工具。尽管完全避免出现同步问题相对更好一点，但是几乎总是无法实现。以下个部分介绍了你可以使用的同步工具的基本类别。<br><h3>1.1.1    原子操作</h3><br>原子操作是同步的一个简单的形式，它处理简单的数据类型。原子操作的优势是它们不妨碍竞争的线程。对于简单的操作，比如递增一个计数器，原子操作比使用锁具有更高的性能优势。<br><br>Mac OS X和iOS包含了许多在32位和64位执行基本的数学和逻辑运算的操作。这些操作都使用了原子版本来操作比较和交换，测试和设置，测试和清理等。查看支持原子操作的列表，参阅/user/include/libkern/OSAtomic.h头文件和参见atomic主页。<br><h3>1.1.2    内存屏障和 Volatile 变量</h3><br>为了达到最佳性能，编译器通常会对汇编基本的指令进行重新排序来尽可能保持处理器的指令流水线。作为优化的一部分，编译器有可能对访问主内存的指令，如果它认为这有可能产生不正确的数据时，将会对指令进行重新排序。不幸的是，靠编译器检测到所有可能内存依赖的操作几乎总是不太可能的。如果看似独立的变量实际上是相互影响，那么编译器优化有可能把这些变量更新位错误的顺序，导致潜在不不正确结果。<br><br>内存屏障（memory barrier）是一个使用来确保内存操作按照正确的顺序工作的非阻塞的同步工具。内存屏障的作用就像一个栅栏，迫使处理器来完成位于障碍前面的任何加载和存储操作，才允许它执行位于屏障之后的加载和存储操作。内存屏障同样使用来确保一个线程（但对另外一个线程可见）的内存操作总是按照预定的顺序完成。如果在这些地方缺少内存屏障有可能让其他线程看到看似不可能的结果（比如，内存屏障的维基百科条目）。为了使用一个内存屏障，你只要在你代码里面需要的地方简单的调用OSMemoryBarrier函数。<br><br>Volatile 变量适用于独立变量的另一个内存限制类型。编译器优化代码通过加载这些变量的值进入寄存器。对于本地变量，这通常不会有什么问题。但是如果一个变量对另外一个线程可见，那么这种优化可能会阻止其他线程发现变量的任何变化。在变量之前加上关键字volatile可以强制编译器每次使用变量的时候都从内存里面加载。如果一个变量的值随时可能给编译器无法检测的外部源更改，那么你可以把该变量声明为volatile变量。<br><br>因为内存屏障和volatile变量降低了编译器可执行的优化，因此你应该谨慎使用它们，只在有需要的地方时候，以确保正确性。关于更多使用内存屏障的信息，参阅OSMemoryBarrier主页。<br><h3>1.1.3    锁</h3><br>锁是最常用的同步工具。你可以是使用锁来保护临界区(<strong>critical section</strong>)，这些代码段在同一个时间只能允许被一个线程访问。比如，一个临界区可能会操作一个特定的数据结构，或使用了每次只能一个客户端访问的资源。<br><br>表4-1列出了程序最常使用的锁。Mac OS X和iOS提供了这些锁里面大部分类型的实现，但是并不是全部实现。对于不支持的锁类型，说明列解析了为什么这些锁不能直接在平台上面实现的原因。<br><p align="center"><strong>Table 4-1</strong>  Lock types</p><br><br><table border="1" cellspacing="0" cellpadding="0"><br><tbody><br><tr><br><td valign="top" width="150px">Lock</td><br><td valign="top">Description</td><br></tr><br><tr><br><td>Mutex[互斥锁]</td><br><td>A mutually exclusive (or <strong>mutex</strong>) lock acts as a protective barrier around a resource. A mutex is a type of semaphore that grants access to only one thread at a time. If a mutex is in use and another thread tries to acquire it, that thread blocks until the mutex is released by its original holder. If multiple threads compete for the same mutex, only one at a time is allowed access to it.</td><br></tr><br><tr><br><td>Recursive lock[递归锁]</td><br><td>A recursive lock is a variant on the mutex lock. A recursive lock allows a single thread to acquire the lock multiple times before releasing it. Other threads remain blocked until the owner of the lock releases the lock the same number of times it acquired it. Recursive locks are used during recursive iterations primarily but may also be used in cases where multiple methods each need to acquire the lock separately.</td><br></tr><br><tr><br><td>Read-write lock<br>[读写锁]</td><br><td>A read-write lock is also referred to as a shared-exclusive lock. This type of lock is typically used in larger-scale operations and can significantly improve performance if the protected data structure is read frequently and modified only occasionally. During normal operation, multiple readers can access the data structure simultaneously. When a thread wants to write to the structure, though, it blocks until all readers release the lock, at which point it acquires the lock and can update the structure. While a writing thread is waiting for the lock, new reader threads block until the writing thread is finished. The system supports read-write locks using POSIX threads only. For more information on how to use these locks, see the <a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/pthread.3.html#//apple_ref/doc/man/3/pthread" target="_blank" rel="external">pthread</a> man page.</td><br></tr><br><tr><br><td>Distributed lock<br>[分布锁]</td><br><td>A distributed lock provides mutually exclusive access at the process level. Unlike a true mutex, a distributed lock does not block a process or prevent it from running. It simply reports when the lock is busy and lets the process decide how to proceed.</td><br></tr><br><tr><br><td>Spin lock<br>[自旋锁]</td><br><td>A spin lock polls its lock condition repeatedly until that condition becomes true. Spin locks are most often used on multiprocessor systems where the expected wait time for a lock is small. In these situations, it is often more efficient to poll than to block the thread, which involves a context switch and the updating of thread data structures. The system does not provide any implementations of spin locks because of their polling nature, but you can easily implement them in specific situations. For information on implementing spin locks in the kernel, see<em>Kernel Programming Guide</em>.</td><br></tr><br><tr><br><td>Double-checked lock<br>[双重检查锁]</td><br><td>A double-checked lock is an attempt to reduce the overhead of taking a lock by testing the locking criteria prior to taking the lock. Because double-checked locks are potentially unsafe, the system does not provide explicit support for them and their use is discouraged.[注意系统不显式支持该锁类型]</td><br></tr><br></tbody><br></table><br><blockquote><strong>注意：</strong><em>大部分锁类型都合并了内存屏障来确保在进入临界区之前它前面的加载和存储指令都已经完成。</em></blockquote><br>关于如何使用锁的信息，参阅”使用锁”部分。<br><h3>1.1.4    条件</h3><br>条件是<strong>信号量</strong>的另外一个形式，它允许在条件为真的时候线程间互相发送信号。条件通常被使用来说明资源可用性，或用来确保任务以特定的顺序执行。当一个线程测试一个条件时，它会被阻塞直到条件为真。它会一直阻塞直到其他线程显式的修改信号量的状态。条件和互斥锁(mutex lock)的区别在于多个线程被允许同时访问一个条件。条件更多是允许不同线程根据一些指定的标准通过的守门人。<br><br>一个方式是你使用条件来管理挂起事件的池。事件队列可能使用条件变量来给等待线程发送信号，此时它们在事件队列中的时候。如果一个事件到达时，队列将给条件发送合适信号。如果一个线程已经处于等待，它会被唤醒，届时它将会取出事件并处理它。如果两个事件到达队列的时间大致相同，队列将会发送两次信号唤醒两个线程。<br><br>系统通过几个不同的技术来支持条件。然而正确实现条件需要仔细编写代码，因此你应该在你自己代码中使用条件之前查看”使用条件”部分的例子。<br><h3>1.1.5    执行Selector例程</h3><br>Cocoa程序包含了一个在一个线程以同步的方式传递消息的方便方法。NSObject类声明方法来在应用的一个活动线程上面执行selector的方法。这些方法允许你的线程以异步的方式来传递消息，以确保它们在同一个线程上面执行是同步的。比如，你可以通过执行selector消息来把一个从你分布计算的结果传递给你的应用的主线程或其他目标线程。每个执行selector的请求都会被放入一个目标线程的run loop的队列里面，然后请求会按照它们到达的顺序被目标线程有序的处理。<br><br>关于执行selector例程的总结和更多关于如何使用它们的信息，参阅Cocoa执行Selector源。<br><h2>1.2        同步的成本和性能</h2><br>同步帮助确保你代码的正确性，但同时将会牺牲部分性能。甚至在无争议的情况下，同步工具的使用将在后面介绍。锁和原子操作通常包含了内存屏障和内核级别同步的使用来确保代码正确被保护。如果，发生锁的争夺，你的线程有可能进入阻塞，在体验上会产生更大的迟延。<br><br>表4-2列出了在无争议情况下使用互斥锁和原子操作的近似的相关成本。这些测试的平均值是使用了上千的样本分析出的结果。随着线程创建时间的推移，互斥采集时间（即使在无争议情况下）可能相差也很大，这依赖于进程的加载，计算机的处理速度和系统和程序现有可用的内存。<br><p align="center"><strong>Table 4-2</strong>  Mutex and atomic operation costs</p><br><br><table border="1" cellspacing="0" cellpadding="0"><br><tbody><br><tr><br><td valign="top" width="150px">Item</td><br><td valign="top" width="200px">Approximate cost</td><br><td valign="top">Notes</td><br></tr><br><tr><br><td>Mutex acquisition time</td><br><td>Approximately 0.2 microseconds<br>[0.2微秒]</td><br><td>This is the lock acquisition time in an uncontested case. If the lock is held by another thread, the acquisition time can be much greater. The figures were determined by analyzing the mean and median values generated during mutex acquisition on an Intel-based iMac with a 2 GHz Core Duo processor and 1 GB of RAM running Mac OS X v10.5.</td><br></tr><br><tr><br><td>Atomic compare-and-swap</td><br><td>Approximately 0.05 microseconds<br>[0.05微秒]</td><br><td>This is the compare-and-swap time in an uncontested case. The figures were determined by analyzing the mean and median values for the operation and were generated on an Intel-based iMac with a 2 GHz Core Duo processor and 1 GB of RAM running Mac OS X v10.5.</td><br></tr><br></tbody><br></table><br>当设计你的并发任务时，正确性是最重要的因素，但是也要考虑性能因素。代码在多个线程下面正确执行，但比相同代码在当线程执行慢，这是难以改善的。如果你是改造已有的单线程应用，你应该始终给关键任务的性能设置测量基线。当增加额外线程后，对相同的任务你应该采取新的测量方法并比较多线程和单线程情况下的性能状况。在改变代码之后，线程并没有提高性能，你应该需要重新考虑具体的实现或同时使用线程。<br><br>关于性能的信息和收集指标的工具，参阅Performance Overview。关于锁原子成本的特定信息，参阅”线程成本”部分。<br><h2>1.3        线程安全和信号量</h2><br>当涉及到多线程应用程序时，没有什么比处理信号量更令人恐惧和困惑的了。信号量是底层BSD机制，它可以用来传递信息给进程或以某种方式操纵它。一些应用程序使用信号量来检测特定事件，比如子进程的消亡。系统使用信号量来终止失控进程，和作为其他类型的通信消息。<br><br>使用信号量的问题并不是你要做什么，而是当你程序是多线程的时候它们的行为。在当线程应用程序里面，所有的信号量处理都在主线程进行。在多线程应用程序里面，信号量被传递到恰好运行的线程，而不依赖于特定的硬件错误（比如非法指令）。如果多个线程同时运行，信号量被传递到任何一个系统挑选的线程。换而言之，信号量可以传递给你应用的任何线程。<br><br>在你应用程序里面实现信号量处理的第一条规则是避免假设任一线程处理信号量。如果一个指定的线程想要处理给定的信号，你需要通过某些方法来通知该线程信号何时到达。你不能只是假设该线程的一个信号处理例程的安装会导致信号被传递到同一线程里面。<br><br>关于更多信号量的信息和信号量处理例程的安装信息，参见signal和sigaction主页。<br><h2>1.4        线程安全设计的技巧</h2><br>同步工具是让你代码安全的有用方法，但是它们并非灵丹妙药。使用太多锁和其他同步的类型原语和非多线程相比明显会降低你应用的线程性能。在性能和安全之间寻找平衡是一门需要经验的艺术。以下各部分提供帮助你为你应用选择合适的同步级别的技巧。<br><h3>1.4.1    完全避免同步</h3><br>对于你新的项目，甚至已有项目，设计你的代码和数据结构来避免使用同步是一个很好的解决办法。虽然锁和其他类型同步工具很有用，但是它们会影响任何应用的性能。而且如果整体设计导致特定资源的高竞争，你的线程可能需要等待更长时间。<br><br>实现并发最好的方法是减少你并发任务之间的交互和相互依赖。如果每个任务在它自己的数据集上面操作，那它不需要使用锁来保护这些数据。甚至如果两个任务共享一个普通数据集，你可以查看分区方法，它们设置或提供拷贝每一项任务的方法。当然，拷贝数据集本身也需要成本，所以在你做出决定前，你需要权衡这些成本和使用同步工具造成的成本那个更可以接受。<br><h3>1.4.2    了解同步的限制</h3><br>同步工具只有当它们被用在应用程序中的所有线程是一致时才是有效的。如果你创建了互斥锁来限制特定资源的访问，你所有线程都必须在试图操纵资源前获得同一互斥锁。如果不这样做导致破坏一个互斥锁提供的保护，这是编程的错误。<br><h3>1.4.3    注意对代码正确性的威胁</h3><br>当你使用锁和内存屏障时，你应该总是小心的把它们放在你代码正确的地方。即使有条件的锁（似乎很好放置）也可能会让你产生一个虚假的安全感。以下一系列例子试图通过指出看似无害的代码的漏洞来举例说明该问题。其基本前提是你有一个可变的数组，它包含一组不可变的对象集。假设你想要调用数组中第一个对象的方法。你可能会做类似下面那样的代码：<br><pre>NSLock<em> arrayLock = GetArrayLock();<br>NSMutableArray</em> myArray = GetSharedArray();<br>id anObject;<br><br>[arrayLock lock];<br>anObject = [myArray objectAtIndex:0];<br>[arrayLock unlock];<br><br>[anObject doSomething];</pre><br><div align="center"></div><br>因为数组是可变的，所有数组周围的锁防止其他线程修改该数组直到你获得了想要的对象。而且因为对象限制它们本身是不可更改的，所以在调用对象的doSomething方法周围不需要锁。<br><br>但是上面显式的例子有一个问题。如果当你释放该锁，而在你有机会执行doSomething方法前其他线程到来并从数组中删除所有对象，那会发生什么呢？对于没有使用垃圾回收的应用程序，你代码用户的对象可能已经释放了，让anObject对象指向一个非法的内存地址。了修正该问题，你可能决定简单的重新安排你的代码，让它在调用doSomething之后才释放锁，如下所示：<br><div align="center"></div><br><pre>NSLock<em> arrayLock = GetArrayLock();<br>NSMutableArray</em> myArray = GetSharedArray();<br>id anObject;<br><br>[arrayLock lock];<br>anObject = [myArray objectAtIndex:0];<br>[anObject doSomething];<br>[arrayLock unlock];</pre><br>通过把doSomething的调用移到锁的内部，你的代码可以保证该方法被调用的时候该对象还是有效的。不幸的是，如果doSomething方法需要耗费很长的时间，这有可能导致你的代码保持拥有该锁很长时间，这会产生一个性能瓶颈。<br><br>该代码的问题不是关键区域定义不清，而是实际问题是不可理解的。真正的问题是由其他线程引发的内存管理的问题。因为它可以被其他线程释放，最好的解决办法是在释放锁之前retain anObject。该解决方案涉及对象被释放，并没有引发一个强制的性能损失。<br><div align="center"></div><br><pre>NSLock<em> arrayLock = GetArrayLock();<br>NSMutableArray</em> myArray = GetSharedArray();<br>id anObject;<br><br>[arrayLock lock];<br>anObject = [myArray objectAtIndex:0];<br>[anObject retain];<br>[arrayLock unlock];<br><br>[anObject doSomething];<br>[anObject release];</pre><br>尽管前面的例子非常简单，它们说明了非常重要的一点。当它涉及到正确性时，你需要考虑不仅仅是问题的表面。内存管理和其他影响你设计的因子都有可能因为出现多个线程而受到影响，所以你必须考虑从上到下考虑这些问题。此外，你应该在涉及安全的时候假设编译器总是出现最坏的情况。这种意识和警惕性，可以帮你避免潜在的问题，并确保你的代码运行正确。<br><br>关于更多介绍如何让你应用程序安全的额外例子，参阅Technical Note TN2059:”Using Collection Classes Safely in Multithreaded Application”。<br><h3>1.4.4    当心死锁（Deadlocks）和活锁(Livelocks)</h3><br>任何时候线程试图同时获得多于一个锁，都有可能引发潜在的死锁。当两个不同的线程分别保持一个锁（而该锁是另外一个线程需要的）又试图获得另外线程保持的锁时就会发生死锁。结果是每个线程都会进入持久性阻塞状态，因为它永远不可能获得另外那个锁。<br><br>一个活锁和死锁类似，当两个线程竞争同一个资源的时候就可能发生活锁。在发生活锁的情况里，一个线程放弃它的第一个锁并试图获得第二个锁。一旦它获得第二个锁，它返回并试图再次获得一个锁。线程就会被锁起来，因为它花费所有的时间来释放一个锁，并试图获取其他锁，而不做实际的工作。<br><br>避免死锁和活锁的最好方法是同一个时间只拥有一个锁。如果你必须在同一时间获取多于一个锁，你应该确保其他线程没有做类似的事情。<br><h3>1.4.5    正确使用Volatile变量</h3><br>如果你已经使用了一个互斥锁来保护一个代码段，不要自动假设你需要使用关键词volatile来保护该代码段的重要的变量。一个互斥锁包含了内存屏障来确保加载和存储操作是按照正确顺序的。在一个临界区添加关键字volatile到变量上面会强制每次访问该变量的时候都要从内存里面从加载。这两种同步技巧的组合使用在一些特定区域是必须的，但是同样会导致显著的性能损失。如果单独使用互斥锁已经可以保护变量，那么忽略关键字volatile。<br><br>为了避免使用互斥锁而不使用volatile变量同样很重要。通常情况下，互斥锁和其他同步机制是比volatile变量更好的方式来保护数据结构的完整性。关键字volatile只是确保从内存加载变量而不是使用寄存器里面的变量。它不保证你代码访问变量是正确的。<br><h2>1.5        使用原子操作</h2><br>非阻塞同步的方式是用来执行某些类型的操作而避免扩展使用锁。尽管锁是同步两个线程的很好方式，获取一个锁是一个很昂贵的操作，即使在无竞争的状态下。相比，许多原子操作花费很少的时间来完成操作也可以达到和锁一样的效果。<br><br>原子操作可以让你在32位或64位的处理器上面执行简单的数学和逻辑的运算操作。这些操作依赖于特定的硬件设施（和可选的内存屏障）来保证给定的操作在影响内存再次访问的时候已经完成。在多线程情况下，你应该总是使用原子操作，它和内存屏障组合使用来保证多个线程间正确的同步内存。<br><br>表4-3列出了可用的原子运算和本地操作和相应的函数名。这些函数声明在/usr/include/libkern/OSAtomic.h头文件里面，在那里你也可以找到完整的语法。这些函数的64-位版本只能在64位的进程里面使用。<br><p align="center"><strong>Table 4-3</strong>  Atomic math and logic operations</p><br><br><div align="center"><br><table border="1" cellspacing="0" cellpadding="0"><br><tbody><br><tr><br><td valign="top" width="150px">Operation</td><br><td valign="top" width="300px">Function name</td><br><td valign="top">Description</td><br></tr><br><tr><br><td>Add</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicAdd32.3.html#//apple_ref/doc/man/3/OSAtomicAdd32" target="_blank" rel="external">OSAtomicAdd32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicAdd32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicAdd32Barrier" target="_blank" rel="external">OSAtomicAdd32Barrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicAdd64.3.html#//apple_ref/doc/man/3/OSAtomicAdd64" target="_blank" rel="external">OSAtomicAdd64</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicAdd64Barrier.3.html#//apple_ref/doc/man/3/OSAtomicAdd64Barrier" target="_blank" rel="external">OSAtomicAdd64Barrier</a></td><br><td>Adds two integer values together and stores the result in one of the specified variables.</td><br></tr><br><tr><br><td>Increment</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicIncrement32.3.html#//apple_ref/doc/man/3/OSAtomicIncrement32" target="_blank" rel="external">OSAtomicIncrement32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicIncrement32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicIncrement32Barrier" target="_blank" rel="external">OSAtomicIncrement32Barrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicIncrement64.3.html#//apple_ref/doc/man/3/OSAtomicIncrement64" target="_blank" rel="external">OSAtomicIncrement64</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicIncrement64Barrier.3.html#//apple_ref/doc/man/3/OSAtomicIncrement64Barrier" target="_blank" rel="external">OSAtomicIncrement64Barrier</a></td><br><td>Increments the specified integer value by 1.</td><br></tr><br><tr><br><td>Decrement</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicDecrement32.3.html#//apple_ref/doc/man/3/OSAtomicDecrement32" target="_blank" rel="external">OSAtomicDecrement32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicDecrement32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicDecrement32Barrier" target="_blank" rel="external">OSAtomicDecrement32Barrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicDecrement64.3.html#//apple_ref/doc/man/3/OSAtomicDecrement64" target="_blank" rel="external">OSAtomicDecrement64</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicDecrement64Barrier.3.html#//apple_ref/doc/man/3/OSAtomicDecrement64Barrier" target="_blank" rel="external">OSAtomicDecrement64Barrier</a></td><br><td>Decrements the specified integer value by 1.</td><br></tr><br><tr><br><td>Logical OR</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicOr32.3.html#//apple_ref/doc/man/3/OSAtomicOr32" target="_blank" rel="external">OSAtomicOr32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicOr32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicOr32Barrier" target="_blank" rel="external">OSAtomicOr32Barrier</a></td><br><td>Performs a logical OR between the specified 32-bit value and a 32-bit mask.</td><br></tr><br><tr><br><td>Logical AND</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicAnd32.3.html#//apple_ref/doc/man/3/OSAtomicAnd32" target="_blank" rel="external">OSAtomicAnd32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicAnd32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicAnd32Barrier" target="_blank" rel="external">OSAtomicAnd32Barrier</a></td><br><td>Performs a logical AND between the specified 32-bit value and a 32-bit mask.</td><br></tr><br><tr><br><td>Logical XOR</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicXor32.3.html#//apple_ref/doc/man/3/OSAtomicXor32" target="_blank" rel="external">OSAtomicXor32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicXor32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicXor32Barrier" target="_blank" rel="external">OSAtomicXor32Barrier</a></td><br><td>Performs a logical XOR between the specified 32-bit value and a 32-bit mask.</td><br></tr><br><tr><br><td>Compare and swap</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwap32.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwap32" target="_blank" rel="external">OSAtomicCompareAndSwap32</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwap32Barrier.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwap32Barrier" target="_blank" rel="external">OSAtomicCompareAndSwap32Barrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwap64.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwap64" target="_blank" rel="external">OSAtomicCompareAndSwap64</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwap64Barrier.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwap64Barrier" target="_blank" rel="external">OSAtomicCompareAndSwap64Barrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwapPtr.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwapPtr" target="_blank" rel="external">OSAtomicCompareAndSwapPtr</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwapPtrBarrier.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwapPtrBarrier" target="_blank" rel="external">OSAtomicCompareAndSwapPtrBarrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwapInt.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwapInt" target="_blank" rel="external">OSAtomicCompareAndSwapInt</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwapIntBarrier.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwapIntBarrier" target="_blank" rel="external">OSAtomicCompareAndSwapIntBarrier</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwapLong.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwapLong" target="_blank" rel="external">OSAtomicCompareAndSwapLong</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicCompareAndSwapLongBarrier.3.html#//apple_ref/doc/man/3/OSAtomicCompareAndSwapLongBarrier" target="_blank" rel="external">OSAtomicCompareAndSwapLongBarrier</a></td><br><td>Compares a variable against the specified old value. If the two values are equal, this function assigns the specified new value to the variable; otherwise, it does nothing. The comparison and assignment are done as one atomic operation and the function returns a Boolean value indicating whether the swap actually occurred.</td><br></tr><br><tr><br><td>Test and set</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicTestAndSet.3.html#//apple_ref/doc/man/3/OSAtomicTestAndSet" target="_blank" rel="external">OSAtomicTestAndSet</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicTestAndSetBarrier.3.html#//apple_ref/doc/man/3/OSAtomicTestAndSetBarrier" target="_blank" rel="external">OSAtomicTestAndSetBarrier</a></td><br><td>Tests a bit in the specified variable, sets that bit to 1, and returns the value of the old bit as a Boolean value. Bits are tested according to the formula (0×80 &gt;&gt; (n &amp; 7)) of byte((char<em>)address + (n &gt;&gt; 3)) where n is the bit number and address is a pointer to the variable. This formula effectively breaks up the variable into 8-bit sized chunks and orders the bits in each chunk in reverse. For example, to test the lowest-order bit (bit 0) of a 32-bit integer, you would actually specify 7 for the bit number; similarly, to test the highest order bit (bit 32), you would specify 24 for the bit number.</em></td><br></tr><br><tr><br><td>Test and clear</td><br><td><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicTestAndClear.3.html#//apple_ref/doc/man/3/OSAtomicTestAndClear" target="_blank" rel="external">OSAtomicTestAndClear</a><br><a href="http://developer.apple.com/library/ios/documentation/System/Conceptual/ManPages_iPhoneOS/man3/OSAtomicTestAndClearBarrier.3.html#//apple_ref/doc/man/3/OSAtomicTestAndClearBarrier" target="_blank" rel="external">OSAtomicTestAndClearBarrier</a></td><br><td>Tests a bit in the specified variable, sets that bit to 0, and returns the value of the old bit as a Boolean value. Bits are tested according to the formula (0×80 &gt;&gt; (n &amp; 7)) of byte((char)address + (n &gt;&gt; 3)) where n is the bit number and address is a pointer to the variable. This formula effectively breaks up the variable into 8-bit sized chunks and orders the bits in each chunk in reverse. For example, to test the lowest-order bit (bit 0) of a 32-bit integer, you would actually specify 7 for the bit number; similarly, to test the highest order bit (bit 32), you would specify 24 for the bit number.</td><br></tr><br></tbody><br></table><br></div><br>&nbsp;<br><br>大部分原子函数的行为是相对简单的并应该是你想要的。然而列表4-1显式了测试-设置和比较-交换操作的原子行为，它们相对复杂一点。OSAtomicTestAndSet 第一次调用展示了如何对一个整形值进行位运算操作，而它的结果和你预期的有差异。最后两次调用OSAtomicCompareAndSwap32显式它的行为。所有情况下，这些函数都是无竞争的下调用的，此时没有其他线程试图操作这些值。<br><br>&nbsp;<br><p align="center"><strong>Listing 4-1</strong>  Performing atomic operations</p><br><br><div align="center"></div><br><pre>int32_t  theValue = 0;<br>OSAtomicTestAndSet(0, &amp;theValue);<br>// theValue is now 128.<br><br>theValue = 0;<br>OSAtomicTestAndSet(7, &amp;theValue);<br>// theValue is now 1.<br><br>theValue = 0;<br>OSAtomicTestAndSet(15, &amp;theValue)<br>// theValue is now 256.<br><br>OSAtomicCompareAndSwap32(256, 512, &amp;theValue);<br>// theValue is now 512.<br><br>OSAtomicCompareAndSwap32(256, 1024, &amp;theValue);<br>// theValue is still 512.</pre><br><p align="left">关于原子操作的更多信息，参见atomic的主页和/usr/include/libkern/OSAtomic.h头文件。</p><br><br><h2>1.6        使用锁</h2><br>锁是线程编程同步工具的基础。锁可以让你很容易保护代码中一大块区域以便你可以确保代码的正确性。Mac OS X和iOS都位所有类型的应用程序提供了互斥锁，而Foundation框架定义一些特殊情况下互斥锁的额外变种。以下个部分显式了如何使用这些锁的类型。<br><h3>1.6.1    使用POSIX互斥锁</h3><br>POSIX互斥锁在很多程序里面很容易使用。为了新建一个互斥锁，你声明并初始化一个pthread_mutex_t的结构。为了锁住和解锁一个互斥锁，你可以使用pthread_mutex_lock和pthread_mutex_unlock函数。列表4-2显式了要初始化并使用一个POSIX线程的互斥锁的基础代码。当你用完一个锁之后，只要简单的调用pthread_mutex_destroy来释放该锁的数据结构。<br><p align="center"><strong>Listing 4-2</strong>  Using a mutex lock</p><br><br><div align="center"></div><br><pre>pthread_mutex_t mutex;<br>void MyInitFunction()<br>{<br>    pthread_mutex_init(&amp;mutex, NULL);<br>}<br><br>void MyLockingFunction()<br>{<br>    pthread_mutex_lock(&amp;mutex);<br>    // Do work.<br>    pthread_mutex_unlock(&amp;mutex);<br>}</pre><br><blockquote><strong>注意：</strong><em>上面的代码只是简单的显式了使用一个POSIX线程互斥锁的步骤。你自己的代码应该检查这些函数返回的错误码，并适当的处理它们。</em></blockquote><br><h3>1.6.2    使用NSLock类</h3><br>在Cocoa程序中NSLock中实现了一个简单的互斥锁。所有锁（包括NSLock）的接口实际上都是通过NSLocking协议定义的，它定义了lock和unlock方法。你使用这些方法来获取和释放该锁。<br><br>除了标准的锁行为，NSLock类还增加了tryLock和lockBeforeDate:方法。方法tryLock试图获取一个锁，但是如果锁不可用的时候，它不会阻塞线程。相反，它只是返回NO。而lockBeforeDate:方法试图获取一个锁，但是如果锁没有在规定的时间内被获得，它会让线程从阻塞状态变为非阻塞状态（或者返回NO）。<br><br>下面的例子显式了你可以是NSLock对象来协助更新一个可视化显式，它的数据结构被多个线程计算。如果线程没有立即获的锁，它只是简单的继续计算直到它可以获得锁再更新显式。<br><pre>BOOL moreToDo = YES;<br>NSLock <em>theLock = [[NSLock alloc] init];<br>…<br>while (moreToDo) {<br>    /</em> Do another increment of calculation <em>/<br>    /</em> until there’s no more to do. <em>/<br>    if ([theLock tryLock]) {<br>        /</em> Update display used by all threads. <em>/<br>        [theLock unlock];<br>    }<br>}</em></pre><br><div align="center"></div><br><h3>1.6.3    使用@synchronized指令</h3><br>@synchronized指令是在Objective-C代码中创建一个互斥锁非常方便的方法。@synchronized指令做和其他互斥锁一样的工作（它防止不同的线程在同一时间获取同一个锁）。然而在这种情况下，你不需要直接创建一个互斥锁或锁对象。相反，你只需要简单的使用Objective-C对象作为锁的令牌，如下面例子所示：<br><div align="center"></div><br><pre>- (void)myMethod:(id)anObj<br>{<br>    @synchronized(anObj)<br>    {<br>        // Everything between the braces is protected by the @synchronized directive.<br>    }<br>}</pre><br>创建给@synchronized指令的对象是一个用来区别保护块的唯一标示符。如果你在两个不同的线程里面执行上述方法，每次在一个线程传递了一个不同的对象给anObj参数，那么每次都将会拥有它的锁，并持续处理，中间不被其他线程阻塞。然而，如果你传递的是同一个对象，那么多个线程中的一个线程会首先获得该锁，而其他线程将会被阻塞直到第一个线程完成它的临界区。<br><br>作为一种预防措施，@synchronized块隐式的添加一个异常处理例程来保护代码。该处理例程会在异常抛出的时候自动的释放互斥锁。这意味着为了使用@synchronized指令，你必须在你的代码中启用异常处理。了如果你不想让隐式的异常处理例程带来额外的开销，你应该考虑使用锁的类。<br><br>关于更多@synchronized指令的信息，参阅The Objective-C Programming Language。<br><h3>1.6.4    使用其他Cocoa锁</h3><br>以下个部分描述了使用Cocoa其他类型的锁。<br><br>&nbsp;<br><br><strong>使用NSRecursiveLock对象</strong><br><br>NSRecursiveLock类定义的锁可以在同一线程多次获得，而不会造成死锁。一个递归锁会跟踪它被多少次成功获得了。每次成功的获得该锁都必须平衡调用锁住和解锁的操作。只有所有的锁住和解锁操作都平衡的时候，锁才真正被释放给其他线程获得。<br><br>正如它名字所言，这种类型的锁通常被用在一个递归函数里面来防止递归造成阻塞线程。你可以类似的在非递归的情况下使用他来调用函数，这些函数的语义要求它们使用锁。以下是一个简单递归函数，它在递归中获取锁。如果你不在该代码里使用NSRecursiveLock对象，当函数被再次调用的时候线程将会出现死锁。<br><div align="center"></div><br><pre>NSRecursiveLock theLock = [[NSRecursiveLock alloc] init];<br><br>void MyRecursiveFunction(int value)<br>{<br>    [theLock lock];<br>    if (value != 0)<br>    {<br>        –value;<br>        MyRecursiveFunction(value);<br>    }<br>    [theLock unlock];<br>}<br><br>MyRecursiveFunction(5);</pre><br><blockquote><strong>注意：</strong><em>因为一个递归锁不会被释放直到所有锁的调用平衡使用了解锁操作，所以你必须仔细权衡是否决定使用锁对性能的潜在影响。长时间持有一个锁将会导致其他线程阻塞直到递归完成。如果你可以重写你的代码来消除递归或消除使用一个递归锁，你可能会获得更好的性能。<strong></strong></em></blockquote><br><strong> </strong><br><br><strong>使用NSConditionLock对象</strong><br><br>NSConditionLock对象定义了一个互斥锁，可以使用特定值来锁住和解锁。不要把该类型的锁和条件（参见“条件”部分）混淆了。它的行为和条件有点类似，但是它们的实现非常不同。<br><br>通常，当多线程需要以特定的顺序来执行任务的时候，你可以使用一个NSConditionLock对象，比如当一个线程生产数据，而另外一个线程消费数据。生产者执行时，消费者使用由你程序指定的条件来获取锁（条件本身是一个你定义的整形值）。当生产者完成时，它会解锁该锁并设置锁的条件为合适的整形值来唤醒消费者线程，之后消费线程继续处理数据。<br><br>NSConditionLock的锁住和解锁方法可以任意组合使用。比如，你可以使用unlockWithCondition:和lock消息，或使用lockWhenCondition:和unlock消息。当然，后面的组合可以解锁一个锁但是可能没有释放任何等待某特定条件值的线程。<br><br>下面的例子显示了生产者-消费者问题如何使用条件锁来处理。想象一个应用程序包含一个数据的队列。一个生产者线程把数据添加到队列，而消费者线程从队列中取出数据。生产者不需要等待特定的条件，但是它必须等待锁可用以便它可以安全的把数据添加到队列。<br><div align="center"></div><br><pre>id condLock = [[NSConditionLock alloc] initWithCondition:NO_DATA];<br><br>while(true)<br>{<br>    [condLock lock];<br>    /<em> Add data to the queue. </em>/<br>    [condLock unlockWithCondition:HAS_DATA];<br>}</pre><br>因为初始化条件锁的值为NO_DATA，生产者线程在初始化的时候可以毫无问题的获取该锁。它会添加队列数据，并把条件设置为HAS_DATA。在随后的迭代中，生产者线程可以把到达的数据添加到队列，无论队列是否为空或依然有数据。唯一让它进入阻塞的情况是当一个消费者线程充队列取出数据的时候。<br><br>因为消费者线程必须要有数据来处理，它会使用一个特定的条件来等待队列。当生产者把数据放入队列时，消费者线程被唤醒并获取它的锁。它可以从队列中取出数据，并更新队列的状态。下列代码显示了消费者线程处理循环的基本结构。<br><pre>while (true)<br>{<br>    [condLock lockWhenCondition:HAS_DATA];<br>    /<em> Remove data from the queue. </em>/<br>    [condLock unlockWithCondition:(isEmpty ? NO_DATA : HAS_DATA)];<br><br>    // Process the data locally.<br>}</pre><br><div align="center"></div><br>&nbsp;<br><br><strong>使用NSDistributedLock对象</strong><br><br>NSDistributedLock类可以被多台主机上的多个应用程序使用来限制对某些共享资源的访问，比如一个文件。锁本身是一个高效的互斥锁，它使用文件系统项目来实现，比如一个文件或目录。对于一个可用的NSDistributedLock对象，锁必须由所有使用它的程序写入。这通常意味着把它放在文件系统，该文件系统可以被所有运行在计算机上面的应用程序访问。<br><br>不像其他类型的锁，NSDistributedLock并没有实现NSLocking协议，所有它没有lock方法。一个lock方法将会阻塞线程的执行，并要求系统以预定的速度轮询锁。以其在你的代码中实现这种约束，NSDistributedLock提供了一个tryLock方法，并让你决定是否轮询。<br><br>因为它使用文件系统来实现，一个NSDistributedLock对象不会被释放除非它的拥有者显式的释放它。如果你的程序在用户一个分布锁的时候崩溃了，其他客户端简无法访问该受保护的资源。在这种情况下，你可以使用breadLock方法来打破现存的锁以便你可以获取它。但是通常应该避免打破锁，除非你确定拥有进程已经死亡并不可能再释放该锁。<br><br>和其他类型的锁一样，当你使用NSDistributedLock对象时，你可以通过调用unlock方法来释放它。<br><h2>1.7        使用条件</h2><br>条件是一个特殊类型的锁，你可以使用它来同步操作必须处理的顺序。它们和互斥锁有微妙的不同。一个线程等待条件会一直处于阻塞状态直到条件获得其他线程显式发出的信号。<br><br>由于微妙之处包含在操作系统实现上，条件锁被允许返回伪成功，即使实际上它们并没有被你的代码告知。为了避免这些伪信号操作的问题，你应该总是在你的条件锁里面使用一个断言。该断言是一个更好的方法来确定是否安全让你的线程处理。条件简单的让你的线程保持休眠直到断言被发送信号的线程设置了。<br><br>以下部分介绍了如何在你的代码中使用条件。<br><h3>1.7.1    使用NSCondition类</h3><br>NSCondition类提供了和POSIX条件相同的语义，但是它把锁和条件数据结构封装在一个单一对象里面。结果是一个你可以像互斥锁那样使用的对象，然后等待特定条件。<br><br>列表4-3显示了一个代码片段，它展示了为等待一个NSCondition对象的事件序列。cocaoCondition变量包含了一个NSCondition对象，而timeToDoWork变量是一个整形，它在其他线程里面发送条件信号时立即递增。<br><p align="center"><strong>Listing 4-3</strong>  Using a Cocoa condition</p><br><br><pre>[cocoaCondition lock];<br>while (timeToDoWork &lt;= 0)<br>    [cocoaCondition wait];<br><br>timeToDoWork–;<br><br>// Do real work here.<br><br>[cocoaCondition unlock];</pre><br>列表4-4显示了用于给Cocoa条件发送信号的代码，并递增他断言变量。你应该在给它发送信号前锁住条件。<br><p align="center"><strong>Listing 4-4</strong>  Signaling a Cocoa condition</p><br><br><pre>[cocoaCondition lock];<br>timeToDoWork++;<br>[cocoaCondition signal];<br>[cocoaCondition unlock];</pre><br><h3>1.7.2    使用POSIX条件</h3><br>POSIX线程条件锁要求同时使用条件数据结构和一个互斥锁。经管两个锁结构是分开的，互斥锁在运行的时候和条件结构紧密联系在一起。多线程等待某一信号应该总是一起使用相同的互斥锁和条件结构。修改该成双结构将会导致错误。<br><br>列表4-5显示了基本初始化过程，条件和断言的使用。在初始化之后，条件和互斥锁，使用ready_to_go变量作为断言等待线程进入一个while循环。仅当断言被设置并且随后的条件信号等待线程被唤醒和开始工作。<br><p align="center"><strong>Listing 4-5</strong>  Using a POSIX condition</p><br><br><pre>pthread_mutex_t mutex;<br>pthread_cond_t condition;<br>Boolean     ready_to_go = true;<br><br>void MyCondInitFunction()<br>{<br>    pthread_mutex_init(&amp;mutex);<br>    pthread_cond_init(&amp;condition, NULL);<br>}<br><br>void MyWaitOnConditionFunction()<br>{<br>    // Lock the mutex.<br>    pthread_mutex_lock(&amp;mutex);<br><br>    // If the predicate is already set, then the while loop is bypassed;<br>    // otherwise, the thread sleeps until the predicate is set.<br>    while(ready_to_go == false)<br>    {<br>        pthread_cond_wait(&amp;condition, &amp;mutex);<br>    }<br><br>    // Do work. (The mutex should stay locked.)<br><br>    // Reset the predicate and release the mutex.<br>    ready_to_go = false;<br>    pthread_mutex_unlock(&amp;mutex);<br>}</pre><br>信号线程负责设置断言和发送信号给条件锁。列表4-6显示了实现该行为的代码。在该例子中，条件被互斥锁内被发送信号来防止等待条件的线程间发生竞争条件。<br><p align="center"><strong>Listing 4-6</strong>  Signaling a condition lock</p><br><br><pre>void SignalThreadUsingCondition()<br>{<br>    // At this point, there should be work for the other thread to do.<br>    pthread_mutex_lock(&amp;mutex);<br>    ready_to_go = true;<br><br>    // Signal the other thread to begin work.<br>    pthread_cond_signal(&amp;condition);<br><br>    pthread_mutex_unlock(&amp;mutex);<br>}</pre><br><br><blockquote><strong>注意：</strong><em>上述代码是显示使用POSIX线程条件函数的简单例子。你自己的代码应该检测这些函数返回错误码并恰当的处理它们。</em></blockquote><br></div>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2015,7 +2026,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">117</span>
+              <span class="site-state-item-count">118</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

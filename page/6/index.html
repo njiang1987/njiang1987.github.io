@@ -265,6 +265,255 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/09/30/c-plus-plus-11-new-features/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/09/30/c-plus-plus-11-new-features/" itemprop="url">
+                  C++ Primer 读书笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-09-30T16:29:22+08:00">
+              2014-09-30
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/09/30/c-plus-plus-11-new-features/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/09/30/c-plus-plus-11-new-features/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>###1. Array</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">array</span>&lt;<span class="keyword">double</span>, 4&gt; a3 = &#123;<span class="number">3.14</span>, <span class="number">2.72</span>, <span class="number">1.62</span>, <span class="number">1.41</span>&#125;;</div><div class="line">   <span class="built_in">array</span>&lt;<span class="keyword">double</span>, 4&gt; a4;</div><div class="line">   a4 = a3;</div></pre></td></tr></table></figure>
+<p>###2. cin</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">getline(<span class="built_in">cin</span>, first_name);</div><div class="line"><span class="built_in">cin</span>.getline(first_name, <span class="number">20</span>);</div></pre></td></tr></table></figure>
+<p>###3. File - fstream</p>
+<ol>
+<li>包含头文件fstream</li>
+<li>创建一个ofstream对象</li>
+<li>将该ofstream对象同一个文件关联起来</li>
+<li>就像使用cout那样使用该ofstream对象</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">ofstream outFile;</div><div class="line">   outFile.open(<span class="string">"fish.txt"</span>);</div><div class="line">   <span class="built_in">string</span> filename;</div><div class="line">   getline(<span class="built_in">cin</span>, filename);</div><div class="line">   outFile&lt;&lt;filename;</div><div class="line">   outFile.close();</div><div class="line">   ifstream inFile;</div><div class="line">   inFile.open(<span class="string">"fish.txt"</span>);</div><div class="line">   <span class="built_in">string</span> resultname;</div><div class="line">   getline(inFile, resultname);</div><div class="line">   <span class="built_in">cout</span>&lt;&lt;resultname;</div><div class="line">   inFile.close();</div></pre></td></tr></table></figure>
+<p>###4. 在函数传参过程中，尽量使用const</p>
+<ol>
+<li>这样可以避免由于五一间修改数据而导致的编程错误，</li>
+<li>使用const使得函数能够处理const 和非const 实参，否则将只能接受非const数据。</li>
+</ol>
+<p>###5. 声明函数指针</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">double betsy(int);</div><div class="line">double pam1(int);</div><div class="line">void estimate(int lines, double (*pf)(int));</div><div class="line">double betsy(int lns)</div><div class="line">&#123;</div><div class="line">    return 0.05*lns;</div><div class="line">&#125;</div><div class="line"></div><div class="line">double pam1(int lns)</div><div class="line">&#123;</div><div class="line">    return 0.03*lns + lns;</div><div class="line">&#125;</div><div class="line"></div><div class="line">void estimate(int lines, double (*pf)(int))</div><div class="line">&#123;</div><div class="line">    cout&lt;&lt;lines&lt;&lt;" lines will take ";</div><div class="line">    cout&lt;&lt;(*pf)(lines)&lt;&lt;" hour(s)\n";</div><div class="line">&#125;</div><div class="line"></div><div class="line">int code;</div><div class="line">   cout&lt;&lt;"how many lines?";</div><div class="line">   cin&gt;&gt;code;</div><div class="line">   cout&lt;&lt;"betsy estimate::";</div><div class="line">   estimate(code, betsy);</div><div class="line">   cout&lt;&lt;"pam1 estimate::";</div><div class="line">   estimate(code, pam1);</div></pre></td></tr></table></figure>
+<p>###6. cout.precision(2)</p>
+<p>###7. 显示具体化</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;&gt; <span class="keyword">void</span> swap&lt;Job&gt;(Job&amp; a, Job&amp; b)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">double</span> t1;</div><div class="line">    <span class="keyword">int</span> t2;</div><div class="line">    t1 = a.salary;</div><div class="line">    a.salary = b.salary;</div><div class="line">    b.salary = t1;</div><div class="line">    t2 = a.<span class="built_in">floor</span>;</div><div class="line">    a.<span class="built_in">floor</span> = b.<span class="built_in">floor</span>;</div><div class="line">    b.<span class="built_in">floor</span> = t2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###8. 关键字decltype </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> x;</div><div class="line"><span class="keyword">decltype</span>(x) y; <span class="comment">//将x的类型复制给y</span></div></pre></td></tr></table></figure>
+<p>给decltype提供的参数可以是表达式，编译器遍历一个核对表来实现声明.</p>
+<p>###9. 声明和定义函数的语法</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">double h(int x, float y);</div><div class="line">auto h(int x, float y) -&gt; double</div></pre></td></tr></table></figure>
+<p>###10. 在同一个文件中只能讲同一个头文件包含一次</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> COORDIN_H_</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> COORDIN_H_</span></div><div class="line">...</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+<p>###11. 名词修饰</p>
+<p>重载函数，编译时， 名称修饰</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">long MyFunctionFoo(int, float)</div><div class="line">MyFunctionFoo@@YAXH</div></pre></td></tr></table></figure>
+<p>###12. thread_local 变量的声明周期与所属的线程一样长</p>
+<p>###13. register 使用CPU寄存器来存储变量</p>
+<p><code>register int count_fast;</code></p>
+<p>###14. 未解决c++查抄c里面的函数原型问题</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> <span class="function"><span class="keyword">void</span> <span class="title">spiff</span><span class="params">(<span class="keyword">int</span>)</span></span>;<span class="comment">// use c protocol for name look-up</span></div><div class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">spoff</span><span class="params">(<span class="keyword">int</span>)</span></span>;	<span class="comment">//use c++ protocol for name look-up</span></div><div class="line"><span class="keyword">extern</span> <span class="string">"C++"</span> <span class="function"><span class="keyword">void</span> <span class="title">spaff</span><span class="params">(<span class="keyword">int</span>)</span></span>;	<span class="comment">//use c++ protocol for name look-up</span></div></pre></td></tr></table></figure>
+<p>###15. int <em> pi = new int;<br>    int </em> pi = new int(sizeof(int));<br>    delete pi;<br>    delete (pi);</p>
+<p>###16. 作用域内枚举 C++11, (struct)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">enum</span> <span class="keyword">class</span> egg &#123;Small, Medium, Large, Jumbo&#125;;</div><div class="line"><span class="keyword">enum</span> <span class="keyword">class</span> shirt &#123;Small, Medium, Large, Jumbo&#125;;</div><div class="line">egg choise = egg::Large;</div><div class="line">   shirt floyd = shirt::Large;</div></pre></td></tr></table></figure>
+<p>###17. 转换函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">operator</span> <span class="title">double</span><span class="params">()</span></span>;</div><div class="line"><span class="function">Stonewt <span class="title">wolfe</span><span class="params">(<span class="number">285.7</span>)</span></span>;</div><div class="line">   <span class="keyword">double</span> host = <span class="keyword">double</span> (wolfe);</div><div class="line">   <span class="keyword">double</span> thinker = (<span class="keyword">double</span>) wolfe;</div></pre></td></tr></table></figure>
+<ol>
+<li>转换函数必须是类方法</li>
+<li>转换函数不能指定返回类型</li>
+<li>转换函数不能有参数</li>
+</ol>
+<p>可以在声明构造函数时使用关键字<code>explicit</code>, 以防止它被用于隐式转换</p>
+<p>###18. C++11 空指针</p>
+<p>引入新关键字<code>nullptr</code>用于表示空指针</p>
+<p>###19. 静态成员函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">HowMany</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> num_string;&#125;</div><div class="line"><span class="keyword">int</span> count = String::HowMany();</div></pre></td></tr></table></figure>
+<p>###20. 通过char*创建string</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[] = &#123;<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>&#125;;</div><div class="line"><span class="built_in">string</span>* test1 = <span class="keyword">new</span> <span class="built_in">string</span>(&amp;s[<span class="number">1</span>]);</div></pre></td></tr></table></figure>
+<p>###21. 重载&lt;&lt;运算符</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">	<span class="keyword">friend</span> ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream&amp; os, <span class="keyword">const</span> Stonewt&amp; obj);</div><div class="line">	ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream&amp; os, <span class="keyword">const</span> Stonewt&amp; obj)</div><div class="line">&#123;</div><div class="line">    os&lt;&lt;obj.stone&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> os;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###22. 类的静态变量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">int</span> count;</div><div class="line"><span class="keyword">int</span> Stonewt::count = <span class="number">0</span>;</div></pre></td></tr></table></figure>
+<p>###23. 使用explicit，让编译器不强转类型</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Class Student</div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">explicit</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;&#125;</div><div class="line">&#125;;</div><div class="line"><span class="function">Sutdent <span class="title">doh</span><span class="params">(<span class="string">"test"</span>, <span class="number">10</span>)</span></span>;</div><div class="line">doh = <span class="number">5</span>;</div></pre></td></tr></table></figure>
+<p>C++提供了关键字<code>explicit</code>，可以阻止不应该允许的经过转换构造函数进行的隐式转换的发生。声明为explicit的构造函数不能在隐式转换中使用。</p>
+<p>###24. virtual public继承，为解决菱形集成问题</p>
+<p>###25. 泛型编程</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> Stack::push(<span class="keyword">const</span> Item&amp; item)</div><div class="line">&#123;&#125;</div></pre></td></tr></table></figure>
+<p>应改为</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> Type&gt;</div><div class="line"><span class="keyword">bool</span> Stack&lt;Type&gt;::push(<span class="keyword">const</span> TYpe&amp; item)</div><div class="line">&#123;&#125;</div></pre></td></tr></table></figure>
+<p>###26. 模板别名</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div><div class="line"><span class="keyword">using</span> arrtype = <span class="built_in">std</span>::<span class="built_in">array</span>&lt;T, <span class="number">12</span>&gt;</div></pre></td></tr></table></figure>
+<p>###27. try block</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">       z = hmean(x, y);</div><div class="line">   &#125; <span class="keyword">catch</span> (<span class="keyword">const</span> <span class="keyword">char</span>* s) &#123;</div><div class="line">       <span class="built_in">cout</span>&lt;&lt;s&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">       <span class="built_in">cout</span>&lt;&lt;<span class="string">"enter new two number: "</span>;</div><div class="line">       <span class="keyword">continue</span>;</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">throw</span> <span class="string">"bad hmean() arguments a== -b"</span>;</div></pre></td></tr></table></figure>
+<p>###28. 未捕获异常不会导致程序立刻异常终止。</p>
+<p>相反，程序将首先调用函数terminate（）。在默认情况下， terminate（）调用abort（）函数，可以指定terminate（）应调用的函数（而不是abort（））来修改terminate（）的这种行为。为此，可调用set_terminate()函数。set_terminate（）和terminate（）都是在头文件exception中声明的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">myQuit</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Terminating due to uncaught exception!"</span>;</div><div class="line">    <span class="built_in">exit</span>(<span class="number">5</span>);</div><div class="line">&#125;</div><div class="line">set_terminate(myQuit);</div></pre></td></tr></table></figure>
+<p>###29. RTTI (Runtime Type Identification)工作原理</p>
+<ol>
+<li>如果可能的话， dynamic_cast运算符将使用一个指向基类的指针来生成一个指向派生类的指针；否则， 该运算符返回0——空指针</li>
+<li>typeid运算符返回一个指出对象的类型的值</li>
+<li>type_info结构存储了有关特定类型的信息。</li>
+</ol>
+<p>###30. dynamic_cast&lt;&gt;</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Worker* wk = <span class="keyword">new</span> Waiter();</div><div class="line">   Singer* sg = <span class="keyword">dynamic_cast</span>&lt;Singer*&gt;(wk);	<span class="comment">// null</span></div><div class="line">   Waiter* wt = <span class="keyword">dynamic_cast</span>&lt;Waiter*&gt;(wk);	<span class="comment">// not null</span></div></pre></td></tr></table></figure>
+<p>###31. typeid, type_info</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cout</span>&lt;&lt;<span class="string">"name = "</span>&lt;&lt;<span class="keyword">typeid</span>(Worker).name()&lt;&lt;<span class="string">", id = "</span>&lt;&lt;<span class="keyword">typeid</span>(Worker).hash_code()&lt;&lt;<span class="built_in">endl</span>;</div></pre></td></tr></table></figure>
+<p>###32. dynamic_cast ：使得在类层次结构中进行向上转换    dynamic_cast<type_name>()</type_name></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const_cast</span> ：用于执行只有一种用途的类型转换，即改变值为<span class="keyword">const</span> 或<span class="keyword">volatile</span>，	<span class="keyword">const_cast</span>&lt;type_name&gt;()</div></pre></td></tr></table></figure>
+<p>###33. 智能指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">       <span class="built_in">auto_ptr</span>&lt;Report&gt; ps(<span class="keyword">new</span> Report(<span class="string">"using auto_ptr"</span>));</div><div class="line">       ps-&gt;comment();</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   &#123;</div><div class="line">       <span class="built_in">shared_ptr</span>&lt;Report&gt; ps(<span class="keyword">new</span> Report(<span class="string">"using share_ptr"</span>));</div><div class="line">       ps-&gt;comment();</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   &#123;</div><div class="line">       <span class="built_in">unique_ptr</span>&lt;Report&gt; ps(<span class="keyword">new</span> Report(<span class="string">"using unique_ptr"</span>));</div><div class="line">       ps-&gt;comment();</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>###34. 问题:会删除ps</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">auto_ptr</span>&lt;<span class="built_in">string</span>&gt; ps(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"t"</span>));</div><div class="line"><span class="built_in">auto_ptr</span>&lt;<span class="built_in">string</span>&gt; vocation;</div><div class="line">vacation = ps;</div></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<ol>
+<li>定义复制运算符，是指执行深复制</li>
+<li>简历所有权概念，对于特定的对象，只能有一个智能指针可拥有它， 这样只有拥有对象的智能指针的构造函数会删除该对象。然后，让复制操作转让所有权。这就是用于auto_ptr和unique_ptr的策略， 但unique_ptr的策略更严格。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">auto_ptr</span>&lt;Report&gt; ps(<span class="keyword">new</span> Report(<span class="string">"using auto_ptr"</span>));</div><div class="line">      <span class="built_in">auto_ptr</span>&lt;Report&gt; ps1 = ps;</div><div class="line">      ps-&gt;comment();	<span class="comment">// ps = NULL</span></div></pre></td></tr></table></figure>
+<ol>
+<li>创建智能更高的指针，跟踪引用特定对象的智能指针数。这称为引用计数。仅当最后一个指针过期时，才调用delete。share_ptr</li>
+</ol>
+<p>###35. Lambda函数</p>
+<p><code>[](int x) {return x % 3 == 0;}    或 [](int x) -&gt; double {return x % 3 == 0;}</code>，类似 <code>bool f(int x) {return x % 3 == 0;}</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">auto</span> mode3 = [](<span class="keyword">int</span> x) &#123;<span class="keyword">return</span> x % <span class="number">3</span> == <span class="number">0</span>;&#125;</div><div class="line">count <span class="number">3</span> = <span class="built_in">std</span>::count_if(numbers.begin(), numbers.end(), mode3);</div></pre></td></tr></table></figure>
+<p>###36. static_assert</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> assert_static(e)    \</span></div><div class="line">    do&#123;   \</div><div class="line">        enum &#123;assert_static__ = 1/(e)&#125;;\</div><div class="line">    &#125;while(0)</div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bit_copy</span><span class="params">(T&amp; a, U&amp; b)</span></span></div><div class="line">&#123;</div><div class="line"><span class="comment">//    assert_static(sizeof(a) == sizeof(b));</span></div><div class="line">    <span class="keyword">static_assert</span>(<span class="keyword">sizeof</span>(a) == <span class="keyword">sizeof</span>(b), <span class="string">"error"</span>);<span class="comment">//此处会报错</span></div><div class="line">    <span class="built_in">memcpy</span>(&amp;a, &amp;b, <span class="keyword">sizeof</span>(a));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> a = <span class="number">0x2468</span>;</div><div class="line">    <span class="keyword">double</span> b;</div><div class="line">    bit_copy(a, b);</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/09/03/auto-ptrde-shi-xian-c-plus-plus/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1803,152 +2052,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2014/08/02/iosbian-li-wei-zhi-dui-xiang/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/08/02/iosbian-li-wei-zhi-dui-xiang/" itemprop="url">
-                  iOS遍历未知对象
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-08-02T13:29:53+08:00">
-              2014-08-02
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/08/02/iosbian-li-wei-zhi-dui-xiang/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/08/02/iosbian-li-wei-zhi-dui-xiang/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSObject</span> (<span class="title">PropertyListing</span>)   </span></div><div class="line"></div><div class="line"><span class="comment">/* 获取对象的所有属性 */</span></div><div class="line">- (<span class="built_in">NSDictionary</span> *)properties_aps</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSMutableDictionary</span> *props = [<span class="built_in">NSMutableDictionary</span> dictionary];   </div><div class="line">   <span class="keyword">unsigned</span> <span class="keyword">int</span> outCount, i;   </div><div class="line">   objc_property_t *properties = class_copyPropertyList([<span class="keyword">self</span> <span class="keyword">class</span>], &amp;outCount);   </div><div class="line">   <span class="keyword">for</span> (i = <span class="number">0</span>; i&lt;outCount; i++)</div><div class="line">    &#123;</div><div class="line">       objc_property_t property = properties[i];</div><div class="line">       <span class="keyword">const</span> <span class="keyword">char</span>* char_f =property_getName(property);</div><div class="line">       <span class="built_in">NSString</span> *propertyName = [<span class="built_in">NSString</span> stringWithUTF8String:char_f];</div><div class="line">       <span class="keyword">id</span> propertyValue = [<span class="keyword">self</span> valueForKey:(<span class="built_in">NSString</span> *)propertyName];   </div><div class="line">       <span class="keyword">if</span> (propertyValue) [props setObject:propertyValue forKey:propertyName];   </div><div class="line">    &#125;   </div><div class="line">   free(properties);   </div><div class="line">   <span class="keyword">return</span> props;   </div><div class="line">&#125;   </div><div class="line"></div><div class="line"><span class="comment">/* 获取对象的所有方法 */</span></div><div class="line">-(<span class="keyword">void</span>)printMothList</div><div class="line">&#123;</div><div class="line">   <span class="keyword">unsigned</span> <span class="keyword">int</span> mothCout_f =<span class="number">0</span>;</div><div class="line">   Method* mothList_f = class_copyMethodList([<span class="keyword">self</span> <span class="keyword">class</span>],&amp;mothCout_f);</div><div class="line">   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;mothCout_f;i++)</div><div class="line">    &#123;</div><div class="line">       Method temp_f = mothList_f[i];</div><div class="line">       IMP imp_f = method_getImplementation(temp_f);</div><div class="line">       SEL name_f = method_getName(temp_f);</div><div class="line">       <span class="keyword">const</span> <span class="keyword">char</span>* name_s =sel_getName(method_getName(temp_f));</div><div class="line">       <span class="keyword">int</span> arguments = method_getNumberOfArguments(temp_f);</div><div class="line">       <span class="keyword">const</span> <span class="keyword">char</span>* encoding =method_getTypeEncoding(temp_f);</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"方法名：%@,参数个数：%d,编码方式：%@"</span>,[<span class="built_in">NSString</span> stringWithUTF8String:name_s],</div><div class="line">                                            arguments,</div><div class="line">                            [<span class="built_in">NSString</span> stringWithUTF8String:encoding]);</div><div class="line">    &#125;</div><div class="line">   free(mothList_f);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1994,7 +2097,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">117</span>
+              <span class="site-state-item-count">118</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

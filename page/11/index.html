@@ -265,6 +265,161 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/10/11/zhuan-why-are-objective-c-delegates-usually-given-the-property-assign-instead-of-retain/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/10/11/zhuan-why-are-objective-c-delegates-usually-given-the-property-assign-instead-of-retain/" itemprop="url">
+                  [转]Why are Objective-C delegates usually given the property assign instead of retain?
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-10-11T00:00:00+08:00">
+              2013-10-11
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/10/11/zhuan-why-are-objective-c-delegates-usually-given-the-property-assign-instead-of-retain/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/10/11/zhuan-why-are-objective-c-delegates-usually-given-the-property-assign-instead-of-retain/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>The reason that you avoid retaining delegates is that you need to avoid a retain loop (more commonly known as retain cycle):</p>
+
+<p>A creates B A sets itself as B’s delegate … A is released by its owner</p>
+
+<p>If B had retained A, A wouldn’t be released, as B owns A, thus A’s dealloc would never get called, causing <em>both A and B</em> to leak.</p>
+
+<p>You shouldn’t worry about A going away because it owns B and thus gets rid of it in dealloc.</p>
+
+<p>[转]：<a href="http://stackoverflow.com/questions/918698/why-are-objective-c-delegates-usually-given-the-property-assign-instead-of-retai" target="_blank" rel="external">http://stackoverflow.com/questions/918698/why-are-objective-c-delegates-usually-given-the-property-assign-instead-of-retai</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/30/yuan-chuang-customize-cakeyframeanimation/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -625,159 +780,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="url">
-                  [StackOverflow]NSOperation和dispatch_async的区别
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-16T00:00:00+08:00">
-              2013-09-16
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>NSOperation*</code> classes are the higher level api. They hide GCD’s lower level api from you so that you can concentrate on getting the task done.</p>
-
-<p>The rule of thumb is: <strong>Use the api of the highest level first and then degrade based on what you need to accomplish.</strong></p>
-
-<p>The advantage of this approach is that your code stays most agnostic to the specific implementation the vendor provides. In this example, using <code>NSOperation</code>, you’ll be using Apple’s implementation of execution queueing (using GCD). Should Apple ever decide to change the details of implementation behind the scenes they can do so without breaking your application’s code.<br><br>One such example would be Apple deprecating GCD and using a completely different library (which is unlikely because Apple created GCD and everybody seems to love it).</p>
-
-<p>Regarding the matter i recommend consulting the following resources:<br><ul><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html</a></li><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html</a></li><br>    <li><a href="http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues" target="_blank" rel="external">http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues</a></li><br>    <li><a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html" target="_blank" rel="external">https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html</a></li><br></ul></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/16/zhuan-zai-ios-duo-xian-cheng-bian-cheng-zhi-nan/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1054,6 +1056,159 @@
 <p>    pthread_mutex_unlock(&amp;mutex);<br><br>}<br>&nbsp;</p>
 
 <p><br><blockquote><strong>注意：</strong><em>上述代码是显示使用POSIX线程条件函数的简单例子。你自己的代码应该检测这些函数返回错误码并恰当的处理它们。</em></blockquote><br></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="姜楠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="天空の城">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="url">
+                  [StackOverflow]NSOperation和dispatch_async的区别
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-16T00:00:00+08:00">
+              2013-09-16
+            </time>
+
+            &nbsp;|&nbsp;
+
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
+              2016-12-26
+            </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/16/stackoverflownsoperation-he-dispatch_async-de-qu-bie/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>NSOperation*</code> classes are the higher level api. They hide GCD’s lower level api from you so that you can concentrate on getting the task done.</p>
+
+<p>The rule of thumb is: <strong>Use the api of the highest level first and then degrade based on what you need to accomplish.</strong></p>
+
+<p>The advantage of this approach is that your code stays most agnostic to the specific implementation the vendor provides. In this example, using <code>NSOperation</code>, you’ll be using Apple’s implementation of execution queueing (using GCD). Should Apple ever decide to change the details of implementation behind the scenes they can do so without breaking your application’s code.<br><br>One such example would be Apple deprecating GCD and using a completely different library (which is unlikely because Apple created GCD and everybody seems to love it).</p>
+
+<p>Regarding the matter i recommend consulting the following resources:<br><ul><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/guide-to-blocks-grand-central-dispatch.html</a></li><br>    <li><a href="http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html" target="_blank" rel="external">http://cocoasamurai.blogspot.de/2009/09/making-nsoperation-look-like-gcd.html</a></li><br>    <li><a href="http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues" target="_blank" rel="external">http://www.raywenderlich.com/19788/how-to-use-nsoperations-and-nsoperationqueues</a></li><br>    <li><a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html" target="_blank" rel="external">https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperationQueue_class/Reference/Reference.html</a></li><br></ul></p>
 
           
         
@@ -1948,7 +2103,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/codejamproblem-a-alien-numbers/">
+  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="姜楠">
@@ -1973,8 +2128,8 @@
             
               
                 
-                <a class="post-title-link" href="/2013/09/04/codejamproblem-a-alien-numbers/" itemprop="url">
-                  [CodeJam]Problem A. Alien Numbers
+                <a class="post-title-link" href="/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/" itemprop="url">
+                  [原创][iOS]关于实现iOS7上面Blur效果的实现
                 </a>
               
             
@@ -2027,8 +2182,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/04/codejamproblem-a-alien-numbers/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/codejamproblem-a-alien-numbers/" itemprop="commentCount"></span>
+                <a href="/2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/ios-guan-yu-shi-xian-ios7-shang-mian-blur-xiao-guo-de-shi-xian/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2056,196 +2211,37 @@
       
         
           
-            <p><a title="http://code.google.com/codejam/contest/32003/dashboard" href="http://code.google.com/codejam/contest/32003/dashboard" target="_blank" rel="external">http://code.google.com/codejam/contest/32003/dashboard</a></p>
+            <p>前几个月iOS7发布，说实话界面扁平化，个人不是很喜欢，但是它的一些效果还是比较炫的，比如Blur效果，看下图<br><a href="http://www.njiang1987.com/wp-content/uploads/2013/09/photo1_normal.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/photo1_normal-169x300.png" alt="photo1_normal" width="169" height="300" class="alignnone size-medium wp-image-43"></a>  <a href="http://www.njiang1987.com/wp-content/uploads/2013/09/photo2_normal.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/photo2_normal-169x300.png" alt="photo2_normal" width="169" height="300" class="alignnone size-medium wp-image-44"></a><br>右边的图片，有个Blur效果，最近PM正想将这个效果添加到我们的产品中，查看网上说，苹果是通过直接从GPU里面取出图片信息，然后render出来的，也没有公用的API可以调用。不过有类似的方法可以模拟这个效果，比如Gaussian Blur，这个是通过CoreImage.framework里面的CIFilter实现的，具体实现如下：<br><pre lang="objc" colla="+"><br>CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, frame);<br><br>CIImage <em>imageToBlur = [CIImage imageWithCGImage:imageRef];<br>CIFilter </em>blurFilter = [CIFilter filterWithName:@”CIGaussianBlur”];<br>[blurFilter setValue:imageToBlur forKey:@”inputImage”];<br>[blurFilter setValue:[NSNumber numberWithFloat:0.1f] forKey:@”inputRadius”];<br>CIImage<em> result = [blurFilter valueForKey:@”outputImage”];<br><br>CIContext</em> context = [CIContext contextWithOptions:nil];<br>CGImageRef cgImage = [context createCGImage:result fromRect:[imageToBlur extent]];<br><br>UIImage* newImage = [UIImage imageWithCGImage:cgImage];<br></pre><br>这样就可以得到一个模糊的效果。但是这种模糊有2个缺点：<br><br>1.如果设置的半径比较大，效率会很低<br><br>2.模糊以后的效果不好</p>
 
-<p>Problem</p>
+<p>后来在网上查到可以用boxblur算法，这个会用到Accelerate.framework里面的一个函数vImageBoxConvolve_ARGB8888，具体实现如下：<br><pre lang="objc" colla="+"><br>- (UIImage<em>)imageWithBoxBlur:(CGFloat)blur withBoxSize:(int)iSize<br>{<br>    if (blur &lt; 0.f || blur &gt; 1.f) {<br>        blur = 0.5f;<br>    }<br>    int boxSize = (int)(blur </em> iSize);<br>    boxSize = boxSize - (boxSize % 2) + 1;</pre></p>
 
-<p>The decimal numeral system is composed of ten digits, which we represent as “0123456789” (the digits in a system are written from lowest to highest). Imagine you have discovered an alien numeral system composed of some number of digits, which may or may not be the same as those used in decimal. For example, if the alien numeral system were represented as “oF8”, then the numbers one through ten would be (F, 8, Fo, FF, F8, 8o, 8F, 88, Foo, FoF). We would like to be able to work with numbers in arbitrary alien systems. More generally, we want to be able to convert an arbitrary number that’s written in one alien system into a second alien system.</p>
+<p>    CGImageRef img = self.CGImage;<br><br>    vImage_Buffer inBuffer, outBuffer;<br><br>    vImage_Error error;<br><br>    void *pixelBuffer;</p>
 
-<p>Input</p>
+<p>    //create vImage_Buffer with data from CGImageRef<br><br>    CGDataProviderRef inProvider = CGImageGetDataProvider(img);<br><br>    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);</p>
 
-<p>The first line of input gives the number of cases, <b>N</b>. <b>N</b> test cases follow. Each case is a line formatted as<br><pre>alien_number source_language target<em>language</em></pre><br>Each language will be represented by a list of its digits, ordered from lowest to highest value. No digit will be repeated in any representation, all digits in the alien number will be present in the source language, and the first digit of the alien number will not be the lowest valued digit of the source language (in other words, the alien numbers have no leading zeroes). Each digit will either be a number 0-9, an uppercase or lowercase letter, or one of the following symbols <code>!”#$%&amp;’()*+,-./:;&lt;=&gt;?@[]^`{|}~</code></p>
+<p>    inBuffer.width = CGImageGetWidth(img);<br><br>    inBuffer.height = CGImageGetHeight(img);<br><br>    inBuffer.rowBytes = CGImageGetBytesPerRow(img);</p>
 
-<p>Output</p>
+<p>    inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);</p>
 
-<p>For each test case, output one line containing “Case #<b>x</b>: “ followed by the alien number translated from the source language to the target language.</p>
+<p>    //create vImage_Buffer for output<br><br>    pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));</p>
 
-<p>Limits</p>
+<p>    if(pixelBuffer == NULL)<br><br>        NSLog(@”No pixelbuffer”);</p>
 
-<p>1 ≤ <b>N</b> ≤ 100.</p>
+<p>    outBuffer.data = pixelBuffer;<br><br>    outBuffer.width = CGImageGetWidth(img);<br><br>    outBuffer.height = CGImageGetHeight(img);<br><br>    outBuffer.rowBytes = CGImageGetBytesPerRow(img);</p>
 
-<p>Small dataset</p>
+<p>    //perform convolution<br><br>    error = vImageBoxConvolve_ARGB8888(&amp;inBuffer, &amp;outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);</p>
 
-<p>1 ≤ num digits in <b>alien_number</b> ≤ 4,<br><br>2 ≤ num digits in <b>source_language</b> ≤ 16,<br><br>2 ≤ num digits in <b>target_language</b> ≤ 16.</p>
+<p>    if (error) {<br><br>        NSLog(@”error from convolution %ld”, error);<br><br>    }</p>
 
-<p>Large dataset</p>
+<p>    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();<br><br>    CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,<br><br>                                             outBuffer.width,<br><br>                                             outBuffer.height,<br><br>                                             8,<br><br>                                             outBuffer.rowBytes,<br><br>                                             colorSpace,<br><br>                                             (CGBitmapInfo)kCGImageAlphaNoneSkipLast);<br><br>    CGImageRef imageRef = CGBitmapContextCreateImage (ctx);<br><br>    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];</p>
 
-<p>1 ≤ <b>alien_number</b> (in decimal) ≤ 1000000000,<br><br>2 ≤ num digits in <b>source_language</b> ≤ 94,<br><br>2 ≤ num digits in <b>target_language</b> ≤ 94.</p>
+<p>    //clean up<br><br>    CGContextRelease(ctx);<br><br>    CGColorSpaceRelease(colorSpace);</p>
 
-<p>Sample<br><div><br><table><br><tbody><br><tr><br><td>Input</td><br><td>Output</td><br></tr><br><tr><br><td><code><code>4<br><br>9 0123456789 oF8<br><br>Foo oF8 0123456789<br><br>13 0123456789abcdef 01<br><br>CODE O!CDE? A?JM!.</code></code>&nbsp;</td><br><td><code>Case #1: Foo<br><br>Case #2: 9<br><br>Case #3: 10011<br><br>Case #4: JAM!<br></code></td><br></tr><br></tbody><br></table><br></div></p>
+<p>    free(pixelBuffer);<br><br>    //free(pixelBuffer2);<br><br>    CFRelease(inBitmapData);</p>
 
-<p>这个题可以简单的理解为从一个n进制的数转换为m进制的数，n进制、m进制跟10进制的唯一区别就是所用的表达符号不一样了，其实转换的道理是一样的，如果上过计算机的课程应该都知道10进制、2进制、16进制相互转化的过程的，n进制数直接转m进制数不好转，我们可以先将n进制的奇怪符号转换成10进制，再将10进制转换成m进制的奇怪符号，就这样。以下是源程序，直接贴代码了，注视的化以后等有时间再加吧，累。。。。。。。。。。。。。。。。。。</p>
+<p>    CGColorSpaceRelease(colorSpace);<br><br>    CGImageRelease(imageRef);</p>
 
-<p><pre lang="cpp"><br>//<br>//  main.cpp<br>//  CodeJamProject<br>//<br>//  Created by Jiang, Nan on 8/26/13.<br>//  Copyright (c) 2013 Jiang, Nan. All rights reserved.<br>//</pre></p>
-
-<p>//#include <br><br>#include <br><br>#include<br><map><br>#include </map><br><br>using namespace std;</p>
-
-<p>int main(int argc, const char * argv[])<br><br>{<br>    freopen(“/Users/jiangnan/Develop/Code Jam/2008/CodeJamProject/CodeJamProject/A-large-practice.in.txt”, “r”, stdin);<br><br>    freopen(“/Users/jiangnan/Develop/Code Jam/2008/CodeJamProject/CodeJamProject/A-large-practice.out.txt”, “w”, stdout);</p>
-
-<p>    int numCase;<br><br>    scanf(“%d”, &amp;numCase);<br><br>    for (int c = 0; c &lt; numCase; c++) {<br><br>        char number[100] = {0};<br><br>        char source[100] = {0};<br><br>        char target[100] = {0};<br><br>        scanf(“%s %s %s”, number, source, target);<br><br>        int srcSize = 0, tarSize = 0;<br><br>        map&lt;char, int&gt; srcmap;<br><br>        map&lt;char, int&gt; tarmap;<br><br>        int i = 0;<br><br>        while (source[i] != ‘\0’) {<br><br>            srcmap[source[i]] = i;<br><br>            i++;<br><br>        }<br><br>        srcSize = i;<br><br>        i = 0;<br><br>        while (target[i] != ‘\0’) {<br><br>            tarmap[target[i]] = i;<br><br>            i++;<br><br>        }<br><br>        tarSize = i;<br><br>        int decimal = 0;<br><br>        i = 100;<br><br>        while (number[i] == ‘\0’) {<br><br>            i–;<br><br>        }<br><br>        int k = 1;<br><br>        while (i &gt; -1) {<br><br>            decimal += k <em> srcmap[number[i]];<br><br>            k </em>= srcSize;<br><br>            i–;<br><br>        }<br><br>        i = 0;<br><br>        char tarnum[100] = {0};<br><br>        while (decimal != 0) {<br><br>            int t = decimal % tarSize;<br><br>            tarnum[i] = target[t];<br><br>            decimal = (decimal - t) / tarSize;<br><br>            i++;<br><br>        }<br><br>        int start = 0, end = i-1;<br><br>        while (start &lt;= end) {<br><br>            char t = tarnum[start];<br><br>            tarnum[start] = tarnum[end];<br><br>            tarnum[end] = t;<br><br>            start++;<br><br>            end–;<br><br>        }</p>
-
-<p>        printf(“Case #%d: %s\n”, c+1, tarnum);<br><br>    }</p>
-
-<p>    fclose(stdin);<br><br>    fclose(stdout);<br><br>    return 0;<br><br>}<br></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.njiang.cn/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="姜楠">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar/avatar.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="天空の城">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="天空の城" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" itemprop="url">
-                  [iOS]关于CALayer和UIView Animation同步问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-09-04T00:00:00+08:00">
-              2013-09-04
-            </time>
-
-            &nbsp;|&nbsp;
-
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-check-o"></i>
-            </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2016-12-26T16:40:34+08:00">
-              2016-12-26
-            </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/04/ios-guan-yu-calayer-he-uiview-animation-tong-bu-wen-ti/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今天在做项目的时候, 同时用到了CABasicAnimation和UIView的animation， 发现会有问题，calayer的animation和uiview的animation不同步，比如CALayer设置position的animation<br><pre lang="objc" colla="+">CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@”position”];<br>animation.fromValue = [NSValue valueWithCGPoint:startpoint];<br>animation.toValue = [NSValue valueWithCGPoint:endpoint];<br>animation.duration = INFO_WINDOW_SLIDE_ANIMATION_TIME;<br>animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];<br>[blurredLayer addAnimation:animation forKey:@”appear”];<br></pre></p>
-
-<p>UIView 的animation：<br><pre lang="objc" colla="+">backgroundView.frame = startframe;<br>[UIView animateWithDuration:INFO_WINDOW_SLIDE_ANIMATION_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{<br>        backgroundView.frame = endframe;<br>} completion:NULL];<br></pre><br>blurredLayer会抖动。后来再stackoverflow上面找到解决方法是将CALayer的animation换成<br><pre lang="objc" colla="+"><br>blurredLayer.position = startpoint;<br>[CATransaction begin];<br>[CATransaction setAnimationDuration:INFO_WINDOW_SLIDE_ANIMATION_TIME];<br>[CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];<br>blurredLayer.position = endpoint;<br>[CATransaction commit];<br></pre><br>这样两个animation就同步了，具体原因不详。</p>
+<p>    return returnImage;<br><br>}<br><br>这个boxblur有个2个优点：<br><br>1. 速度很快<br><br>2. 模糊以后的效果很好<br><br>正好弥补了Gaussian Blur的缺点，但是这个boxblur也有个致命的缺点就是，如果一张图片既有深色区域又有浅色区域，模糊以后，深色区域的颜色就不对了。过几天我再来补图。<br><br>后来无意中发现，如果先用Gaussian blur以后，再用boxblur几次，效果比较好。还是过几天来补图，呵呵，这几天比较忙，一直在做PM的Spec，虽然都是界面的东西，对我一个计算机半路出家的人来说还是优点难度的。以下是效果图，外加公司的产品。<br><br>[caption id=”attachment_48” align=”aligncenter” width=”300”]<a href="http://www.njiang1987.com/wp-content/uploads/2013/09/iOS-Simulator-Screen-shot-Sep-4-2013-7.43.34-PM.png" target="_blank" rel="external"><img src="http://www.njiang1987.com/wp-content/uploads/2013/09/iOS-Simulator-Screen-shot-Sep-4-2013-7.43.34-PM-300x225.png" alt="blur以后的效果图" width="300" height="225" class="size-medium wp-image-48"></a> blur以后的效果图[/caption]</p>
 
           
         
@@ -2320,7 +2316,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">117</span>
+              <span class="site-state-item-count">118</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
