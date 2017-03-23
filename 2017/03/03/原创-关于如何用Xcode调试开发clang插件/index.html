@@ -92,18 +92,18 @@
 <meta property="og:site_name" content="天空の城">
 <meta property="og:description" content="前沿​        最近，由于技术需求，需要编写clang的插件，在网上也搜索了很久相关资料，也尝试写了一些demo的程序，详情可以点击上一篇文章 - 关于clang插件的实现原理及实践，在写插件的过程中，有个很头大的问题，无法调试，之前唯一的办法就是输入log来调试，效率低下。
 ​        为了解决这个问题，也搜索过lldb直接对插件进行调试，也不是很理想，纠结了很长时间，后来在网上找到">
-<meta property="og:image" content="http://www.njiang.cn/./1.png">
-<meta property="og:image" content="http://www.njiang.cn/./2.png">
-<meta property="og:image" content="http://www.njiang.cn/./3.png">
-<meta property="og:image" content="http://www.njiang.cn/./4.png">
-<meta property="og:image" content="http://www.njiang.cn/5.png">
-<meta property="og:image" content="http://www.njiang.cn/./7.png">
-<meta property="og:updated_time" content="2017-03-03T03:47:26.000Z">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/03/03/1.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/03/03/2.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/03/03/3.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/03/03/4.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/03/03/5.png">
+<meta property="og:image" content="http://www.njiang.cn/uploads/2017/03/03/7.png">
+<meta property="og:updated_time" content="2017-03-23T02:27:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[原创]关于如何用Xcode调试开发clang插件">
 <meta name="twitter:description" content="前沿​        最近，由于技术需求，需要编写clang的插件，在网上也搜索了很久相关资料，也尝试写了一些demo的程序，详情可以点击上一篇文章 - 关于clang插件的实现原理及实践，在写插件的过程中，有个很头大的问题，无法调试，之前唯一的办法就是输入log来调试，效率低下。
 ​        为了解决这个问题，也搜索过lldb直接对插件进行调试，也不是很理想，纠结了很长时间，后来在网上找到">
-<meta name="twitter:image" content="http://www.njiang.cn/./1.png">
+<meta name="twitter:image" content="http://www.njiang.cn/uploads/2017/03/03/1.png">
 
 
 
@@ -322,8 +322,8 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-check-o"></i>
             </span>
-            <time title="Post modified" itemprop="dateModified" datetime="2017-03-03T11:47:26+08:00">
-              2017-03-03
+            <time title="Post modified" itemprop="dateModified" datetime="2017-03-23T10:27:08+08:00">
+              2017-03-23
             </time>
             
           </span>
@@ -363,6 +363,7 @@
       
         <h1 id="前沿"><a href="#前沿" class="headerlink" title="前沿"></a>前沿</h1><p>​        最近，由于技术需求，需要编写clang的插件，在网上也搜索了很久相关资料，也尝试写了一些demo的程序，详情可以点击上一篇文章 - <a href="http://www.atatech.org/articles/71752" target="_blank" rel="external">关于clang插件的实现原理及实践</a>，在写插件的过程中，有个很头大的问题，无法调试，之前唯一的办法就是输入log来调试，效率低下。</p>
 <p>​        为了解决这个问题，也搜索过lldb直接对插件进行调试，也不是很理想，纠结了很长时间，后来在网上找到了<a href="https://kangwang1988.github.io，这篇博客的博主，也咨询了他很多知识，后来从他那里了解到用`libtooling`可以进行调试开发，大喜！然后去搜索相关的资料，可惜网上没有相关的技术文档，所以想开这篇博客，大概介绍下方法。不管怎样，调试插件，都是用`libtooling`这个库，先来介绍下这个库。" target="_blank" rel="external">https://kangwang1988.github.io，这篇博客的博主，也咨询了他很多知识，后来从他那里了解到用`libtooling`可以进行调试开发，大喜！然后去搜索相关的资料，可惜网上没有相关的技术文档，所以想开这篇博客，大概介绍下方法。不管怎样，调试插件，都是用`libtooling`这个库，先来介绍下这个库。</a></p>
+<a id="more"></a>
 <h1 id="1-libtooling库"><a href="#1-libtooling库" class="headerlink" title="1. libtooling库"></a>1. libtooling库</h1><p>​        <code>libTooling</code>是一个库，用来支持clang的独立工具的开发。主要用法就是<code>runToolOnCode</code>进行调试。实例如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"clang/Tooling/Tooling.h"</span></span></div><div class="line"></div><div class="line">TEST(runToolOnCode, CanSyntaxCheckCode) &#123;</div><div class="line">  <span class="comment">// runToolOnCode returns whether the action was correctly run over the</span></div><div class="line">  <span class="comment">// given code.</span></div><div class="line">  EXPECT_TRUE(runToolOnCode(<span class="keyword">new</span> clang::SyntaxOnlyAction, <span class="string">"class X &#123;&#125;;"</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果不知道怎么使用libtooling的，可以戳<a href="https://clang.llvm.org/docs/HowToSetupToolingForLLVM.html" target="_blank" rel="external">这里</a>。</p>
@@ -384,7 +385,7 @@
 <h1 id="2-将llvm编译成xcode工程"><a href="#2-将llvm编译成xcode工程" class="headerlink" title="2 将llvm编译成xcode工程"></a>2 将llvm编译成xcode工程</h1><p>​       首先，在llvm的源代码文件夹同一级，建一个文件夹名为<code>llvm_build_xcode</code>，这个文件夹用来存放llvm的编译生成的库。</p>
 <p>​        如果不知道如何下载源码，请参考第一篇文章中的，<code>1.2 安装编译LLVM</code>章节。</p>
 <p>如下图：</p>
-<p><img src="./1.png" alt=""></p>
+<p><img src="/uploads/2017/03/03/1.png" alt=""></p>
 <h2 id="2-1-生成Xcode工程"><a href="#2-1-生成Xcode工程" class="headerlink" title="2.1 生成Xcode工程"></a>2.1 生成Xcode工程</h2><p>然后命令行输入</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /opt/llvm/llvm_build_xcode</div><div class="line">cmake -G Xcode ../llvm</div></pre></td></tr></table></figure>
 <p>其中，<code>llvm</code>文件夹即存放llvm的源代码。其中cmake还有其他选项</p>
@@ -406,7 +407,7 @@
 </ul>
 <p>这一步结束之后，会在<code>llvm_build_xcode</code>文件夹底下生成Xcode工程。</p>
 <h2 id="2-2-添加插件工程"><a href="#2-2-添加插件工程" class="headerlink" title="2.2 添加插件工程"></a>2.2 添加插件工程</h2><p>​         用Xcode打开上面生成的工程，会提示你是否自动生成target，可以取消，后期在<code>Manage Scheme</code>中自动生成。如下图所示：</p>
-<p><img src="./2.png" alt=""></p>
+<p><img src="/uploads/2017/03/03/2.png" alt=""></p>
 <p>​        可见，llvm的工程非常大，建议只添加自己需要的工程的scheme，这里我们可以先跑下clang的例子工程中的<code>clang-check</code>。</p>
 <p>​        在工程中可以找到<code>ClangCheck.cpp</code>文件，这个就是<code>clang-check</code>的源文件。可以看下它的main函数为：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">int main(int argc, const char **argv) &#123;</div><div class="line">...</div><div class="line">  // 创建CommonOptionsParser，并初始化Tool</div><div class="line">  CommonOptionsParser OptionsParser(argc, argv, ClangCheckCategory);</div><div class="line">  ClangTool Tool(OptionsParser.getCompilations(),</div><div class="line">                 OptionsParser.getSourcePathList());</div><div class="line">...</div><div class="line">  ClangCheckActionFactory CheckFactory;</div><div class="line">  std::unique_ptr&lt;FrontendActionFactory&gt; FrontendFactory;</div><div class="line"></div><div class="line">  // Choose the correct factory based on the selected mode.</div><div class="line">  if (Analyze)</div><div class="line">    FrontendFactory = newFrontendActionFactory&lt;clang::ento::AnalysisAction&gt;();</div><div class="line">  else if (Fixit)</div><div class="line">    FrontendFactory = newFrontendActionFactory&lt;FixItAction&gt;();</div><div class="line">  else</div><div class="line">    FrontendFactory = newFrontendActionFactory(&amp;CheckFactory);</div><div class="line">  // 生成相应的ASTAction</div><div class="line">  return Tool.run(FrontendFactory.get());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -436,7 +437,7 @@
 <li><p>cmake界面配置</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ccmake ../llvm</div></pre></td></tr></table></figure>
 <p>回出现如下界面：</p>
-<p><img src="./3.png" alt=""></p>
+<p><img src="/uploads/2017/03/03/3.png" alt=""></p>
 <p>找到<code>LLVM_ENABLE_RTTI</code>，并设置成<code>ON</code>。</p>
 <blockquote>
 <p>这个需要激活高级选项才能找到，按<code>T</code>激活高级选项</p>
@@ -449,7 +450,7 @@
 </ol>
 <p>生成makefile之后，直接运行make，就可以编译了，耗时比较长，你可以做点其他事情，等待它完成。这样我们就有了激活RTTI的llvm的库，接下来让我们看下如何从零搭建一个插件工具。</p>
 <h2 id="3-2-创建Command-Line工程"><a href="#3-2-创建Command-Line工程" class="headerlink" title="3.2 创建Command Line工程"></a>3.2 创建Command Line工程</h2><p>如图所示，创建一个<code>Command Line Tool</code>工程，暂且命名为<code>ClangToolTest</code>工程。</p>
-<p><img src="./4.png" alt=""></p>
+<p><img src="/uploads/2017/03/03/4.png" alt=""></p>
 <p>工程创建完毕，需要告知工程的头文件引用路径和库的查找路径。</p>
 <ul>
 <li><p>头文件路径</p>
@@ -459,7 +460,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/opt/llvm/llvm/include</div><div class="line">/opt/llvm/llvm/tools/clang/include</div><div class="line">/opt/llvm/llvm_build_rtti/include</div><div class="line">/opt/llvm/llvm_build_rtti/tools/clang/include/</div><div class="line"># 如果需要gtest的话，引入下面2个头文件路径</div><div class="line">/opt/llvm/llvm/utils/unittest/googletest/include</div><div class="line">/opt/llvm/llvm/tools/clang/unittests/Tooling</div></pre></td></tr></table></figure>
 <p>​</p>
 <p>如下图所示:</p>
-<p><img src="5.png" alt=""></p>
+<p><img src="/uploads/2017/03/03/5.png" alt=""></p>
 <p>​</p>
 </li>
 <li><p>库的链接选项<br>再找到<code>Other Linker Flag</code>选项，修改为：</p>
@@ -469,7 +470,7 @@
 </ul>
 <p>现在我们用<code>#2</code>中用到的clang-check的cpp文件进行测试，文件路径为<code>/opt/llvm/llvm/tools/clang/tools/clang-check/ClangCheck.cpp</code>，这里就不贴它的代码了。</p>
 <p>如果需要入参的话，可以在Scheme中添加相关的测试文件路径，如下所示：</p>
-<p><img src="./7.png" alt=""></p>
+<p><img src="/uploads/2017/03/03/7.png" alt=""></p>
 <p>按照上面应该就可以编译调试了。</p>
 <h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4 结束语"></a>4 结束语</h1><p>​        这种开发出来的就是命令行式的插件，具体用法为，例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ export BD=/path/to/build/llvm</div><div class="line">$ $BD/bin/clang-check -p $BD tools/clang/tools/clang-check/ClangCheck.cpp</div></pre></td></tr></table></figure>
@@ -518,10 +519,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/23/原创-关于如何用Xcode调试开发clang插件/" rel="prev" title="[原创]关于如何用Xcode调试开发clang插件">
-                [原创]关于如何用Xcode调试开发clang插件 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -593,7 +590,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">118</span>
+              <span class="site-state-item-count">117</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
